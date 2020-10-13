@@ -1,0 +1,152 @@
+<div class="header bg-gradient-danger py-7 py-lg-1">
+    <div class="container">
+        <div class="header-body text-center mb-7">
+            <div class="row justify-content-center">
+            </div>
+        </div>
+    </div>
+
+    <div class="separator separator-bottom separator-skew zindex-100">
+        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+        </svg>
+    </div>
+</div>
+
+<h1>Formulario de Registro de Proveedores</h1>
+
+<form (submit)="submit()" [formGroup]="registerProveedoresForm"> 
+    
+    <div class="form-group">
+        <div class="form-row">
+
+            <!-- Nombre -->
+            <div class="col-5">
+                <label for="nombre">Nombre/Razon Social</label>
+                <input type="text" class="form-control" formControlName="nombre">
+
+                <div *ngIf="verificarCampo('nombre')" class="alert-danger">
+                    {{getMensajeError("nombre")}} 
+                </div>
+            </div>
+
+            <!-- Nit -->
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="nit">Nit</label>
+                    <input type="text" class="form-control" formControlName="nit">
+                </div>
+
+                <div *ngIf="verificarCampo('nit')" class="alert-danger">
+                    {{getMensajeError("nit")}} 
+                </div>
+            </div>
+
+            <!-- Tipo de Proveedor -->
+            <div class="col-3">      
+                <div class="form-group">
+                    <label for="tipoProveedor">Seleccione el tipo de proveedor</label>
+                    <select class="form-control" id="tipoProveedor" name="tipoProveedor" formControlName="tipoProveedor">
+                        <option *ngFor="let tipoProveedor of listTipoProveedor" [value]="tipoProveedor.value">{{tipoProveedor.name}}</option>
+                    </select>
+                </div>
+
+                <div *ngIf="verificarCampo('tipoProveedor')" class="alert-danger">
+                    {{getMensajeError("tipoProveedor")}} 
+                </div>
+            </div>
+        </div>   
+    </div>
+
+    <div class="form-group">
+        <div class="form-row">
+
+            <!-- Direccion -->
+            <div class="col-5">   
+                <div class="form-group">
+                    <label for="direccion">Dirección</label>
+                    <input type="text" class="form-control" formControlName="direccion">
+                </div>
+
+                <div *ngIf="verificarCampo('direccion')" class="alert-danger">
+                    {{getMensajeError("direccion")}} 
+                </div>
+            </div>
+
+            <!-- Telefono -->
+            <div class="col-3">       
+                <div class="form-group">
+                    <label for="telefono">Teléfono</label>
+                    <input type="text" class="form-control" formControlName="telefono">
+                </div>
+
+                <div *ngIf="verificarCampo('telefono')" class="alert-danger">
+                    {{getMensajeError("telefono")}} 
+                </div>
+            </div>
+
+            <!-- Mail -->
+            <div class="col-3">               
+                <div class="form-group">
+                    <label for="email">e-mail</label>
+                    <input type="text" class="form-control" formControlName="email">
+                </div>
+
+                <div *ngIf="verificarCampo('email')" class="alert-danger">
+                    {{getMensajeError("email")}} 
+                </div>
+            </div>
+        </div>   
+    </div>
+
+    <div class="form-group">
+        <div class="form-row">
+
+            <!-- Pais -->
+            <div class="col-3">      
+                <div class="form-group">
+                    <label for="pais">Seleccione el Pais</label>
+                    <select class="form-control" id="pais" name="pais" #pais formControlName="pais" (change) = "onSelPais($event.target.value)">
+                        <option *ngFor="let pais of listPaises" [value]="pais.value">{{pais.name}}</option>
+                    </select>
+                </div>
+
+                <div *ngIf="verificarCampo('pais')" class="alert-danger">
+                    {{getMensajeError("pais")}} 
+                </div>
+            </div>
+
+            <!-- Departamento -->
+            <div class="col-3" *ngIf= "pais.value !== ''">      
+                <div class="form-group">
+                    <label for="departamento">Seleccione el Departamento</label>
+                    <select class="form-control" id="departamento" #departamento name="departamento" formControlName="departamento" (change) = "onSelDepartamento($event.target.value)">
+                        <option *ngFor="let departamento of listDepartamentos" [value]="departamento.value">{{departamento.name}}</option>
+                    </select>
+                </div>
+
+                <div *ngIf="verificarCampo('departamento')" class="alert-danger">
+                    {{getMensajeError("departamento")}} 
+                </div>
+            </div>
+
+            <!-- Ciudad -->
+            <div class="col-3" *ngIf= "pais.value !== ''">      
+                <div class="form-group">
+                    <label for="ciudad">Seleccione la Ciudad</label>
+                    <select class="form-control" id="ciudad" name="ciudad" formControlName="ciudad">
+                        <option *ngFor="let ciudad of listCiudades" [value]="ciudad.value">{{ciudad.name}}</option>
+                    </select>
+                </div>
+
+                <div *ngIf="verificarCampo('ciudad')" class="alert-danger">
+                    {{getMensajeError("ciudad")}} 
+                </div>
+            </div>
+        </div>   
+    </div>
+
+    <button type="submit" class="btn btn-success" [disabled]="registerProveedoresForm.invalid">Crear</button>
+    <button type="button" class="btn btn-default" (click)="refrescar()">Limpiar</button>
+
+</form>
