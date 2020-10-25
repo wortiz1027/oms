@@ -18,6 +18,17 @@ import { CreacionProveedoresComponent } from './pages/gestionProveedores/creacio
 import { CreacionProductoComponent } from './pages/gestionProductos/creacion-producto/creacion-producto.component';
 import { ActualizacionProductoComponent } from './pages/gestionProductos/actualizacion-producto/actualizacion-producto.component';
 import { EliminacionProductoComponent } from './pages/gestionProductos/eliminacion-producto/eliminacion-producto.component';
+import { BuscarProductoComponent } from './pages/gestionProductos/buscar-producto/buscar-producto.component';
+
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import { DetalleProductoComponent } from './pages/gestionProductos/detalle-producto/detalle-producto.component';
+import { BusquedaProductoComponent } from './pages/gestionProductos/busqueda-producto/busqueda-producto.component';
+import { BusquedaClienteComponent } from './pages/gestionClientes/busqueda-cliente/busqueda-cliente.component';
+import { CreacionClienteComponent } from './pages/gestionClientes/creacion-cliente/creacion-cliente.component';
+import { BuscarClienteComponent } from './pages/gestionClientes/buscar-cliente/buscar-cliente.component';
+import { ActualizacionClienteComponent } from './pages/gestionClientes/actualizacion-cliente/actualizacion-cliente.component';
+import { DetalleClienteComponent } from './pages/gestionClientes/detalle-cliente/detalle-cliente.component';
 
 @NgModule({
   imports: [
@@ -30,7 +41,9 @@ import { EliminacionProductoComponent } from './pages/gestionProductos/eliminaci
     MatNativeDateModule,
     RouterModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
   declarations: [
     AppComponent,
@@ -39,7 +52,15 @@ import { EliminacionProductoComponent } from './pages/gestionProductos/eliminaci
     CreacionProveedoresComponent,
     CreacionProductoComponent,
     ActualizacionProductoComponent,
-    EliminacionProductoComponent
+    EliminacionProductoComponent,
+    BuscarProductoComponent,
+    DetalleProductoComponent,
+    BusquedaProductoComponent,
+    BusquedaClienteComponent,
+    CreacionClienteComponent,
+    BuscarClienteComponent,
+    ActualizacionClienteComponent,
+    DetalleClienteComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

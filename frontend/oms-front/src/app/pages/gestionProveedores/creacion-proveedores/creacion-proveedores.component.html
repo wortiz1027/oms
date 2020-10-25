@@ -15,7 +15,7 @@
 
 <h1>Formulario de Registro de Proveedores</h1>
 
-<form (submit)="submit()" [formGroup]="registerProveedoresForm"> 
+<form (submit)="crearProveedor()" [formGroup]="registerProveedoresForm"> 
     
     <div class="form-group">
         <div class="form-row">
@@ -88,7 +88,7 @@
             <!-- Mail -->
             <div class="col-3">               
                 <div class="form-group">
-                    <label for="email">e-mail</label>
+                    <label for="email">Email</label>
                     <input type="text" class="form-control" formControlName="email">
                 </div>
 

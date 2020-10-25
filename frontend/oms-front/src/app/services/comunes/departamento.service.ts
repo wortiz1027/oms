@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { DepartamentoI } from 'src/app/models/Departamento';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
+
 export class DepartamentoService {
 
   private listDepartamentos: DepartamentoI [] = [

@@ -1,0 +1,119 @@
+<h1>Detalle del Cliente</h1>
+
+<form [formGroup]="detalleClientesForm"> 
+    
+    <div class="form-group">
+        <div class="form-row">
+
+            <!-- Numero Identificacion -->
+            <div class="col-3">   
+                <div class="form-group">
+                    <label for="identificacion">Número Identificación</label>
+                    <input type="text" class="form-control" formControlName="identificacion">
+                </div>
+
+                <div *ngIf="verificarCampo('identificacion')" class="alert-danger">
+                    {{getMensajeError("identificacion")}} 
+                </div>
+            </div>
+
+            <!-- Nombres -->
+            <div class="col-3">   
+                <div class="form-group">
+                    <label for="nombres">Nombres</label>
+                    <input type="text" class="form-control" formControlName="nombres">
+                </div>
+
+                <div *ngIf="verificarCampo('nombres')" class="alert-danger">
+                    {{getMensajeError("nombres")}} 
+                </div>
+            </div>
+
+            <!-- Apellidos -->
+            <div class="col-3">   
+                <div class="form-group">
+                    <label for="apellidos">Apellidos</label>
+                    <input type="text" class="form-control" formControlName="apellidos">
+                </div>
+
+                <div *ngIf="verificarCampo('apellidos')" class="alert-danger">
+                    {{getMensajeError("apellidos")}} 
+                </div>
+            </div>
+        </div>   
+    </div>
+
+    <div class="form-group">
+        <div class="form-row">
+
+            <!-- Fecha Nacimiento -->
+            <div class="col-3">       
+                <mat-form-field appearance="fill" class="form-group">
+                    <mat-label>Fecha de Nacimiento </mat-label>
+                    <input matInput [matDatepicker]="fechaNacimiento" placeholder="Seleccione una Fecha" class="form-control" formControlName="fechaNacimiento" [min]="minDate" [max]="maxDate">
+                    <mat-datepicker-toggle matSuffix [for]="fechaNacimiento"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #fechaNacimiento></mat-datepicker>
+                </mat-form-field> 
+
+                <div *ngIf="verificarCampo('fechaNacimiento')" class="alert-danger">
+                    {{getMensajeError("fechaNacimiento")}} 
+                </div>
+            </div>
+
+            <!-- Dirección -->
+            <div class="col-3">            
+                <div class="form-group">
+                    <label for="direccion">Dirección</label>
+                    <input type="text" class="form-control" formControlName="direccion">
+                </div>
+
+                <div *ngIf="verificarCampo('direccion')" class="alert-danger">
+                    {{getMensajeError("direccion")}} 
+                </div>
+            </div>
+
+            <!-- Telefono -->
+            <div class="col-3">     
+                <div class="form-group">
+                    <label for="telefono">Teléfono</label>
+                    <input type="text" class="form-control" formControlName="telefono">
+                </div>
+
+                <div *ngIf="verificarCampo('telefono')" class="alert-danger">
+                    {{getMensajeError("telefono")}} 
+                </div>
+            </div>
+        </div>   
+    </div>
+
+    <div class="form-group">
+        <div class="form-row">
+            <!-- Mail -->
+            <div class="col-3">               
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" class="form-control" formControlName="email">
+                </div>
+
+                <div *ngIf="verificarCampo('email')" class="alert-danger">
+                    {{getMensajeError("email")}} 
+                </div>
+            </div>
+
+            <!-- Status del Cliente -->
+            <div class="col-3">      
+                <div class="form-group">
+                    <label for="statusCliente">Seleccione el status del cliente</label>
+                    <select class="form-control" id="statusCliente" name="statusCliente" formControlName="statusCliente">
+                        <option *ngFor="let statusCliente of listStatusCliente" [value]="statusCliente.value">{{statusCliente.name}}</option>
+                    </select>
+                </div>
+
+                <div *ngIf="verificarCampo('statusCliente')" class="alert-danger">
+                    {{getMensajeError("statusCliente")}} 
+                </div>
+            </div>           
+        </div>   
+    </div>
+
+</form>

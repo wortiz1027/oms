@@ -1,21 +1,6 @@
-<div class="header bg-gradient-danger py-7 py-lg-1">
-    <div class="container">
-        <div class="header-body text-center mb-7">
-            <div class="row justify-content-center">
-            </div>
-        </div>
-    </div>
+<h1>Detalle del Producto</h1>
 
-    <div class="separator separator-bottom separator-skew zindex-100">
-        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
-        </svg>
-    </div>
-</div>
-
-<h1>Formulario de Registro de Productos</h1>
-
-<form (submit)="crearProducto()" [formGroup]="registerProductosForm"> 
+<form [formGroup]="detalleProductosForm"> 
     
     <div class="form-group">
         <div class="form-row">
@@ -120,22 +105,16 @@
             </div>
 
             <!-- Fecha Final -->
-            <div class="col-3"> 
-                <mat-form-field appearance="fill" class="form-group">     
-                    <mat-label>Fecha Fin </mat-label>
-                    <input matInput [matDatepicker]="fechaFinal" placeholder="Seleccione una Fecha" class="form-control" formControlName="fechaFinal" [min]="minDate" [max]="maxDate">
-                    <mat-datepicker-toggle matSuffix [for]="fechaFinal"></mat-datepicker-toggle>
-                    <mat-datepicker touchUi #fechaFinal></mat-datepicker> 
-                </mat-form-field> 
-
-                <div *ngIf="verificarCampo('fechaFinal')" class="alert-danger">
-                    {{getMensajeError("fechaFinal")}} 
-                </div>
+            <div class="col-3">       
+                <mat-label>Fecha Fin </mat-label>
+                <input matInput [matDatepicker]="fechaFinal" placeholder="Seleccione una Fecha" class="form-control" formControlName="fechaFinal" [min]="minDate" [max]="maxDate">
+                <mat-datepicker-toggle matSuffix [for]="fechaFinal"></mat-datepicker-toggle>
+                <mat-datepicker touchUi #fechaFinal></mat-datepicker> 
             </div>           
         </div>   
     </div>
 
-    <div class="form-group" [hidden]="registerProductosForm.controls.tipoProveedor.value !== '3'">
+    <div class="form-group" [hidden]="detalleProductosForm.controls.tipoProveedor.value !== '3'">
         <div class="form-row">
 
             <!-- Ciudad Origen -->
@@ -163,13 +142,5 @@
             </div>
         </div>   
     </div>
-
-    <!--Componente para cargar imagenes-->          
-    <div class="form-group">
-        <app-file-upload #fileUpload></app-file-upload>
-    </div>
-
-    <button type="submit" class="btn btn-success" [disabled]="registerProductosForm.invalid">Crear</button>
-    <button type="button" class="btn btn-default" (click)="refrescar()">Limpiar</button>
 
 </form>

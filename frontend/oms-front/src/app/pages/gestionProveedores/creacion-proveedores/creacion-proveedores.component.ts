@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { CiudadI } from 'src/app/models/Ciudad';
 import { DepartamentoI } from 'src/app/models/Departamento';
 import { PaisI } from 'src/app/models/Pais';
+import { ProveedorDTO } from 'src/app/models/ProveedorDTO';
 import { TipoProveedorI } from 'src/app/models/TipoProveedor';
 import { CiudadService } from 'src/app/services/comunes/ciudad.service';
 import { DepartamentoService } from 'src/app/services/comunes/departamento.service';
@@ -22,6 +23,7 @@ export class CreacionProveedoresComponent implements OnInit {
   public listPaises: PaisI[];
   public listDepartamentos: DepartamentoI[];
   public listCiudades: CiudadI[];
+  proveedor: ProveedorDTO;
 
   constructor(private formBuilder: FormBuilder,
               private svTipoProveedor : TipoProveedorService,
@@ -48,15 +50,26 @@ export class CreacionProveedoresComponent implements OnInit {
     this.listCiudades = this.svCiudades.getListCiudades();
   }
   
-    submit() {
+  crearProveedor() {
   
-      if (!this.registerProveedoresForm.valid) {
-        alert('Alguna regla de validación no se está cumpliendo');
-  
-        return;
-      }
-      console.log(this.registerProveedoresForm.value);
+    if (!this.registerProveedoresForm.valid) {
+      alert('Alguna regla de validación no se está cumpliendo');
+
+      return;
     }
+
+    this.proveedor.nombre = this.registerProveedoresForm.get('nombre').value;
+    this.proveedor.nit = this.registerProveedoresForm.get('nit').value;
+    this.proveedor.tipoProveedor = this.registerProveedoresForm.get('tipoProveedor').value;
+    this.proveedor.direccion = this.registerProveedoresForm.get('direccion').value;
+    this.proveedor.pais = this.registerProveedoresForm.get('pais').value;
+    this.proveedor.departamento = this.registerProveedoresForm.get('departamento').value;
+    this.proveedor.ciudad = this.registerProveedoresForm.get('ciudad').value;
+    this.proveedor.telefono = this.registerProveedoresForm.get('telefono').value;
+    this.proveedor.email = this.registerProveedoresForm.get('email').value;
+
+    console.log(this.registerProveedoresForm.value);
+  }
   
     refrescar() {
       this.registerProveedoresForm.patchValue({

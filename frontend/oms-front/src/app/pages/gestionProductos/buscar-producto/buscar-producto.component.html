@@ -1,0 +1,65 @@
+<form [formGroup]="busquedaProductosForm"> 
+    
+    <div class="form-group">
+        <div class="form-row">
+
+            <!-- Busqueda Productos -->
+            <div class="col-3">       
+                <div class="form-group">
+                    <label for="busquedaProducto">Busqueda Producto</label>
+                    <input type="text" class="form-control" formControlName="busquedaProducto" placeholder="Ingrese (código, nombre o descripción) del producto">
+                </div>
+
+                <div *ngIf="verificarCampo('busquedaProducto')" class="alert-danger">
+                    {{getMensajeError("busquedaProducto")}} 
+                </div>
+            </div>
+        </div>   
+    </div>     
+
+    <button type="button" class="btn btn-default" [disabled]="busquedaProductosForm.invalid" (click)="buscar()">Buscar</button>
+    <button type="button" class="btn btn-default" (click)="refrescar()">Limpiar</button>
+    <br>
+    <br>
+    
+    <div class="form-group">
+        <h1>Lista de Productos</h1>
+        
+        <div class="form-row">
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource">
+              
+                  <!-- Item tabla-->
+                  <ng-container matColumnDef="position">
+                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+                  </ng-container>
+              
+                  <!-- Codigo Producto -->
+                  <ng-container matColumnDef="codProducto">
+                    <th mat-header-cell *matHeaderCellDef> Código </th>
+                    <td mat-cell *matCellDef="let element"> {{element.codProducto}} </td>
+                  </ng-container>
+              
+                  <!-- Nombre Producto -->
+                  <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                  </ng-container>
+
+                  <!-- Descripcion Producto -->
+                  <ng-container matColumnDef="descripcion">
+                    <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                    <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+                  </ng-container>
+ 
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+              
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </div>  
+        </div>   
+    </div>
+
+</form>

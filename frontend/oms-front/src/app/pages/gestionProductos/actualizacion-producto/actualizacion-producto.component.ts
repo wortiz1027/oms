@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-actualizacion-producto',
@@ -7,9 +7,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ActualizacionProductoComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
 
-  ngOnInit(): void {
+  }  
+  
+  ngOnInit() {
+
   }
+
+  actualizar() {
+    alert('¿Seguro que quiere actualizar el producto?');
+
+    return;
+  }
+
 
 }

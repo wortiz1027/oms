@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ProveedoresI } from 'src/app/models/Proveedores';
 
 @Injectable()
+
 export class ProveedorService {
 
   private listProveedores: ProveedoresI [] = [

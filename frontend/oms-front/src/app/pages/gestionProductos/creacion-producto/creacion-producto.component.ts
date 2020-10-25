@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ProveedoresI } from 'src/app/models/Proveedores';
 import { TipoProveedorI } from 'src/app/models/TipoProveedor';
 
 import{FileUploadComponent} from 'src/app/components/file-upload/file-upload.component'
 import { TipoProveedorService } from 'src/app/services/comunes/tipo-proveedor.service';
 import { ProveedorService } from 'src/app/services/comunes/proveedor.service';
+import { ProductoDTO } from 'src/app/models/ProductoDTO';
 
 
 @Component({
@@ -22,13 +23,15 @@ export class CreacionProductoComponent implements OnInit {
   public minDate: Date;
   public maxDate: Date;
   public base64: string;
+  producto: ProductoDTO;
+
   @ViewChild(FileUploadComponent) fileUpload;
 
     constructor(private formBuilder: FormBuilder, 
                 private svTipoProveedor: TipoProveedorService,
                 private svProveedores: ProveedorService) {
                   
-                  //Se establece la fecha minimay maxima
+                  //Se establece la fecha minima y maxima
                   const currentYear = new Date().getFullYear();
                   this.minDate = new Date();
                   this.maxDate = new Date(currentYear + 0, 11, 31);
@@ -41,8 +44,8 @@ export class CreacionProductoComponent implements OnInit {
       nombre: ['', { validators: [Validators.required]}],
       descripcion: ['', { validators: [Validators.required]}],
       precio: ['', { validators: [Validators.required]}],
-      fechaInicial: [''],
-      fechaFinal: [''],
+      fechaInicial: ['', { validators: [Validators.required]}],
+      fechaFinal: ['', { validators: [Validators.required]}],
       ciudadOrigen: [''],
       ciudadDestino: [''],
       urlImagen: ['']
@@ -53,15 +56,27 @@ export class CreacionProductoComponent implements OnInit {
   
     }
   
-    submit() {
+    crearProducto() {
       
       if (!this.registerProductosForm.valid) {
         alert('Alguna regla de validación no se está cumpliendo');
   
         return;
       }
+
+      this.producto.tipoProveedor = this.registerProductosForm.get('tipoProveedor').value;
+      this.producto.proveedor = this.registerProductosForm.get('proveedores').value;
+      this.producto.codigo = this.registerProductosForm.get('codigo').value;
+      this.producto.nombre = this.registerProductosForm.get('nombre').value;
+      this.producto.descripcion = this.registerProductosForm.get('descripcion').value;
+      this.producto.precio = this.registerProductosForm.get('precio').value;
+      this.producto.fechaInicial = this.registerProductosForm.get('fechaInicial').value;
+      this.producto.fechaFinal = this.registerProductosForm.get('fechaFinal').value;
+      this.producto.ciudadOrigen = this.registerProductosForm.get('ciudadOrigen').value;
+      this.producto.ciudadDestino = this.registerProductosForm.get('ciudadDestino').value;
       
       console.log(this.registerProductosForm.value);
+      console.log(this.fileUpload.imageURL);
       //let imagenBase64:string; 
 
       //imagenBase64 = this.fileUpload.fileUploadForm as string;

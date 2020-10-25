@@ -16,8 +16,14 @@ export const ROUTES: RouteInfo[] = [
   {path: '/tables', title: 'Tables', icon: 'ni-bullet-list-67 text-red', class: ''},
   {path: '/login', title: 'Login', icon: 'ni-key-25 text-info', class: ''},
   {path: '/crearProveedor', title: 'Crear Proveedor', icon: 'ni-circle-08 text-pink', class: ''},
-  {path: '/crearProducto', title: 'Crear Producto', icon: 'ni-circle-08 text-pink', class: ''}
-
+  {path: '/crearProducto', title: 'Crear Producto', icon: 'ni-circle-08 text-pink', class: ''},
+  {path: '/buscarProducto', title: 'Buscar Producto', icon: 'ni-circle-08 text-pink', class: ''},
+  {path: '/actualizarProducto', title: 'Actualizar Producto', icon: 'ni-circle-08 text-pink', class: ''},
+  {path: '/eliminarProducto', title: 'Eliminar Producto', icon: 'ni-circle-08 text-pink', class: ''},
+  {path: '/crearCliente', title: 'Crear Cliente', icon: 'ni-circle-08 text-pink', class: ''},
+  {path: '/buscarCliente', title: 'Buscar Cliente', icon: 'ni-circle-08 text-pink', class: ''},
+  {path: '/actualizarCliente', title: 'Actualizar Cliente', icon: 'ni-circle-08 text-pink', class: ''}
+  
 ];
 
 @Component({

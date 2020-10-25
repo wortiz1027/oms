@@ -1,0 +1,165 @@
+<div class="header bg-gradient-danger py-7 py-lg-1">
+    <div class="container">
+        <div class="header-body text-center mb-7">
+            <div class="row justify-content-center">
+            </div>
+        </div>
+    </div>
+
+    <div class="separator separator-bottom separator-skew zindex-100">
+        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+        </svg>
+    </div>
+</div>
+
+<h1>Formulario de Registro de Clientes</h1>
+
+<form (submit)="crearCliente()" [formGroup]="registerClientesForm"> 
+    
+    <div class="form-group">
+        <div class="form-row">
+
+            <!-- Numero Identificacion -->
+            <div class="col-3">   
+                <div class="form-group">
+                    <label for="identificacion">Número Identificación</label>
+                    <input type="text" class="form-control" formControlName="identificacion">
+                </div>
+
+                <div *ngIf="verificarCampo('identificacion')" class="alert-danger">
+                    {{getMensajeError("identificacion")}} 
+                </div>
+            </div>
+
+            <!-- Nombres -->
+            <div class="col-3">   
+                <div class="form-group">
+                    <label for="nombres">Nombres</label>
+                    <input type="text" class="form-control" formControlName="nombres">
+                </div>
+
+                <div *ngIf="verificarCampo('nombres')" class="alert-danger">
+                    {{getMensajeError("nombres")}} 
+                </div>
+            </div>
+
+            <!-- Apellidos -->
+            <div class="col-3">   
+                <div class="form-group">
+                    <label for="apellidos">Apellidos</label>
+                    <input type="text" class="form-control" formControlName="apellidos">
+                </div>
+
+                <div *ngIf="verificarCampo('apellidos')" class="alert-danger">
+                    {{getMensajeError("apellidos")}} 
+                </div>
+            </div>
+        </div>   
+    </div>
+
+    <div class="form-group">
+        <div class="form-row">
+
+            <!-- Fecha Nacimiento -->
+            <div class="col-3">       
+                <mat-form-field appearance="fill" class="form-group">
+                    <mat-label>Fecha de Nacimiento </mat-label>
+                    <input matInput [matDatepicker]="fechaNacimiento" placeholder="Seleccione una Fecha" class="form-control" formControlName="fechaNacimiento" [min]="minDate" [max]="maxDate">
+                    <mat-datepicker-toggle matSuffix [for]="fechaNacimiento"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #fechaNacimiento></mat-datepicker>
+                </mat-form-field> 
+
+                <div *ngIf="verificarCampo('fechaNacimiento')" class="alert-danger">
+                    {{getMensajeError("fechaNacimiento")}} 
+                </div>
+            </div>
+
+            <!-- Dirección -->
+            <div class="col-3">            
+                <div class="form-group">
+                    <label for="direccion">Dirección</label>
+                    <input type="text" class="form-control" formControlName="direccion">
+                </div>
+
+                <div *ngIf="verificarCampo('direccion')" class="alert-danger">
+                    {{getMensajeError("direccion")}} 
+                </div>
+            </div>
+
+            <!-- Telefono -->
+            <div class="col-3">     
+                <div class="form-group">
+                    <label for="telefono">Teléfono</label>
+                    <input type="text" class="form-control" formControlName="telefono">
+                </div>
+
+                <div *ngIf="verificarCampo('telefono')" class="alert-danger">
+                    {{getMensajeError("telefono")}} 
+                </div>
+            </div>
+        </div>   
+    </div>
+
+    <div class="form-group">
+        <div class="form-row">
+            <!-- Mail -->
+            <div class="col-3">               
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" class="form-control" formControlName="email">
+                </div>
+
+                <div *ngIf="verificarCampo('email')" class="alert-danger">
+                    {{getMensajeError("email")}} 
+                </div>
+            </div>
+
+            <!-- Status del Cliente -->
+            <div class="col-3">      
+                <div class="form-group">
+                    <label for="statusCliente">Seleccione el status del cliente</label>
+                    <select class="form-control" id="statusCliente" name="statusCliente" formControlName="statusCliente">
+                        <option *ngFor="let statusCliente of listStatusCliente" [value]="statusCliente.value">{{statusCliente.name}}</option>
+                    </select>
+                </div>
+
+                <div *ngIf="verificarCampo('statusCliente')" class="alert-danger">
+                    {{getMensajeError("statusCliente")}} 
+                </div>
+            </div>           
+        </div>   
+    </div>
+
+    <div class="form-group">
+        <div class="form-row">
+            <!-- Nombre Usuario -->
+            <div class="col-3">               
+                <div class="form-group">
+                    <label for="nombreUsuario">Nombre de Usuario</label>
+                    <input type="text" class="form-control" formControlName="nombreUsuario">
+                </div>
+
+                <div *ngIf="verificarCampo('nombreUsuario')" class="alert-danger">
+                    {{getMensajeError("nombreUsuario")}} 
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div class="col-3">               
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="text" class="form-control" formControlName="password">
+                </div>
+
+                <div *ngIf="verificarCampo('password')" class="alert-danger">
+                    {{getMensajeError("password")}} 
+                </div>
+            </div>     
+        </div>   
+    </div>
+
+    <button type="submit" class="btn btn-success" [disabled]="registerClientesForm.invalid">Crear</button>
+    <button type="button" class="btn btn-default" (click)="refrescar()">Limpiar</button>
+
+</form>

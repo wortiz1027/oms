@@ -9,7 +9,13 @@ export class EliminacionProductoComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnInit(){
+  }
+
+  eliminar() {
+    alert('¿Seguro que quiere eliminar el producto?');
+
+    return;
   }
 
 }
