@@ -1,0 +1,77 @@
+<div class="header bg-gradient-danger py-7 py-lg-1">
+    <div class="container">
+        <div class="header-body text-center mb-7">
+            <div class="row justify-content-center">
+            </div>
+        </div>
+    </div>
+
+    <div class="separator separator-bottom separator-skew zindex-100">
+        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+        </svg>
+    </div>
+</div>
+
+<h1>Formulario para Asignar Productos a la Campaña</h1>
+
+<form (submit)="agregarProducto()" [formGroup]="asignarProductosForm"> 
+    
+    <!--Componente para la busqueda de campañas-->          
+    <div class="form-group">
+        <app-buscar-campania #buscarCampania></app-buscar-campania>
+    </div> 
+
+    <br>
+    <br>
+
+    <div class="form-group">
+        <div class="form-row">
+
+            <!-- Tipo de Proveedor -->
+            <div class="col-3">      
+                <div class="form-group">
+                    <label for="tipoProveedor">Seleccione el tipo de proveedor</label>
+                    <select class="form-control" id="tipoProveedor" name="tipoProveedor" #tipoProveedor formControlName="tipoProveedor" (change) = "onSelTipoProveedores($event.target.value)">
+                        <option *ngFor="let tipoProveedor of listTipoProveedor" [value]="tipoProveedor.value">{{tipoProveedor.name}}</option>
+                    </select>
+                </div>
+
+                <div *ngIf="verificarCampo('tipoProveedor')" class="alert-danger">
+                    {{getMensajeError("tipoProveedor")}} 
+                </div>
+            </div>
+
+            <!-- Proveedores -->
+            <div class="col-3" *ngIf= "tipoProveedor.value !== ''">      
+                <div class="form-group">
+                    <label for="proveedores">Seleccione el proveedor</label>
+                    <select class="form-control" id="proveedores" name="proveedores" formControlName="proveedores">
+                        <option *ngFor="let proveedor of listProveedores" [value]="proveedor.value">{{proveedor.name}}</option>
+                    </select>
+                </div>
+
+                <div *ngIf="verificarCampo('proveedores')" class="alert-danger">
+                    {{getMensajeError("proveedores")}} 
+                </div>
+            </div>
+
+            <!-- Productos 
+            <div class="col-3" *ngIf= "proveedor.value !== ''">      
+                <div class="form-group">
+                    <label for="producto">Seleccione el producto</label>
+                    <select class="form-control" id="producto" name="producto" formControlName="producto">
+                        <option *ngFor="let producto of listProductos" [value]="producto.value">{{producto.name}}</option>
+                    </select>
+                </div>
+
+                <div *ngIf="verificarCampo('producto')" class="alert-danger">
+                    {{getMensajeError("producto")}} 
+                </div>
+            </div>-->
+        </div>   
+    </div>
+
+    <button type="submit" class="btn btn-default">Agregar</button>
+
+</form>

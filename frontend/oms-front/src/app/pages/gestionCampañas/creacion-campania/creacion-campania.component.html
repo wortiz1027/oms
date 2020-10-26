@@ -1,0 +1,147 @@
+<div class="header bg-gradient-danger py-7 py-lg-1">
+    <div class="container">
+        <div class="header-body text-center mb-7">
+            <div class="row justify-content-center">
+            </div>
+        </div>
+    </div>
+
+    <div class="separator separator-bottom separator-skew zindex-100">
+        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+            xmlns="http://www.w3.org/2000/svg">
+            <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+        </svg>
+    </div>
+</div>
+
+<h1>Formulario de Registro de Campañas</h1>
+
+<form (submit)="crearCampania()" [formGroup]="registerCampaniasForm">
+
+    <div class="form-group">
+        <div class="form-row">
+
+            <!-- Codigo Campaña -->
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="codigo">Código</label>
+                    <input type="text" class="form-control" formControlName="codigo">
+                </div>
+
+                <div *ngIf="verificarCampo('codigo')" class="alert-danger">
+                    {{getMensajeError("codigo")}}
+                </div>
+            </div>
+
+            <!-- Nombre Campaña -->
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" class="form-control" formControlName="nombre">
+                </div>
+
+                <div *ngIf="verificarCampo('nombre')" class="alert-danger">
+                    {{getMensajeError("nombre")}}
+                </div>
+            </div>
+
+            <!-- Descripción Campaña -->
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <input type="text" class="form-control" formControlName="descripcion">
+                </div>
+
+                <div *ngIf="verificarCampo('descripcion')" class="alert-danger">
+                    {{getMensajeError("descripcion")}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-row">
+            <!-- Fecha Inicial -->
+            <div class="col-3">
+                <mat-form-field appearance="fill" class="form-group">
+                    <mat-label>Fecha Inicio </mat-label>
+                    <input matInput [matDatepicker]="fechaInicial" placeholder="Seleccione una Fecha"
+                        class="form-control" formControlName="fechaInicial" [min]="minDate" [max]="maxDate">
+                    <mat-datepicker-toggle matSuffix [for]="fechaInicial"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #fechaInicial></mat-datepicker>
+                </mat-form-field>
+
+                <div *ngIf="verificarCampo('fechaInicial')" class="alert-danger">
+                    {{getMensajeError("fechaInicial")}}
+                </div>
+            </div>
+
+            <!-- Fecha Final -->
+            <div class="col-3">
+                <mat-form-field appearance="fill" class="form-group">
+                    <mat-label>Fecha Fin </mat-label>
+                    <input matInput [matDatepicker]="fechaFinal" placeholder="Seleccione una Fecha" class="form-control"
+                        formControlName="fechaFinal" [min]="minDate" [max]="maxDate">
+                    <mat-datepicker-toggle matSuffix [for]="fechaFinal"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #fechaFinal></mat-datepicker>
+                </mat-form-field>
+
+                <div *ngIf="verificarCampo('fechaFinal')" class="alert-danger">
+                    {{getMensajeError("fechaFinal")}}
+                </div>
+            </div>
+
+            <!-- Descuento -->
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="descuento">Descuento</label>
+                    <input type="number" class="form-control" formControlName="descuento" placeholder="Ingrese el % de descuento">
+                </div>
+
+                <div *ngIf="verificarCampo('descuento')" class="alert-danger">
+                    {{getMensajeError("descuento")}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-row">
+
+            <!-- Activar o Desactivar -->
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="activa">Estado</label>
+                
+                    <div class="custom-control custom-radio">
+                        <input id="activado" type="radio" class="custom-control-input" value="activado" name="activa" formControlName="activa">
+                        <label class="custom-control-label" for="activado">Activado</label>
+                    </div>
+
+                    <div class="custom-control custom-radio">
+                        <input id="desactivado" type="radio" class="custom-control-input" value="desactivado" name="activa" formControlName="activa">
+                        <label class="custom-control-label" for="desactivado">Desactivado</label>
+                    </div>
+
+                    <div *ngIf="verificarCampo('activa')" class="alert-danger">
+                        {{getMensajeError("activa")}}
+                    </div>
+                </div>
+
+                <div *ngIf="verificarCampo('activa')" class="alert-danger">
+                    {{getMensajeError("activa")}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Componente para cargar imagenes-->
+    <div class="form-group">
+        <app-file-upload #fileUpload></app-file-upload>
+    </div>
+
+    <button type="button" class="btn btn-default" (click)="asignarProductos()">Asignar Productos</button>
+    <button type="submit" class="btn btn-success" [disabled]="registerCampaniasForm.invalid">Crear</button>
+    <button type="button" class="btn btn-default" (click)="refrescar()">Limpiar</button>
+
+</form>

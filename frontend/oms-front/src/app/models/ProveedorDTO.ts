@@ -6,7 +6,7 @@ export interface ProveedorDTO{
     pais: string;
     departamento: string;
     ciudad: string;
-    fechaciudadInicial: string;
     telefono: string;
     email: string;
 }
+

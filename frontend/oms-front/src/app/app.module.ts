@@ -22,6 +22,7 @@ import { BuscarProductoComponent } from './pages/gestionProductos/buscar-product
 
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
+
 import { DetalleProductoComponent } from './pages/gestionProductos/detalle-producto/detalle-producto.component';
 import { BusquedaProductoComponent } from './pages/gestionProductos/busqueda-producto/busqueda-producto.component';
 import { BusquedaClienteComponent } from './pages/gestionClientes/busqueda-cliente/busqueda-cliente.component';
@@ -29,6 +30,12 @@ import { CreacionClienteComponent } from './pages/gestionClientes/creacion-clien
 import { BuscarClienteComponent } from './pages/gestionClientes/buscar-cliente/buscar-cliente.component';
 import { ActualizacionClienteComponent } from './pages/gestionClientes/actualizacion-cliente/actualizacion-cliente.component';
 import { DetalleClienteComponent } from './pages/gestionClientes/detalle-cliente/detalle-cliente.component';
+import { CreacionCampaniaComponent } from './pages/gestionCampañas/creacion-campania/creacion-campania.component';
+import { DetalleCampaniaComponent } from './pages/gestionCampañas/detalle-campania/detalle-campania.component';
+import { BuscarCampaniaComponent } from './pages/gestionCampañas/buscar-campania/buscar-campania.component';
+import { ActualizacionCampaniaComponent } from './pages/gestionCampañas/actualizacion-campania/actualizacion-campania.component';
+import { EliminacionCampaniaComponent } from './pages/gestionCampañas/eliminacion-campania/eliminacion-campania.component';
+import { AsignarProductosComponent } from './pages/gestionCampañas/asignar-productos/asignar-productos.component';
 
 @NgModule({
   imports: [
@@ -60,7 +67,13 @@ import { DetalleClienteComponent } from './pages/gestionClientes/detalle-cliente
     CreacionClienteComponent,
     BuscarClienteComponent,
     ActualizacionClienteComponent,
-    DetalleClienteComponent
+    DetalleClienteComponent,
+    CreacionCampaniaComponent,
+    DetalleCampaniaComponent,
+    BuscarCampaniaComponent,
+    ActualizacionCampaniaComponent,
+    EliminacionCampaniaComponent,
+    AsignarProductosComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -124,4 +124,4 @@ export class CreacionProductoComponent implements OnInit {
       return ((this.registerProductosForm.get(field).dirty || this.registerProductosForm.get(field).touched) && 
               (this.registerProductosForm.get(field).invalid || this.registerProductosForm.get(field).errors?.required));
     }   
-  }
+}

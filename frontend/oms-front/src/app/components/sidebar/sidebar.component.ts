@@ -22,7 +22,10 @@ export const ROUTES: RouteInfo[] = [
   {path: '/eliminarProducto', title: 'Eliminar Producto', icon: 'ni-circle-08 text-pink', class: ''},
   {path: '/crearCliente', title: 'Crear Cliente', icon: 'ni-circle-08 text-pink', class: ''},
   {path: '/buscarCliente', title: 'Buscar Cliente', icon: 'ni-circle-08 text-pink', class: ''},
-  {path: '/actualizarCliente', title: 'Actualizar Cliente', icon: 'ni-circle-08 text-pink', class: ''}
+  {path: '/actualizarCliente', title: 'Actualizar Cliente', icon: 'ni-circle-08 text-pink', class: ''},
+  {path: '/crearCampania', title: 'Crear Campaña', icon: 'ni-circle-08 text-pink', class: ''},
+  {path: '/actualizarCampania', title: 'Actualizar Campaña', icon: 'ni-circle-08 text-pink', class: ''},
+  {path: '/eliminarCampania', title: 'Eliminar Campaña', icon: 'ni-circle-08 text-pink', class: ''}
   
 ];
 

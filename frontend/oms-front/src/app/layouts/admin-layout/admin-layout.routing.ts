@@ -13,6 +13,10 @@ import { BusquedaProductoComponent } from 'src/app/pages/gestionProductos/busque
 import { CreacionClienteComponent } from 'src/app/pages/gestionClientes/creacion-cliente/creacion-cliente.component';
 import { BusquedaClienteComponent } from 'src/app/pages/gestionClientes/busqueda-cliente/busqueda-cliente.component';
 import { ActualizacionClienteComponent } from 'src/app/pages/gestionClientes/actualizacion-cliente/actualizacion-cliente.component';
+import { CreacionCampaniaComponent } from 'src/app/pages/gestionCampañas/creacion-campania/creacion-campania.component';
+import { ActualizacionCampaniaComponent } from 'src/app/pages/gestionCampañas/actualizacion-campania/actualizacion-campania.component';
+import { EliminacionCampaniaComponent } from 'src/app/pages/gestionCampañas/eliminacion-campania/eliminacion-campania.component';
+import { AsignarProductosComponent } from 'src/app/pages/gestionCampañas/asignar-productos/asignar-productos.component';
 
 export const AdminLayoutRoutes: Routes = [
   { path: 'dashboard',                 component: DashboardComponent},
@@ -27,6 +31,10 @@ export const AdminLayoutRoutes: Routes = [
   { path: 'eliminarProducto',          component: EliminacionProductoComponent},
   { path: 'crearCliente',              component: CreacionClienteComponent},
   { path: 'buscarCliente',             component: BusquedaClienteComponent},
-  { path: 'actualizarCliente',         component: ActualizacionClienteComponent}
+  { path: 'actualizarCliente',         component: ActualizacionClienteComponent},
+  { path: 'crearCampania',             component: CreacionCampaniaComponent},
+  { path: 'actualizarCampania',        component: ActualizacionCampaniaComponent},
+  { path: 'eliminarCampania',          component: EliminacionCampaniaComponent},
+  { path: 'asignarProductos',          component: AsignarProductosComponent}
   
 ];
