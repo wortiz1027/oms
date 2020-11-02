@@ -18,8 +18,10 @@ import { ActualizacionCampaniaComponent } from 'src/app/pages/gestionCampañas/a
 import { EliminacionCampaniaComponent } from 'src/app/pages/gestionCampañas/eliminacion-campania/eliminacion-campania.component';
 import { AsignarProductosComponent } from 'src/app/pages/gestionCampañas/asignar-productos/asignar-productos.component';
 
+import { AuthenticationGuard } from '../../guard/authentication.guard';
+
 export const AdminLayoutRoutes: Routes = [
-  { path: 'dashboard',                 component: DashboardComponent},
+  { path: 'dashboard',                 component: DashboardComponent, canActivate: [AuthenticationGuard]},
   { path: 'user-profile',              component: UserProfileComponent},
   { path: 'tables',                    component: TablesComponent},
   { path: 'icons',                     component: IconsComponent},

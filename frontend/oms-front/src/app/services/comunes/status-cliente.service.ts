@@ -1,28 +1,31 @@
 import { Injectable } from '@angular/core';
-import { StatusClienteI } from 'src/app/models/StatusCliente';
+import { StatusCliente } from 'src/app/models/StatusCliente';
 
 @Injectable()
 
 export class StatusClienteService {
 
-  private listStatusCliente: StatusClienteI [] = [
+  private listStatusCliente: StatusCliente [] = [
     {
-      name: "Platinum",
-      value: "1"
+      type: "1",
+      code: "PLT", 
+      description: "Platino"
     },
     {
-      name: "Gold",
-      value: "2"
+      type: "2",
+      code: "DRD", 
+      description: "Dorado"
     },
     {
-      name: "Silver",
-      value: "3"
+      type: "3",
+      code: "PLO", 
+      description: "Plateado"
     }
   ];
 
   constructor() { }
 
-  getListStatusCliente(): StatusClienteI[]{
+  getListStatusCliente(): StatusCliente[]{
     return this.listStatusCliente;
   }
 }

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ClienteDTO } from 'src/app/models/ClienteDTO';
-import { StatusClienteI } from 'src/app/models/StatusCliente';
+import { StatusCliente } from 'src/app/models/StatusCliente';
+
 import { StatusClienteService } from 'src/app/services/comunes/status-cliente.service';
 
 @Component({
@@ -15,11 +16,10 @@ export class CreacionClienteComponent implements OnInit {
   private emailValido = "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$";
   public minDate: Date;
   public maxDate: Date;
-  public listStatusCliente: StatusClienteI[];
+  public listStatusCliente: StatusCliente[];
   
   cliente: ClienteDTO;
   
-
   constructor(private formBuilder: FormBuilder,
               private svStatusCLiente : StatusClienteService) { 
     
@@ -61,7 +61,7 @@ export class CreacionClienteComponent implements OnInit {
     this.cliente.direccion = this.registerClientesForm.get('direccion').value;
     this.cliente.telefono = this.registerClientesForm.get('telefono').value;
     this.cliente.email = this.registerClientesForm.get('email').value;
-    this.cliente.statusCliente = this.registerClientesForm.get('statusCliente').value;
+    //this.cliente.statusCliente = this.registerClientesForm.get('statusCliente').value;
     this.cliente.username = this.registerClientesForm.get('nombreUsuario').value;
     this.cliente.password = this.registerClientesForm.get('password').value;
 

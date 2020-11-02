@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { StatusClienteI } from 'src/app/models/StatusCliente';
+import { StatusCliente } from 'src/app/models/StatusCliente';
 import { StatusClienteService } from 'src/app/services/comunes/status-cliente.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class DetalleClienteComponent implements OnInit {
   private emailValido = "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$";
   public minDate: Date;
   public maxDate: Date;
-  public listStatusCliente: StatusClienteI[];
+  public listStatusCliente: StatusCliente[];
 
   constructor(private formBuilder: FormBuilder,
     private svStatusCLiente : StatusClienteService) { 

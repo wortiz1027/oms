@@ -37,6 +37,9 @@ import { ActualizacionCampaniaComponent } from './pages/gestionCampañas/actuali
 import { EliminacionCampaniaComponent } from './pages/gestionCampañas/eliminacion-campania/eliminacion-campania.component';
 import { AsignarProductosComponent } from './pages/gestionCampañas/asignar-productos/asignar-productos.component';
 
+import { LoginService } from './services/login/login.service';
+import { AutguardService } from './services/guard/autguard.service';
+
 @NgModule({
   imports: [
     BrowserAnimationsModule,
@@ -75,7 +78,8 @@ import { AsignarProductosComponent } from './pages/gestionCampañas/asignar-prod
     EliminacionCampaniaComponent,
     AsignarProductosComponent
   ],
-  providers: [],
+  providers: [AutguardService,
+              LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

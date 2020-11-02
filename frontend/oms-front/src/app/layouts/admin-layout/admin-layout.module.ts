@@ -13,6 +13,8 @@ import {MapsComponent} from '../../pages/maps/maps.component';
 import {UserProfileComponent} from '../../pages/user-profile/user-profile.component';
 import {TablesComponent} from '../../pages/tables/tables.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { LoginService } from 'src/app/services/login/login.service';
+import { CrearClienteService } from 'src/app/services/clientes/crear-cliente.service';
 
 // import { ToastrModule } from 'ngx-toastr';
 
@@ -31,6 +33,10 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     TablesComponent,
     IconsComponent,
     MapsComponent
+  ],
+  providers: [
+    CrearClienteService,
+    LoginService
   ]
 })
 

@@ -1,4 +1,5 @@
-export interface StatusClienteI{
-    name: string;
-    value: string;
+export class StatusCliente{
+    type: string;
+    code: string;
+    description: string;
 }
