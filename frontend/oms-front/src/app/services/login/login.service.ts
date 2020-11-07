@@ -24,13 +24,14 @@ export class LoginService {
     }
 
     userLogin(_body: UserToLoging): Observable<any> {
-        console.log('Ingreso al login');
-        this.formData.append('client_id', '5258f2f8-05b3-11eb-96f5-9f4a2df3ac0e');
-        this.formData.append('client_secret', '9430fd38-05b3-11eb-a999-c7e4bb44a691');
+        console.log('Ingreso al servicio login');
+        this.formData.append('client_id', environment.clientId_variable);
+        this.formData.append('client_secret', environment.clientSecret_variable);
         this.formData.append('scope', 'read write');
         this.formData.append('grant_type', 'password');
         this.formData.append('username', _body.username);
         this.formData.append('password', _body.password);
+        console.log("resquest login " + JSON.stringify(this.formData));
         return this.httpClient
             .post<any>(environment.login_endpoint, this.formData);
     }

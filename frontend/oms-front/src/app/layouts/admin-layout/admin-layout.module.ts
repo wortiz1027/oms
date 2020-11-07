@@ -15,6 +15,7 @@ import {TablesComponent} from '../../pages/tables/tables.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { LoginService } from 'src/app/services/login/login.service';
 import { CrearClienteService } from 'src/app/services/clientes/crear-cliente.service';
+import { RolesClienteService } from 'src/app/services/comunes/roles-cliente.service';
 
 // import { ToastrModule } from 'ngx-toastr';
 
@@ -36,7 +37,8 @@ import { CrearClienteService } from 'src/app/services/clientes/crear-cliente.ser
   ],
   providers: [
     CrearClienteService,
-    LoginService
+    LoginService,
+    RolesClienteService
   ]
 })
 

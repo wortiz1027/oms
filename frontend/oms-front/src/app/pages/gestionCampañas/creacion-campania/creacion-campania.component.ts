@@ -10,12 +10,20 @@ import {Router} from '@angular/router';
   styles: []
 })
 export class CreacionCampaniaComponent implements OnInit {
+  public minDate: Date;
+  public maxDate: Date;
+  public base64: string;
   campania: CampaniaDTO;
 
   @ViewChild(FileUploadComponent) fileUpload;
 
   constructor(private formBuilder: FormBuilder,
               private router: Router) {
+
+              //Se establece la fecha minima y maxima
+              const currentYear = new Date().getFullYear();
+              this.minDate = new Date();
+              this.maxDate = new Date(currentYear + 0, 11, 31);
   
   }
 

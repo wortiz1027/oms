@@ -39,6 +39,8 @@ import { AsignarProductosComponent } from './pages/gestionCampañas/asignar-prod
 
 import { LoginService } from './services/login/login.service';
 import { AutguardService } from './services/guard/autguard.service';
+import { LoginOmsComponent } from './pages/login-oms/login-oms.component';
+import { CrearUsuarioComponent } from './pages/gestionUsuarios/crear-usuario/crear-usuario.component';
 
 @NgModule({
   imports: [
@@ -76,7 +78,9 @@ import { AutguardService } from './services/guard/autguard.service';
     BuscarCampaniaComponent,
     ActualizacionCampaniaComponent,
     EliminacionCampaniaComponent,
-    AsignarProductosComponent
+    AsignarProductosComponent,
+    LoginOmsComponent,
+    CrearUsuarioComponent
   ],
   providers: [AutguardService,
               LoginService],

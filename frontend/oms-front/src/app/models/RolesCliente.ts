@@ -1,4 +1,4 @@
 export class RolesCliente{
-    idRole: string;
-    role: string;
+    idRole?: string;
+    role?: string;
 }
