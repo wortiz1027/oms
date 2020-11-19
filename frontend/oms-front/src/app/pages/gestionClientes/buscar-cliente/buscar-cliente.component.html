@@ -1,65 +1,68 @@
-<form [formGroup]="busquedaClientesForm"> 
-    
-    <div class="form-group">
-        <div class="form-row">
+<form [formGroup]="busquedaClientesForm">
 
-            <!-- Busqueda Clientes -->
-            <div class="col-3">       
-                <div class="form-group">
-                    <label for="busquedaCliente">Busqueda Cliente</label>
-                    <input type="text" class="form-control" formControlName="busquedaCliente" placeholder="Ingrese (identificación, nombre o apellido) del cliente">
-                </div>
+  <div class="form-group">
+    <div class="form-row">
 
-                <div *ngIf="verificarCampo('busquedaCliente')" class="alert-danger">
-                    {{getMensajeError("busquedaCliente")}} 
-                </div>
-            </div>
-        </div>   
-    </div>     
-
-    <button type="button" class="btn btn-default" [disabled]="busquedaClientesForm.invalid" (click)="buscar()">Buscar</button>
-    <button type="button" class="btn btn-default" (click)="refrescar()">Limpiar</button>
-    <br>
-    <br>
-    
-    <div class="form-group">
-        <h1>Lista de Clientes</h1>
-        
-        <div class="form-row">
-            <div class="mat-elevation-z8">
-                <table mat-table [dataSource]="dataSource">
-              
-                  <!-- Item tabla-->
-                  <ng-container matColumnDef="position">
-                    <th mat-header-cell *matHeaderCellDef> No. </th>
-                    <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-                  </ng-container>
-
-                  <!-- Numero de Identificación -->
-                  <ng-container matColumnDef="identificacion">
-                    <th mat-header-cell *matHeaderCellDef> Número Identificación </th>
-                    <td mat-cell *matCellDef="let element"> {{element.identificacion}} </td>
-                  </ng-container>
-              
-                  <!-- Nombres del Cliente -->
-                  <ng-container matColumnDef="nombres">
-                    <th mat-header-cell *matHeaderCellDef> Nombres </th>
-                    <td mat-cell *matCellDef="let element"> {{element.nombres}} </td>
-                  </ng-container>
-              
-                  <!-- Apellidos del Cliente -->
-                  <ng-container matColumnDef="apellidos">
-                    <th mat-header-cell *matHeaderCellDef> Nombre </th>
-                    <td mat-cell *matCellDef="let element"> {{element.apellidos}} </td>
-                  </ng-container>
-
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
-              
-                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-            </div>  
-        </div>   
+      <!-- Busqueda Clientes -->
+      <div class="col-3">
+        <div class="form-group">
+          <label for="busquedaCliente">Busqueda Cliente</label>
+          <input type="text" class="form-control" formControlName="busquedaCliente"
+                 placeholder="Ingrese (identificación, nombre o apellido) del cliente">
+        </div>
+      </div>
     </div>
+  </div>
+
+  <button type="button" class="btn btn-default" (click)="buscar()">Buscar</button>
+  <button type="button" class="btn btn-default" (click)="limpiar()">Limpiar</button>
+  <br>
+  <br>
+
+  <div class="content-section implementation" *ngIf="lstClientes && lstClientes.length > 0">
+      <!--Resultados Busqueda-->
+      <div class="card">
+        <h1>Lista de Clientes</h1>
+        <p-table 
+          [value]="lstClientes"
+          [rows]="5"
+          selectionMode="single"
+          [(selection)]="selectedCliente" 
+          dataKey="codigo"
+          (onRowSelect)="onRowSelect($event)" 
+          (onRowUnselect)="onRowUnselect($event)"
+          [responsive]="true"
+          emptyMessage="No se encontraron resultados">
+          
+          <ng-template pTemplate="header">
+            <tr>
+              <th>No. Identificación</th>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>userName</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-cliente>
+            <tr [pSelectableRow]="cliente">
+              <td>{{cliente.cedula}}</td>
+              <td>{{cliente.nombres}}</td>
+              <td>{{cliente.apellidos}}</td>
+              <td>{{cliente.username}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+        <p-paginator [rows]="5"  
+                     [totalRecords]="totalRecords"
+                     [showCurrentPageReport]="true"
+                     currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} Resultados"
+                     (onPageChange)="paginate($event)"
+                     #paginator
+                     [first]="first">
+        </p-paginator>
+
+      </div>
+  </div>
 
 </form>

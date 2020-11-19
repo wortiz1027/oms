@@ -20,39 +20,68 @@ export class LoginService {
     constructor(private httpClient: HttpClient,
         private cookies: CookieService,
         private router: Router) {
-        console.log('Users service ready!!');
     }
 
     userLogin(_body: UserToLoging): Observable<any> {
         console.log('Ingreso al servicio login');
+
         this.formData.append('client_id', environment.clientId_variable);
         this.formData.append('client_secret', environment.clientSecret_variable);
         this.formData.append('scope', 'read write');
         this.formData.append('grant_type', 'password');
         this.formData.append('username', _body.username);
         this.formData.append('password', _body.password);
-        console.log("resquest login " + JSON.stringify(this.formData));
+
         return this.httpClient
             .post<any>(environment.login_endpoint, this.formData);
     }
 
     setToken(userInformation: ResponseService) {
         this.cookies.set('token', userInformation.access_token);
-        this.cookies.set('username', userInformation.username);
+        this.cookies.set('refreshToken', userInformation.refresh_token);
+    }
+
+    setUserInformation(username: string) {
+        this.cookies.set('username', username);
     }
 
     getToken() {
         return this.cookies.get('token');
     }
 
+    getRefreshToken(){
+        return this.cookies.get('refreshToken');
+    }
+
     getUserName() {
-        return this.cookies.get('username');
+        let username = '';
+        username = this.cookies.get('username');
+
+        return username;
     }
 
     userLogout() {
-        this.cookies.set('token', '');
-        this.cookies.set('username', '');
-        this.router.navigateByUrl('/login');
+        this.cookies.deleteAll();
+        this.router.navigateByUrl('/loginOMS');
+    }
+
+    refreshToken() {
+
+        this.formData.append('client_id', environment.clientId_variable);
+        this.formData.append('client_secret', environment.clientSecret_variable);
+        this.formData.append('grant_type', 'refresh_token');
+        this.formData.append('refresh_token', this.getRefreshToken());
+
+        this.httpClient
+            .post<any>(environment.login_endpoint, this.formData).subscribe(
+                (resRefresh) => {
+                    this.responseService = resRefresh;
+                    this.setToken(this.responseService);
+                  },
+                  (error) => {
+                    console.log('Error {}', error);
+                  }
+            );
     }
 
 }

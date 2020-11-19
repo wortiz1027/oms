@@ -9,7 +9,7 @@
             <div class="col-3">   
                 <div class="form-group">
                     <label for="identificacion">Número Identificación</label>
-                    <input type="text" class="form-control" formControlName="identificacion">
+                    <input type="text" class="form-control" formControlName="identificacion" readonly>
                 </div>
 
                 <div *ngIf="verificarCampo('identificacion')" class="alert-danger">
@@ -21,7 +21,7 @@
             <div class="col-3">   
                 <div class="form-group">
                     <label for="nombres">Nombres</label>
-                    <input type="text" class="form-control" formControlName="nombres">
+                    <input type="text" class="form-control" formControlName="nombres" readonly>
                 </div>
 
                 <div *ngIf="verificarCampo('nombres')" class="alert-danger">
@@ -33,7 +33,7 @@
             <div class="col-3">   
                 <div class="form-group">
                     <label for="apellidos">Apellidos</label>
-                    <input type="text" class="form-control" formControlName="apellidos">
+                    <input type="text" class="form-control" formControlName="apellidos" readonly>
                 </div>
 
                 <div *ngIf="verificarCampo('apellidos')" class="alert-danger">
@@ -50,7 +50,7 @@
             <div class="col-3">       
                 <mat-form-field appearance="fill" class="form-group">
                     <mat-label>Fecha de Nacimiento </mat-label>
-                    <input matInput [matDatepicker]="fechaNacimiento" placeholder="Seleccione una Fecha" class="form-control" formControlName="fechaNacimiento" [min]="minDate" [max]="maxDate">
+                    <input matInput [matDatepicker]="fechaNacimiento" placeholder="Seleccione una Fecha" class="form-control" formControlName="fechaNacimiento" [min]="minDate" [max]="maxDate" readonly>
                     <mat-datepicker-toggle matSuffix [for]="fechaNacimiento"></mat-datepicker-toggle>
                     <mat-datepicker touchUi #fechaNacimiento></mat-datepicker>
                 </mat-form-field> 
@@ -64,7 +64,7 @@
             <div class="col-3">            
                 <div class="form-group">
                     <label for="direccion">Dirección</label>
-                    <input type="text" class="form-control" formControlName="direccion">
+                    <input type="text" class="form-control" formControlName="direccion" readonly>
                 </div>
 
                 <div *ngIf="verificarCampo('direccion')" class="alert-danger">
@@ -76,7 +76,7 @@
             <div class="col-3">     
                 <div class="form-group">
                     <label for="telefono">Teléfono</label>
-                    <input type="text" class="form-control" formControlName="telefono">
+                    <input type="text" class="form-control" formControlName="telefono" readonly>
                 </div>
 
                 <div *ngIf="verificarCampo('telefono')" class="alert-danger">
@@ -92,7 +92,7 @@
             <div class="col-3">               
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="text" class="form-control" formControlName="email">
+                    <input type="text" class="form-control" formControlName="email" readonly>
                 </div>
 
                 <div *ngIf="verificarCampo('email')" class="alert-danger">
@@ -104,8 +104,8 @@
             <div class="col-3">      
                 <div class="form-group">
                     <label for="statusCliente">Seleccione el status del cliente</label>
-                    <select class="form-control" id="statusCliente" name="statusCliente" formControlName="statusCliente">
-                        <option *ngFor="let statusCliente of listStatusCliente" [value]="statusCliente.value">{{statusCliente.name}}</option>
+                    <select class="form-control" id="statusCliente" name="statusCliente" formControlName="statusCliente" disabled>
+                        <option *ngFor="let statusCliente of listStatusCliente" [value]="statusCliente.type">{{statusCliente.description}}</option>
                     </select>
                 </div>
 
@@ -114,6 +114,6 @@
                 </div>
             </div>           
         </div>   
-    </div>
+    </div> 
 
 </form>

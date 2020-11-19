@@ -1,25 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ProveedoresI } from 'src/app/models/Proveedores';
+import { TipoProductosI } from 'src/app/models/TipoProductos';
 import { TipoProveedorI } from 'src/app/models/TipoProveedor';
-import { ProveedorService } from 'src/app/services/comunes/proveedor.service';
+import { TipoProductoService } from 'src/app/services/comunes/tipoProducto.service';
 import { TipoProveedorService } from 'src/app/services/comunes/tipo-proveedor.service';
 
 @Component({
   selector: 'app-asignar-productos',
   templateUrl: './asignar-productos.component.html',
   styles: [],
-  providers: [TipoProveedorService, ProveedorService]
+  providers: [TipoProveedorService, TipoProductoService]
 })
 
 export class AsignarProductosComponent implements OnInit {
 
   public listTipoProveedor: TipoProveedorI[];
-  public listProveedores: ProveedoresI[];
+  public listProveedores: TipoProductosI[];
 
   constructor(private formBuilder: FormBuilder, 
               private svTipoProveedor: TipoProveedorService,
-              private svProveedores: ProveedorService) { 
+              private svTipoProducto: TipoProductoService) { 
 
   }
 
@@ -38,7 +38,7 @@ export class AsignarProductosComponent implements OnInit {
     //Limpiar el campo proveedores
     this.asignarProductosForm.patchValue({proveedores: this.listProveedores});
 
-    this.listProveedores = this.svProveedores.getListProveedores().filter(item => item.tipoProveedor == value);
+    this.listProveedores = this.svTipoProducto.getListTipoProductos().filter(item => item.tipoProveedor == value);
   }
 
   //Metodos Para validacion de campos

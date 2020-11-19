@@ -42,6 +42,17 @@ import { AutguardService } from './services/guard/autguard.service';
 import { LoginOmsComponent } from './pages/login-oms/login-oms.component';
 import { CrearUsuarioComponent } from './pages/gestionUsuarios/crear-usuario/crear-usuario.component';
 
+
+//Nuevos
+import { BrowserModule } from '@angular/platform-browser';
+import { TableModule} from 'primeng/table';
+import { ButtonModule} from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { PaginatorModule} from 'primeng/paginator';
+import { DetalleClienteEditComponent } from './pages/gestionClientes/detalle-cliente-edit/detalle-cliente-edit.component';
+
 @NgModule({
   imports: [
     BrowserAnimationsModule,
@@ -55,7 +66,16 @@ import { CrearUsuarioComponent } from './pages/gestionUsuarios/crear-usuario/cre
     AppRoutingModule,
     ReactiveFormsModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    //nuevos
+    BrowserModule,
+    TableModule,
+    ButtonModule,
+    TooltipModule,
+    RadioButtonModule,
+    InputSwitchModule,
+    PaginatorModule
+
   ],
   declarations: [
     AppComponent,
@@ -80,7 +100,8 @@ import { CrearUsuarioComponent } from './pages/gestionUsuarios/crear-usuario/cre
     EliminacionCampaniaComponent,
     AsignarProductosComponent,
     LoginOmsComponent,
-    CrearUsuarioComponent
+    CrearUsuarioComponent,
+    DetalleClienteEditComponent
   ],
   providers: [AutguardService,
               LoginService],

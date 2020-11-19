@@ -67,8 +67,7 @@ export class CreacionProveedoresComponent implements OnInit {
     this.proveedor.ciudad = this.registerProveedoresForm.get('ciudad').value;
     this.proveedor.telefono = this.registerProveedoresForm.get('telefono').value;
     this.proveedor.email = this.registerProveedoresForm.get('email').value;
-
-    console.log(this.registerProveedoresForm.value);
+    
   }
   
     refrescar() {

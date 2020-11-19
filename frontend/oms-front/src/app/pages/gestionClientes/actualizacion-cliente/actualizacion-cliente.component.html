@@ -20,17 +20,20 @@
     
     <!--Componente para la busqueda de clientes-->          
     <div class="form-group">
-        <app-buscar-cliente #buscarProducto></app-buscar-cliente>
-    </div> 
-
+        <app-buscar-cliente (sendClienteSelect)="onRowSelect($event)"
+                            (sendClienteUnSelect)="onRowUnselect($event)">
+        </app-buscar-cliente>
+    </div>   
     <br>
     <br>
 
     <!--Componente para ver el detalle de clientes-->          
-    <div class="form-group">
-        <app-detalle-cliente #detalleProducto></app-detalle-cliente>
+    <div class="form-group" *ngIf="visibilidadDetalle">
+        <app-detalle-cliente-edit [cliente]="cliente"
+                                  (sendDetalleCliente)="showFormContactData($event)"
+        ></app-detalle-cliente-edit>
     </div>
 
-    <button type="submit" class="btn btn-default">Actualizar</button>
+    <button type="submit" class="btn btn-default" *ngIf="visibilidadDetalle">Actualizar</button>
 
 </form>

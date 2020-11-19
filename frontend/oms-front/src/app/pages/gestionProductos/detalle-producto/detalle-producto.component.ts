@@ -1,27 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ProveedoresI } from 'src/app/models/Proveedores';
+import { TipoProductosI } from 'src/app/models/TipoProductos';
 import { TipoProveedorI } from 'src/app/models/TipoProveedor';
-import { ProveedorService } from 'src/app/services/comunes/proveedor.service';
+import { TipoProductoService } from 'src/app/services/comunes/tipoProducto.service';
 import { TipoProveedorService } from 'src/app/services/comunes/tipo-proveedor.service';
 
 @Component({
   selector: 'app-detalle-producto',
   templateUrl: './detalle-producto.component.html',
   styles: [],
-  providers: [TipoProveedorService, ProveedorService]
+  providers: [TipoProveedorService, TipoProductoService]
 })
 export class DetalleProductoComponent implements OnInit {
 
   public listTipoProveedor: TipoProveedorI[];
-  public listProveedores: ProveedoresI[];
+  public listProveedores: TipoProductosI[];
   public minDate: Date;
   public maxDate: Date;
   public base64: string;
 
   constructor(private formBuilder: FormBuilder, 
     private svTipoProveedor: TipoProveedorService,
-    private svProveedores: ProveedorService) {
+    private svTipoProducto: TipoProductoService) {
       
       //Se establece la fecha minimay maxima
       const currentYear = new Date().getFullYear();
@@ -53,7 +53,7 @@ export class DetalleProductoComponent implements OnInit {
     //Limpiar el campo proveedores
     this.detalleProductosForm.patchValue({proveedores: this.listProveedores});
 
-    this.listProveedores = this.svProveedores.getListProveedores().filter(item => item.tipoProveedor == value);
+    this.listProveedores = this.svTipoProducto.getListTipoProductos().filter(item => item.tipoProveedor == value);
   }
 
   //Metodos Para validacion de campos

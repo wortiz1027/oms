@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ClienteDTO } from 'src/app/models/ClienteDTO';
-import { ResponseCrearClienteDTO } from 'src/app/models/ResponseCrearClienteDTO';
-import { RolesCliente } from 'src/app/models/RolesCliente';
+import { RequestCrearUsuarioDTO } from 'src/app/models/RequestCrearUsuarioDTO';
+import { ResponseCrearUsuarioDTO } from 'src/app/models/ResponseCrearUsuarioDTO';
+import { RolesUsuario } from 'src/app/models/RolesUsuario';
 import { StatusCliente } from 'src/app/models/StatusCliente';
-import { CrearClienteService } from 'src/app/services/clientes/crear-cliente.service';
+import { LoginService } from 'src/app/services/login/login.service';
+import { CrearUsuarioService } from 'src/app/services/usuarios/crear-usuario.service';
 
 @Component({
   selector: 'app-register',
@@ -13,11 +14,12 @@ import { CrearClienteService } from 'src/app/services/clientes/crear-cliente.ser
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  cliente: ClienteDTO;
-  responseService: ResponseCrearClienteDTO;
+  cliente: RequestCrearUsuarioDTO;
+  responseService: ResponseCrearUsuarioDTO;
 
   constructor(private formBuilder: FormBuilder,
-              private _crearCliente: CrearClienteService,
+              private svCrearCliente: CrearUsuarioService,
+              private svLogin: LoginService,
               private router: Router) { 
 
   }
@@ -46,15 +48,15 @@ export class RegisterComponent implements OnInit {
       alert('Alguna regla de validación no se está cumpliendo');
       return;
     }
-    var listRoles = new Array<RolesCliente>();
+    var listRoles = new Array<RolesUsuario>();
 
-    var rol = new RolesCliente;
+    var rol = new RolesUsuario;
     rol.idRole = "3";
     rol.role = "ROLE_CLIENT";
 
     listRoles.push(rol);
 
-    var rol = new RolesCliente;
+    var rol = new RolesUsuario;
     rol.idRole = "10";
     rol.role = "ROLE_CLIENTES_CONSULTA";
 
@@ -78,13 +80,17 @@ export class RegisterComponent implements OnInit {
     this.cliente.roles = listRoles;
     this.cliente.types = statusCliente;
 
-    this._crearCliente.createUser(this.cliente).subscribe(
+    this.svCrearCliente.createUser(this.cliente).subscribe(
       (res) => {
         this.responseService = res;
         alert("Usuario Creado !!!");
+        this.svLogin.refreshToken();
         this.router.navigate(['dashboard']);
       },
       (res) => {
+        if(res.status == 401){
+          this.svLogin.userLogout();
+        }
         console.log('error ' + JSON.stringify(res.status));
       }
     );

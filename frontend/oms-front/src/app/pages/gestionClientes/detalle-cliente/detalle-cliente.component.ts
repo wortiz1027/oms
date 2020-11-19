@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { RequestCrearUsuarioDTO } from 'src/app/models/RequestCrearUsuarioDTO';
 import { StatusCliente } from 'src/app/models/StatusCliente';
 import { StatusClienteService } from 'src/app/services/comunes/status-cliente.service';
 
@@ -16,6 +17,9 @@ export class DetalleClienteComponent implements OnInit {
   public maxDate: Date;
   public listStatusCliente: StatusCliente[];
 
+  @Input() cliente: RequestCrearUsuarioDTO;
+  @Input() readonly: Boolean;
+  
   constructor(private formBuilder: FormBuilder,
     private svStatusCLiente : StatusClienteService) { 
 
@@ -23,6 +27,7 @@ export class DetalleClienteComponent implements OnInit {
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(1900, 1, 1);
     this.maxDate = new Date();  
+
   }
 
   detalleClientesForm = this.formBuilder.group({
@@ -38,6 +43,21 @@ export class DetalleClienteComponent implements OnInit {
 
   ngOnInit(){
     this.listStatusCliente = this.svStatusCLiente.getListStatusCliente();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.cliente.currentValue) {
+      let cliente: RequestCrearUsuarioDTO = changes.cliente.currentValue;
+      this.detalleClientesForm.controls['identificacion'].setValue(cliente.cedula);
+      this.detalleClientesForm.controls['nombres'].setValue(cliente.nombres);
+      this.detalleClientesForm.controls['apellidos'].setValue(cliente.apellidos);
+      this.detalleClientesForm.controls['fechaNacimiento'].setValue(cliente.fechaNacimiento);
+      this.detalleClientesForm.controls['direccion'].setValue(cliente.direccion);
+      this.detalleClientesForm.controls['telefono'].setValue(cliente.telefono);
+      this.detalleClientesForm.controls['email'].setValue(cliente.email);
+      this.detalleClientesForm.controls['statusCliente'].setValue(cliente ? cliente.types ? cliente.types.type :"" : "");
+      
+    }
   }
 
   //Metodos Para validacion de campos

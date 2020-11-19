@@ -133,29 +133,6 @@
 
     <div class="form-group">
         <div class="form-row">
-            <!-- Roles Usuario -->
-            <div class="col-3">               
-                <div class="form-group">
-                    <label class="field-label">Roles</label>
-                    <div class="flex-container">
-                        <div *ngFor="let rol of listRolesCliente; let i = index">
-                            <label>
-                              <input type="checkbox" [value]="rol.idRole" name="roles" (change)="onCheckboxChange($event)" />
-                              {{rol.role}}
-                            </label>
-                        </div>
-
-                        <div *ngIf="this.registerClientesForm.controls['roles'].errors?.required" class="alert-danger">
-                            {{getMensajeError("roles")}} 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="form-row">
             <!-- Nombre Usuario -->
             <div class="col-3">               
                 <div class="form-group">
@@ -182,6 +159,6 @@
     </div>
 
     <button type="submit" class="btn btn-success" [disabled]="registerClientesForm.invalid">Crear</button>
-    <button type="button" class="btn btn-default" (click)="refrescar()">Limpiar</button>
+    <button type="button" class="btn btn-default" (click)="limpiar()">Limpiar</button>
 
 </form>

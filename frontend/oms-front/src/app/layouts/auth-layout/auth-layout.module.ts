@@ -7,7 +7,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import {RegisterComponent} from '../../pages/register/register.component';
 import { LoginService } from 'src/app/services/login/login.service';
-import { CrearClienteService } from 'src/app/services/clientes/crear-cliente.service';
+import { CrearUsuarioService } from 'src/app/services/usuarios/crear-usuario.service';
 
 @NgModule({
   imports: [
@@ -22,7 +22,7 @@ import { CrearClienteService } from 'src/app/services/clientes/crear-cliente.ser
   ],
   providers: [
     LoginService,
-    CrearClienteService
+    CrearUsuarioService
   ]
 })
 export class AuthLayoutModule {

@@ -21,6 +21,7 @@ import { AsignarProductosComponent } from 'src/app/pages/gestionCampañas/asigna
 import { AuthenticationGuard } from '../../guard/authentication.guard';
 import { LoginOmsComponent } from 'src/app/pages/login-oms/login-oms.component';
 import { CrearUsuarioComponent } from 'src/app/pages/gestionUsuarios/crear-usuario/crear-usuario.component';
+import { FileUploadComponent } from 'src/app/components/file-upload/file-upload.component';
 
 export const AdminLayoutRoutes: Routes = [
   { path: 'dashboard',                 component: DashboardComponent, canActivate: [AuthenticationGuard]},
@@ -41,6 +42,6 @@ export const AdminLayoutRoutes: Routes = [
   { path: 'eliminarCampania',          component: EliminacionCampaniaComponent},
   { path: 'asignarProductos',          component: AsignarProductosComponent},
   { path: 'loginOMS',                  component: LoginOmsComponent},
-  { path: 'crearusuario',              component: CrearUsuarioComponent}
+  { path: 'crearUsuario',              component: CrearUsuarioComponent}
   
 ];

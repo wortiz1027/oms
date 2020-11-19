@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FileUpload } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-file-upload',
@@ -11,62 +11,31 @@ export class FileUploadComponent implements OnInit {
   public imageURL: string;
   public nombreImagen: string;
   public base64: string;
+  public file: File;
+  public fileBase64: string;
 
-  constructor(private formBuilder: FormBuilder) { }
-
-  fileUploadForm = this.formBuilder.group({
-    imagen: [null],
-    nombreImagen: ['', { validators: [Validators.required]}]
-  });
+  constructor() { }
 
   ngOnInit(): void {
   }
 
-  //Carga imagenes
-  showPreview(event) {
-    const file = (event.target as HTMLInputElement).files[0];
-
-    this.fileUploadForm.patchValue({
-      imagen: file
-    });
-
-    this.fileUploadForm.get('imagen').updateValueAndValidity()
-
-    // File Preview
+  uploadDocuments(event: any, uploader: FileUpload) {
+    this.file = null;
+    this.fileBase64 = "";
     const reader = new FileReader();
 
-    reader.onload = () => {
-      this.imageURL = reader.result as string;
-      let temp64;
-      temp64 = this.imageURL.split(',', this.imageURL.length);
+    if(event.files[0] != null){
+      reader.readAsDataURL(event.files[0]);
 
-      this.base64 = temp64[1];
+      reader.onload = () => {
+        this.fileBase64 = reader.result.toString().replace(/^data:(.*,)?/, ''),
+        this.file = event.files[0]
+      };
     }
 
-    reader.readAsDataURL(file)
+    reader.onerror = (error) => {
+    };
+    uploader.clear();
   }
-
-  refrescar() {
-    this.fileUploadForm.patchValue({
-      imagen: null,
-      nombreImagen: ''
-    });
-  }
-
-  //Metodos Para validacion de campos
-  getMensajeError(field:string): string{
-    let mensaje: string;
-  
-    if(this.fileUploadForm.get(field).errors.required){
-      mensaje = 'El campo es requerido';
-    }
-  
-    return mensaje;
-  }
-  
-  verificarCampo(field: string): boolean{
-    return ((this.fileUploadForm.get(field).dirty || this.fileUploadForm.get(field).touched) && 
-            (this.fileUploadForm.get(field).invalid || this.fileUploadForm.get(field).errors?.required));
-  } 
 
 }

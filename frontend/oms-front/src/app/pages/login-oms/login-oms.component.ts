@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 
 import { Router } from '@angular/router';
 import { LoginService, ResponseService } from 'src/app/services/login/login.service';
-import { environment } from 'src/environments/environment';
 import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -43,7 +42,7 @@ export class LoginOmsComponent implements OnInit, OnDestroy {
     this._loginService.userLogin(this.userToLogin).subscribe(
       (res) => {
         this.responseService = res;
-        console.log('resService: ', this.responseService);
+
         this.responseService.username = this.userToLogin.username;
         this._loginService.setToken(this.responseService);
         this.router.navigate(['/dashboard']);
@@ -52,7 +51,6 @@ export class LoginOmsComponent implements OnInit, OnDestroy {
         console.log('error ' + JSON.stringify(res.status));
       }
     );
-    console.log('token', this._loginService.getToken());
   }
 
   //Metodos Para validacion de campos

@@ -14,8 +14,8 @@ import {UserProfileComponent} from '../../pages/user-profile/user-profile.compon
 import {TablesComponent} from '../../pages/tables/tables.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { LoginService } from 'src/app/services/login/login.service';
-import { CrearClienteService } from 'src/app/services/clientes/crear-cliente.service';
-import { RolesClienteService } from 'src/app/services/comunes/roles-cliente.service';
+import { CrearUsuarioService } from 'src/app/services/usuarios/crear-usuario.service';
+import { RolesUsuarioService } from 'src/app/services/comunes/roles-usuario.service';
 
 // import { ToastrModule } from 'ngx-toastr';
 
@@ -26,7 +26,9 @@ import { RolesClienteService } from 'src/app/services/comunes/roles-cliente.serv
     FormsModule,
     HttpClientModule,
     NgbModule,
-    ClipboardModule
+    ClipboardModule,
+    //nuevos
+    
   ],
   declarations: [
     DashboardComponent,
@@ -36,9 +38,9 @@ import { RolesClienteService } from 'src/app/services/comunes/roles-cliente.serv
     MapsComponent
   ],
   providers: [
-    CrearClienteService,
+    CrearUsuarioService,
     LoginService,
-    RolesClienteService
+    RolesUsuarioService
   ]
 })
 

@@ -24,7 +24,7 @@
             <div class="col-3">      
                 <div class="form-group">
                     <label for="tipoProveedor">Seleccione el tipo de proveedor</label>
-                    <select class="form-control" id="tipoProveedor" name="tipoProveedor" #tipoProveedor formControlName="tipoProveedor" (change) = "onSelTipoProveedores($event.target.value)">
+                    <select class="form-control" id="tipoProveedor" name="tipoProveedor" #tipoProveedor formControlName="tipoProveedor" (change)="onSelTipoProveedores($event.target.value)">
                         <option *ngFor="let tipoProveedor of listTipoProveedor" [value]="tipoProveedor.value">{{tipoProveedor.name}}</option>
                     </select>
                 </div>
@@ -37,14 +37,14 @@
             <!-- Proveedores -->
             <div class="col-3" *ngIf= "tipoProveedor.value !== ''">      
                 <div class="form-group">
-                    <label for="proveedores">Seleccione el proveedor</label>
-                    <select class="form-control" id="proveedores" name="proveedores" formControlName="proveedores">
-                        <option *ngFor="let proveedor of listProveedores" [value]="proveedor.value">{{proveedor.name}}</option>
+                    <label for="tipoProducto">Seleccione el tipo de producto</label>
+                    <select class="form-control" id="tipoProducto" name="tipoProducto" formControlName="tipoProducto" (change)="onSelTipoProducto($event)">
+                        <option *ngFor="let tipoProducto of listTipoProductos" [nombre]="tipoProducto.name" [value]="tipoProducto.value">{{tipoProducto.name}}</option>
                     </select>
                 </div>
 
-                <div *ngIf="verificarCampo('proveedores')" class="alert-danger">
-                    {{getMensajeError("proveedores")}} 
+                <div *ngIf="verificarCampo('tipoProducto')" class="alert-danger">
+                    {{getMensajeError("tipoProducto")}} 
                 </div>
             </div>
 
@@ -170,6 +170,6 @@
     </div>
 
     <button type="submit" class="btn btn-success" [disabled]="registerProductosForm.invalid">Crear</button>
-    <button type="button" class="btn btn-default" (click)="refrescar()">Limpiar</button>
+    <button type="button" class="btn btn-default" (click)="limpiar()">Limpiar</button>
 
 </form>

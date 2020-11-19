@@ -1,34 +1,22 @@
-<div class="form-group">
-    <div class="form-row">
-
-        <!-- Imagen Producto -->
-        <div class="col-3">            
-            <div class="form-group">
-                <label for="nombreImagen">Nombre Imagen</label>
-                <input type="text" class="form-control" formControlName="nombreImagen" placeholder="Ingrese el Nombre de la Imagen">
-            </div>
-
-            <div *ngIf="verificarCampo('nombreImagen')" class="alert-danger">
-                {{getMensajeError("nombreImagen")}} 
-            </div>
+<form>
+    <div class="ui-g ui-fluid">
+        <div class="ui-g-12" [style.padding-top]="'30px'">
+          <div class="ui-sm-12 ui-md-12 ui-g-12 ui-lg-12">
+            <p-fileUpload #uploader
+                          chooseLabel="Adjuntar"
+                          uploadLabel="Cargar"
+                          cancelLabel="Cancelar"
+                          [multiple]="false"
+                          customUpload="true"
+                          accept="image/*"
+                          (uploadHandler)="uploadDocuments($event, uploader)"
+                          name="file[]"
+                          maxFileSize="2000000"
+                          invalidFileSizeMessageSummary="El documento que desea adjuntar supera el tamaño permitido"
+                          invalidFileTypeMessageSummary="El documento que desea adjuntar no comparte el formato permitido">
+            </p-fileUpload>
+          </div>
         </div>
-
-        <!-- Select File -->
-        <input type="file" accept="image/*" (change)="showPreview($event)" />
- 
-    </div>   
-        <div class="form-group">
-            <div class="form-row">
-                <div class="card-columns">
-                    <div class="card-body">                        
-                        <!-- Image Preview -->
-                        <mat-card-content>
-                            <div class="imagePreview" *ngIf="imageURL && imageURL !== ''">
-                                <img [src]="imageURL" [alt]="nombreImagen">
-                            </div>
-                        </mat-card-content>
-                    </div>
-                </div>
-            </div>
-        </div>
-</div>
+    </div>
+    
+</form>
