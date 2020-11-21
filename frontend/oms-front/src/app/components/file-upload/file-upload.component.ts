@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FileUpload } from 'primeng/fileupload';
 
 @Component({
@@ -8,31 +8,35 @@ import { FileUpload } from 'primeng/fileupload';
 })
 export class FileUploadComponent implements OnInit {
 
-  public imageURL: string;
-  public nombreImagen: string;
-  public base64: string;
-  public file: File;
-  public fileBase64: string;
+  public file: File = null;
+  public fileBase64: string = "";
+  imagen: any = {};
+
+  @Output() sendFileUpload = new EventEmitter<any>();
 
   constructor() { }
 
   ngOnInit(): void {
+
   }
 
   uploadDocuments(event: any, uploader: FileUpload) {
-    this.file = null;
-    this.fileBase64 = "";
     const reader = new FileReader();
 
     if(event.files[0] != null){
       reader.readAsDataURL(event.files[0]);
 
       reader.onload = () => {
-        this.fileBase64 = reader.result.toString().replace(/^data:(.*,)?/, ''),
-        this.file = event.files[0]
-      };
-    }
+        this.fileBase64 = reader.result.toString().replace(/^data:(.*,)?/, '');
+        this.file = event.files[0];
+        
+        this.imagen.fileBase64 = reader.result.toString().replace(/^data:(.*,)?/, '');
+        this.imagen.file = event.files[0];
 
+        this.sendFileUpload.emit(this.imagen);
+      };
+      
+    }
     reader.onerror = (error) => {
     };
     uploader.clear();

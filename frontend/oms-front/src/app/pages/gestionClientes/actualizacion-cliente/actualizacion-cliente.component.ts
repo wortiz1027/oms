@@ -2,7 +2,6 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { RequestCrearUsuarioDTO } from 'src/app/models/RequestCrearUsuarioDTO';
 import { ResponseCrearUsuarioDTO } from 'src/app/models/ResponseCrearUsuarioDTO';
-import { StatusCliente } from 'src/app/models/StatusCliente';
 import { LoginService } from 'src/app/services/login/login.service';
 import { ActualizarUsuarioService } from 'src/app/services/usuarios/actualizar-usuario.service';
 import { DetalleClienteEditComponent } from '../detalle-cliente-edit/detalle-cliente-edit.component';
@@ -17,9 +16,7 @@ export class ActualizacionClienteComponent implements OnInit {
 
   cliente: RequestCrearUsuarioDTO;
   visibilidadDetalle:Boolean;
-  //public listStatusCliente: StatusCliente[];
-  //typeCliente: StatusCliente;
-  //formDataDetalleCliente: EventEmitter<FormGroup> = new EventEmitter<any>();
+
   formDataDetalleCliente: FormGroup;
 
   responseService: ResponseCrearUsuarioDTO;
@@ -36,12 +33,12 @@ export class ActualizacionClienteComponent implements OnInit {
 
   onRowSelect(cliente: RequestCrearUsuarioDTO) {
     this.cliente = cliente;
-    this.visibilidadDetalle =true;
+    this.visibilidadDetalle = true;
   }
   
   onRowUnselect(cliente: RequestCrearUsuarioDTO) {
     this.cliente = cliente;
-    this.visibilidadDetalle=false;
+    this.visibilidadDetalle = false;
   }
 
   showFormContactData(componentDetalleCliente: DetalleClienteEditComponent) {

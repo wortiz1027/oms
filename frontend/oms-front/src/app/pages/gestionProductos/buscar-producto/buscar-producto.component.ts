@@ -1,86 +1,276 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
+import { RequestBuscarProductoDTO } from 'src/app/models/RequestBuscarProductoDTO';
+import { RequestCrearProductoDTO } from 'src/app/models/RequestCrearProductoDTO';
+import { ResponseBuscarProductoDTO } from 'src/app/models/ResponseBuscarProductoDTO';
+import { LoginService } from 'src/app/services/login/login.service';
+import { BuscarProductoService } from 'src/app/services/producto/buscar-producto.service';
+
+import { Paginator } from 'primeng/paginator';
 
 @Component({
   selector: 'app-buscar-producto',
   templateUrl: './buscar-producto.component.html'
 })
 
-export class BuscarProductoComponent implements OnInit, AfterViewInit {
+export class BuscarProductoComponent implements OnInit {
+  reqBuscarProducto: RequestBuscarProductoDTO;
+  resBuscarProducto: ResponseBuscarProductoDTO;
+  lstProductos: RequestCrearProductoDTO[];
+  totalRecords: number;
+  first: number = 0;
 
-  displayedColumns: string[] = ['position', 'codProducto', 'name', 'descripcion'];
+  @Output() sendProductoSelect = new EventEmitter<RequestCrearProductoDTO>();
+  @Output() sendProductoUnSelect = new EventEmitter<RequestCrearProductoDTO>();
 
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  selectedProducto: RequestCrearProductoDTO;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('paginator', { static: true }) paginator: Paginator;
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder,
+              private svBuscarProducto: BuscarProductoService,
+              private svLogin: LoginService
+            ) {
 
   }
         
   busquedaProductosForm = this.formBuilder.group({
-    busquedaProducto: ['', { validators: [Validators.required]}]
+    busquedaProducto: ['']
   });
   
   ngOnInit() {
-
+    this.lstProductos = []; 
   }
   
   buscar() {
-    if (!this.busquedaProductosForm.valid) {
-      alert('Alguna regla de validación no se está cumpliendo');
+    this.reqBuscarProducto = {};
+    this.lstProductos = []; 
+    let producto: RequestCrearProductoDTO = {};
+    
+    this.reqBuscarProducto.text = this.busquedaProductosForm.get('busquedaProducto').value;
+    this.reqBuscarProducto.page = "0";
+    this.reqBuscarProducto.size = "5";
+    this.reqBuscarProducto.token = this.svLogin.getToken().valueOf();
 
-      return;
+    if(this.reqBuscarProducto.text != null && this.reqBuscarProducto.text.trim() != ""){
+      this.svBuscarProducto.buscarProductoText(this.reqBuscarProducto).subscribe(
+        (res) => {
+          this.resBuscarProducto = res;
+
+          if(this.resBuscarProducto.status.code == "SUCCESS"){
+            if(this.resBuscarProducto.data.products != null && this.resBuscarProducto.data.products.length > 0){
+              for(let i= 0; i < this.resBuscarProducto.data.products.length; i++){
+                producto = {};
+  
+                producto.productId = this.resBuscarProducto.data.products[i].productId;
+                producto.productCode = this.resBuscarProducto.data.products[i].productCode;
+                producto.productName = this.resBuscarProducto.data.products[i].productName;
+                producto.productDescription = this.resBuscarProducto.data.products[i].productDescription;
+                producto.productPrice = this.resBuscarProducto.data.products[i].productPrice;
+                producto.originCity = this.resBuscarProducto.data.products[i].originCity;
+                producto.destinationCity = this.resBuscarProducto.data.products[i].destinationCity;
+                producto.startDate = this.resBuscarProducto.data.products[i].startDate;
+                producto.endDate = this.resBuscarProducto.data.products[i].endDate;
+                producto.type = this.resBuscarProducto.data.products[i].type;
+                producto.image = this.resBuscarProducto.data.products[i].image;
+                producto.vendorId = this.resBuscarProducto.data.products[i].vendorId;           
+  
+                this.lstProductos.push(producto);
+  
+                this.totalRecords = this.resBuscarProducto.data.totalItems;
+              }
+            }
+            this.svLogin.refreshToken();
+
+            this.limpiar();
+          }else {
+            alert(this.resBuscarProducto.status.description);
+
+            this.limpiar();
+          }
+        },
+        (res) => {
+          this.selectedProducto = {};
+
+          this.sendProductoUnSelect.emit(this.selectedProducto);
+          
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }else if(res.error.status.code == "ERROR"){
+            alert("No se encontró ningún producto con ese texto");
+          }
+        }
+      );
+    }else{
+      this.svBuscarProducto.buscarProductos(this.reqBuscarProducto).subscribe(
+        (res) => {
+          this.resBuscarProducto = res;
+
+          if(this.resBuscarProducto.data.products != null && this.resBuscarProducto.data.products.length > 0){
+            for(let i= 0; i < this.resBuscarProducto.data.products.length; i++){
+              producto = {};
+
+              producto.productId = this.resBuscarProducto.data.products[i].productId;
+              producto.productCode = this.resBuscarProducto.data.products[i].productCode;
+              producto.productName = this.resBuscarProducto.data.products[i].productName;
+              producto.productDescription = this.resBuscarProducto.data.products[i].productDescription;
+              producto.productPrice = this.resBuscarProducto.data.products[i].productPrice;
+              producto.originCity = this.resBuscarProducto.data.products[i].originCity;
+              producto.destinationCity = this.resBuscarProducto.data.products[i].destinationCity;
+              producto.startDate = this.resBuscarProducto.data.products[i].startDate;
+              producto.endDate = this.resBuscarProducto.data.products[i].endDate;
+              producto.type = this.resBuscarProducto.data.products[i].type;
+              producto.image = this.resBuscarProducto.data.products[i].image;
+              producto.vendorId = this.resBuscarProducto.data.products[i].vendorId;           
+
+              this.lstProductos.push(producto);
+
+              this.totalRecords = this.resBuscarProducto.data.totalItems;
+            }
+          }
+          this.svLogin.refreshToken();
+        },
+        (res) => {
+          this.selectedProducto = {};
+
+          this.sendProductoUnSelect.emit(this.selectedProducto);
+
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }
+          console.log('error ' + JSON.stringify(res.status));
+        }
+      );
     }
+
   }
 
-  refrescar() {
+  limpiar() {
     this.busquedaProductosForm.patchValue({
       busquedaProducto: ''
     });
   }
 
-  //Metodos Para validacion de campos
-  getMensajeError(field:string): string{
-    let mensaje: string;
+  paginate(event) {
+    this.first = event.first;
+
+    this.reqBuscarProducto = {};
+    this.lstProductos = []; 
+    let producto: RequestCrearProductoDTO = {};
+    
+    this.reqBuscarProducto.text = this.busquedaProductosForm.get('busquedaProducto').value;
+    this.reqBuscarProducto.page = String(event.page == 0 ? 0 : event.page);
+    this.reqBuscarProducto.size = "5";
+    this.reqBuscarProducto.token = this.svLogin.getToken().valueOf();
+
+    if(this.reqBuscarProducto.text != null && this.reqBuscarProducto.text.trim() != ""){
+      this.svBuscarProducto.buscarProductoText(this.reqBuscarProducto).subscribe(
+        (res) => {
+          this.resBuscarProducto = res;
+
+          if(this.resBuscarProducto.status.code == "SUCCESS"){
+            if(this.resBuscarProducto.data.products != null && this.resBuscarProducto.data.products.length > 0){
+              for(let i= 0; i < this.resBuscarProducto.data.products.length; i++){
+                producto = {};
   
-    if(this.busquedaProductosForm.get(field).errors.required){
-      mensaje = 'El campo es requerido';
+                producto.productId = this.resBuscarProducto.data.products[i].productId;
+                producto.productCode = this.resBuscarProducto.data.products[i].productCode;
+                producto.productName = this.resBuscarProducto.data.products[i].productName;
+                producto.productDescription = this.resBuscarProducto.data.products[i].productDescription;
+                producto.productPrice = this.resBuscarProducto.data.products[i].productPrice;
+                producto.originCity = this.resBuscarProducto.data.products[i].originCity;
+                producto.destinationCity = this.resBuscarProducto.data.products[i].destinationCity;
+                producto.startDate = this.resBuscarProducto.data.products[i].startDate;
+                producto.endDate = this.resBuscarProducto.data.products[i].endDate;
+                producto.type = this.resBuscarProducto.data.products[i].type;
+                producto.image = this.resBuscarProducto.data.products[i].image;
+                producto.vendorId = this.resBuscarProducto.data.products[i].vendorId;           
+  
+                this.lstProductos.push(producto);
+  
+                this.totalRecords = this.resBuscarProducto.data.totalItems;
+              }
+            }
+            this.svLogin.refreshToken();
+
+            this.limpiar();
+          }else {
+            alert(this.resBuscarProducto.status.description);
+
+            this.limpiar();
+          }
+        },
+        (res) => {
+          this.selectedProducto = {};
+
+          this.sendProductoUnSelect.emit(this.selectedProducto);
+
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }
+          console.log('error ' + JSON.stringify(res.status));
+        }
+      );
+    }else{
+      this.svBuscarProducto.buscarProductos(this.reqBuscarProducto).subscribe(
+        (res) => {
+          this.resBuscarProducto = res;
+
+          if(this.resBuscarProducto.data.products != null && this.resBuscarProducto.data.products.length > 0){
+            for(let i= 0; i < this.resBuscarProducto.data.products.length; i++){
+              producto = {};
+
+              producto.productId = this.resBuscarProducto.data.products[i].productId;
+              producto.productCode = this.resBuscarProducto.data.products[i].productCode;
+              producto.productName = this.resBuscarProducto.data.products[i].productName;
+              producto.productDescription = this.resBuscarProducto.data.products[i].productDescription;
+              producto.productPrice = this.resBuscarProducto.data.products[i].productPrice;
+              producto.originCity = this.resBuscarProducto.data.products[i].originCity;
+              producto.destinationCity = this.resBuscarProducto.data.products[i].destinationCity;
+              producto.startDate = this.resBuscarProducto.data.products[i].startDate;
+              producto.endDate = this.resBuscarProducto.data.products[i].endDate;
+              producto.type = this.resBuscarProducto.data.products[i].type;
+              producto.image = this.resBuscarProducto.data.products[i].image;
+              producto.vendorId = this.resBuscarProducto.data.products[i].vendorId;           
+
+              this.lstProductos.push(producto);
+
+              this.totalRecords = this.resBuscarProducto.data.totalItems;
+            }
+          }
+          this.svLogin.refreshToken();
+        },
+        (res) => {
+          this.selectedProducto = {};
+
+          this.sendProductoUnSelect.emit(this.selectedProducto);
+
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }
+          console.log('error ' + JSON.stringify(res.status));
+        }
+      );
     }
-  
-    return mensaje;
+
   }
-  
-  verificarCampo(field: string): boolean{
-    return ((this.busquedaProductosForm.get(field).dirty || this.busquedaProductosForm.get(field).touched) && 
-            (this.busquedaProductosForm.get(field).invalid || this.busquedaProductosForm.get(field).errors?.required));
+
+  onRowSelect(event) {
+    let idProducto = this.selectedProducto.productId;
+
+    let producto: RequestCrearProductoDTO;
+
+    if(idProducto != null && idProducto != ""){
+
+    }
+    this.sendProductoSelect.emit(this.selectedProducto);
+  }
+
+  onRowUnselect(event) {
+    this.selectedProducto = {};
+
+    this.sendProductoUnSelect.emit(this.selectedProducto);
   }
 
 }
-
-export interface PeriodicElement {
-  position: number;
-  codProducto: string;
-  name: string;
-  descripcion: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, codProducto: '1-001', name: 'Hydrogen', descripcion: 'Descripcion producto 1'},
-  {position: 2, codProducto: '1-002', name: 'Helium', descripcion: 'Descripcion producto 2'},
-  {position: 3, codProducto: '1-003', name: 'Lithium', descripcion: 'Descripcion producto 3'},
-  {position: 4, codProducto: '1-004', name: 'Beryllium', descripcion: 'Descripcion producto 4'},
-  {position: 5, codProducto: '1-005', name: 'Boron', descripcion: 'Descripcion producto 5'},
-  {position: 6, codProducto: '2-001', name: 'Carbon', descripcion: 'Descripcion producto 6'},
-  {position: 7, codProducto: '2-002', name: 'Neon', descripcion: 'Descripcion producto 7'},
-  {position: 8, codProducto: '2-003', name: 'Sodium', descripcion: 'Descripcion producto 8'},
-  {position: 9, codProducto: '2-004', name: 'Aluminum', descripcion: 'Descripcion producto 9'},
-  {position: 10, codProducto: '3-001', name: 'Magnesium', descripcion: 'Descripcion producto 10'}
-];

@@ -15,7 +15,6 @@
     </div>     
 
     <button type="button" class="btn btn-default" (click)="buscar()">Buscar</button>
-    <button type="button" class="btn btn-default" (click)="limpiar()">Limpiar</button>
     <br>
     <br>
     
@@ -28,7 +27,7 @@
           [rows]="5"
           selectionMode="single"
           [(selection)]="selectedProducto" 
-          dataKey="codigo"
+          dataKey="productCode"
           (onRowSelect)="onRowSelect($event)" 
           (onRowUnselect)="onRowUnselect($event)"
           [responsive]="true"
@@ -43,7 +42,7 @@
           </ng-template>
 
           <ng-template pTemplate="body" let-producto>
-            <tr [pSelectableRow]="cliente">
+            <tr [pSelectableRow]="producto">
               <td>{{producto.productCode}}</td>
               <td>{{producto.productName}}</td>
               <td>{{producto.productDescription}}</td>
@@ -62,5 +61,6 @@
 
       </div>
   </div>
+
 
 </form>

@@ -1,5 +1,5 @@
-import { ImagenI } from "./Imagen"
-import { TipoProductoI } from "./TipoProducto"
+import { IdDescripcionI } from "./IdDescripcion";
+import { ImagenI } from "./Imagen";
 
 export interface ResponseCrearProductoDTO{
     productId?: string;
@@ -8,7 +8,7 @@ export interface ResponseCrearProductoDTO{
     productDescription?: string;
     startDate?: string;
     endDate?: string;
-    type?: TipoProductoI;
+    type?: IdDescripcionI;
     productPrice?: number;
     originCity?: string;
     destinationCity?: string;

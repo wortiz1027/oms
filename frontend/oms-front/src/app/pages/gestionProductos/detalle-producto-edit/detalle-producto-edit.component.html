@@ -9,7 +9,7 @@
             <div class="col-3">      
                 <div class="form-group">
                     <label for="tipoProveedor">Seleccione el tipo de proveedor</label>
-                    <select class="form-control" id="tipoProveedor" name="tipoProveedor" #tipoProveedor formControlName="tipoProveedor" (change)="onSelTipoProveedores($event.target.value)" disabled>
+                    <select class="form-control" id="tipoProveedor" name="tipoProveedor" #tipoProveedor formControlName="tipoProveedor" (change)="onSelTipoProveedores($event.target.value)">
                         <option *ngFor="let tipoProveedor of listTipoProveedor" [value]="tipoProveedor.value">{{tipoProveedor.name}}</option>
                     </select>
                 </div>
@@ -23,7 +23,7 @@
             <div class="col-3" *ngIf= "detalleProductosForm.controls.tipoProveedor.value">      
                 <div class="form-group">
                     <label for="tipoProducto">Seleccione el tipo de producto</label>
-                    <select class="form-control" id="tipoProducto" name="tipoProducto" formControlName="tipoProducto" (change)="onSelTipoProducto($event)" disabled>
+                    <select class="form-control" id="tipoProducto" name="tipoProducto" formControlName="tipoProducto" (change)="onSelTipoProducto($event)">
                         <option *ngFor="let tipoProducto of listTipoProductos" [nombre]="tipoProducto.name" [value]="tipoProducto.value">{{tipoProducto.name}}</option>
                     </select>
                 </div>
@@ -37,7 +37,7 @@
             <div class="col-3">   
                 <div class="form-group">
                     <label for="codigo">Código</label>
-                    <input type="text" class="form-control" formControlName="codigo" readonly>
+                    <input type="text" class="form-control" formControlName="codigo">
                 </div>
 
                 <div *ngIf="verificarCampo('codigo')" class="alert-danger">
@@ -54,7 +54,7 @@
             <div class="col-3">       
                 <div class="form-group">
                     <label for="nombre">Nombre</label>
-                    <input type="text" class="form-control" formControlName="nombre" readonly>
+                    <input type="text" class="form-control" formControlName="nombre">
                 </div>
 
                 <div *ngIf="verificarCampo('nombre')" class="alert-danger">
@@ -66,7 +66,7 @@
             <div class="col-3">            
                 <div class="form-group">
                     <label for="descripcion">Descripción</label>
-                    <input type="text" class="form-control" formControlName="descripcion" readonly>
+                    <input type="text" class="form-control" formControlName="descripcion">
                 </div>
 
                 <div *ngIf="verificarCampo('descripcion')" class="alert-danger">
@@ -78,7 +78,7 @@
             <div class="col-3">     
                 <div class="form-group">
                     <label for="precio">Precio</label>
-                    <input type="text" class="form-control" formControlName="precio" readonly>
+                    <input type="text" class="form-control" formControlName="precio">
                 </div>
 
                 <div *ngIf="verificarCampo('precio')" class="alert-danger">
@@ -94,7 +94,7 @@
             <div class="col-3">       
                 <mat-form-field appearance="fill" class="form-group">
                     <mat-label>Fecha Inicio </mat-label>
-                    <input matInput [matDatepicker]="fechaInicial" placeholder="Seleccione una Fecha" class="form-control" formControlName="fechaInicial" [min]="minDate" [max]="maxDate" readonly>
+                    <input matInput [matDatepicker]="fechaInicial" placeholder="Seleccione una Fecha" class="form-control" formControlName="fechaInicial" [min]="minDate" [max]="maxDate">
                     <mat-datepicker-toggle matSuffix [for]="fechaInicial"></mat-datepicker-toggle>
                     <mat-datepicker touchUi #fechaInicial></mat-datepicker>
                 </mat-form-field> 
@@ -108,7 +108,7 @@
             <div class="col-3"> 
                 <mat-form-field appearance="fill" class="form-group">     
                     <mat-label>Fecha Fin </mat-label>
-                    <input matInput [matDatepicker]="fechaFinal" placeholder="Seleccione una Fecha" class="form-control" formControlName="fechaFinal" [min]="minDate" [max]="maxDate" readonly>
+                    <input matInput [matDatepicker]="fechaFinal" placeholder="Seleccione una Fecha" class="form-control" formControlName="fechaFinal" [min]="minDate" [max]="maxDate">
                     <mat-datepicker-toggle matSuffix [for]="fechaFinal"></mat-datepicker-toggle>
                     <mat-datepicker touchUi #fechaFinal></mat-datepicker> 
                 </mat-form-field> 
@@ -127,7 +127,7 @@
             <div class="col-3">       
                 <div class="form-group">
                     <label for="ciudadOrigen">Ciudad Origen</label>
-                    <input type="text" class="form-control" formControlName="ciudadOrigen" readonly>
+                    <input type="text" class="form-control" formControlName="ciudadOrigen">
                 </div>
 
                 <div *ngIf="verificarCampo('ciudadOrigen')" class="alert-danger">
@@ -139,7 +139,7 @@
             <div class="col-3">            
                 <div class="form-group">
                     <label for="ciudadDestino">Ciudad Destino</label>
-                    <input type="text" class="form-control" formControlName="ciudadDestino" readonly>
+                    <input type="text" class="form-control" formControlName="ciudadDestino">
                 </div>
 
                 <div *ngIf="verificarCampo('ciudadDestino')" class="alert-danger">

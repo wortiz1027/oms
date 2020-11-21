@@ -18,6 +18,7 @@ export const environment = {
   clientSecret_variable: `${clientSecret}`,
   grant_type_variable: `${grant_type}`,
   createimage_variable: `${hostApiGateway}/images/cmd`,
-  createProduct_variable: `${hostApiGateway}/products/cmd`
+  createProduct_variable: `${hostApiGateway}/products/cmd`,
+  searchProduct_endpoint: `${hostApiGateway}/products/qrs`,
 };
 

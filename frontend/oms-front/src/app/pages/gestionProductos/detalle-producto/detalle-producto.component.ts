@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TipoProductosI } from 'src/app/models/TipoProductos';
 import { TipoProveedorI } from 'src/app/models/TipoProveedor';
 import { TipoProductoService } from 'src/app/services/comunes/tipoProducto.service';
 import { TipoProveedorService } from 'src/app/services/comunes/tipo-proveedor.service';
+import { RequestCrearProductoDTO } from 'src/app/models/RequestCrearProductoDTO';
 
 @Component({
   selector: 'app-detalle-producto',
@@ -14,10 +15,17 @@ import { TipoProveedorService } from 'src/app/services/comunes/tipo-proveedor.se
 export class DetalleProductoComponent implements OnInit {
 
   public listTipoProveedor: TipoProveedorI[];
-  public listProveedores: TipoProductosI[];
+  public listTipoProductos: TipoProductosI[];
   public minDate: Date;
   public maxDate: Date;
   public base64: string;
+
+  urlImage: string;
+
+  @Input() producto: RequestCrearProductoDTO;
+
+  selectedNameTipoProducto: string;
+  selectedValueTipoProducto: string;
 
   constructor(private formBuilder: FormBuilder, 
     private svTipoProveedor: TipoProveedorService,
@@ -31,7 +39,7 @@ export class DetalleProductoComponent implements OnInit {
 
   detalleProductosForm = this.formBuilder.group({
     tipoProveedor: ['', { validators: [Validators.required]}],
-    proveedores: ['', { validators: [Validators.required]}],
+    tipoProducto: ['', { validators: [Validators.required]}],
     codigo: ['', { validators: [Validators.required]}],
     nombre: ['', { validators: [Validators.required]}],
     descripcion: ['', { validators: [Validators.required]}],
@@ -45,15 +53,50 @@ export class DetalleProductoComponent implements OnInit {
 
   ngOnInit() {
     this.listTipoProveedor = this.svTipoProveedor.getListTipoProveedor();
-
-  }
+  } 
 
   //Carga proveedores segun la seleccion de tipo proveedor
   onSelTipoProveedores(value: string): void{
     //Limpiar el campo proveedores
-    this.detalleProductosForm.patchValue({proveedores: this.listProveedores});
+    this.detalleProductosForm.patchValue({tipoProducto: this.listTipoProductos});
 
-    this.listProveedores = this.svTipoProducto.getListTipoProductos().filter(item => item.tipoProveedor == value);
+    this.listTipoProductos = this.svTipoProducto.getListTipoProductos().filter(item => item.tipoProveedor == value);
+  }
+
+  //Se mapea el name y value del tipo de producto
+  onSelTipoProducto(event): void{
+    let name = event.target.options[event.target.options.selectedIndex].text;
+
+    this.selectedNameTipoProducto = name;
+    this.selectedValueTipoProducto = event.target.value;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.producto.currentValue) {
+
+      let producto: RequestCrearProductoDTO = changes.producto.currentValue;
+
+      if(producto != null && producto.vendorId != null && producto.vendorId != ""){
+        this.onSelTipoProveedores(producto.vendorId);
+      }else{
+        this.listTipoProductos = this.svTipoProducto.getListTipoProductos();
+      }
+      
+      this.detalleProductosForm.controls['tipoProveedor'].setValue(producto ? producto.vendorId ? producto.vendorId :"" : "");
+      this.detalleProductosForm.controls['tipoProducto'].setValue(producto ? producto.type ? producto.type.id ? producto.type.id : "" : "" : "");
+      this.detalleProductosForm.controls['codigo'].setValue(producto.productCode);
+      this.detalleProductosForm.controls['nombre'].setValue(producto.productName);
+      this.detalleProductosForm.controls['descripcion'].setValue(producto.productDescription);
+      this.detalleProductosForm.controls['precio'].setValue(producto.productPrice);
+      this.detalleProductosForm.controls['fechaInicial'].setValue(producto.startDate);
+      this.detalleProductosForm.controls['fechaFinal'].setValue(producto.endDate);
+      this.detalleProductosForm.controls['ciudadOrigen'].setValue(producto.originCity);
+      this.detalleProductosForm.controls['ciudadDestino'].setValue(producto.destinationCity);
+      this.detalleProductosForm.controls['urlImagen'].setValue(producto ? producto.image ? producto.image.url :"" : "");
+
+      //this.urlImage = this.detalleProductosForm.controls['urlImagen'].value;      
+      this.urlImage = "https://material.angular.io/assets/img/examples/shiba2.jpg";
+    }
   }
 
   //Metodos Para validacion de campos

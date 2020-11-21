@@ -42,6 +42,7 @@ import { AutguardService } from './services/guard/autguard.service';
 import { LoginOmsComponent } from './pages/login-oms/login-oms.component';
 import { CrearUsuarioComponent } from './pages/gestionUsuarios/crear-usuario/crear-usuario.component';
 
+import {MatCardModule} from '@angular/material/card';
 
 //Nuevos
 import { BrowserModule } from '@angular/platform-browser';
@@ -52,6 +53,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { PaginatorModule} from 'primeng/paginator';
 import { DetalleClienteEditComponent } from './pages/gestionClientes/detalle-cliente-edit/detalle-cliente-edit.component';
+import { DetalleProductoEditComponent } from './pages/gestionProductos/detalle-producto-edit/detalle-producto-edit.component';
 
 @NgModule({
   imports: [
@@ -67,6 +69,7 @@ import { DetalleClienteEditComponent } from './pages/gestionClientes/detalle-cli
     ReactiveFormsModule,
     MatTableModule,
     MatPaginatorModule,
+    MatCardModule,
     //nuevos
     BrowserModule,
     TableModule,
@@ -101,7 +104,8 @@ import { DetalleClienteEditComponent } from './pages/gestionClientes/detalle-cli
     AsignarProductosComponent,
     LoginOmsComponent,
     CrearUsuarioComponent,
-    DetalleClienteEditComponent
+    DetalleClienteEditComponent,
+    DetalleProductoEditComponent
   ],
   providers: [AutguardService,
               LoginService],

@@ -12,13 +12,13 @@ import { RequestCrearImagenDTO } from 'src/app/models/RequestCrearImagenDTO';
 import { UUID } from 'angular2-uuid';
 import { CrearImagenService } from 'src/app/services/imagenes/crear-imagen.service';
 import { ResponseCrearImagenDTO } from 'src/app/models/ResponseCrearImagenDTO';
-import { TipoProductoI } from 'src/app/models/TipoProducto';
 import { CrearProductoService } from 'src/app/services/producto/crear-producto.service';
 import { ResponseCrearProductDTO } from 'src/app/models/ResponseCrearProductDTO';
 import { Router } from '@angular/router';
 import { TipoProductoService } from 'src/app/services/comunes/tipoProducto.service';
 import { formatDate } from '@angular/common';
 import { LoginService } from 'src/app/services/login/login.service';
+import { IdDescripcionI } from 'src/app/models/IdDescripcion';
 
 
 @Component({
@@ -109,7 +109,7 @@ export class CreacionProductoComponent implements OnInit {
             //Se prepara los datos del producto
             this.producto = {};
             let codigoProductoUuid = UUID.UUID();
-            let tipoProducto: TipoProductoI = {};
+            let tipoProducto: IdDescripcionI = {};
             let imagen: any = {};
             let fechaInicio: string = "";
             let fechaFin: string = "";
@@ -192,7 +192,7 @@ export class CreacionProductoComponent implements OnInit {
       this.listTipoProductos = this.svTipoProducto.getListTipoProductos().filter(item => item.tipoProveedor == value);
     }
 
-    //Se mapea el name y vakue del tipo de producto
+    //Se mapea el name y value del tipo de producto
     onSelTipoProducto(event): void{
 
       let name = event.target.options[event.target.options.selectedIndex].text;

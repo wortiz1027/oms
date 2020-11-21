@@ -15,19 +15,20 @@
 
 <h1>Formulario de Busqueda de Productos</h1>
 
-<form (submit)="submit()"> 
-    
+<form> 
+
     <!--Componente para la busqueda de productos-->          
     <div class="form-group">
-        <app-buscar-producto #buscarProducto></app-buscar-producto>
-    </div> 
-
+        <app-buscar-producto (sendProductoSelect)="onRowSelect($event)"
+                             (sendProductoUnSelect)="onRowUnselect($event)">
+        </app-buscar-producto>
+    </div>   
     <br>
     <br>
 
     <!--Componente para ver el detalle de productos-->          
-    <div class="form-group">
-        <app-detalle-producto #detalleProducto></app-detalle-producto>
+    <div class="form-group" *ngIf="visibilidadDetalle">
+        <app-detalle-producto [producto]="producto"></app-detalle-producto>
     </div>
     
 

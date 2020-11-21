@@ -18,7 +18,6 @@ export class DetalleClienteEditComponent implements OnInit {
   public listStatusCliente: StatusCliente[];
 
   @Input() cliente: RequestCrearUsuarioDTO;
-  @Input() readonly: Boolean;
   @Output() sendDetalleCliente = new EventEmitter<DetalleClienteEditComponent>();
 
   constructor(private formBuilder: FormBuilder,

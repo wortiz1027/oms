@@ -25,7 +25,7 @@ export class BuscarClienteComponent implements OnInit {
 
   selectedCliente: RequestCrearUsuarioDTO;
 
-  //@ViewChild('paginator', { static: true }) paginator: Paginator
+  //@ViewChild('paginator', { static: true }) paginator: Paginator;
 
   constructor(private formBuilder: FormBuilder,
               private svBuscarUsuario: BuscarUsuarioService,
@@ -86,9 +86,16 @@ export class BuscarClienteComponent implements OnInit {
           }
         },
         (res) => {
+          this.selectedCliente = {};
+
+          this.sendClienteUnSelect.emit(this.selectedCliente);
+
           if(res.status == 401){
             this.svLogin.userLogout();
+          }else if(res.status == 404){
+            alert("No se encontró ningún cliente con ese número de identificación");  
           }
+
           console.log('error ' + JSON.stringify(res.status));
         }
       );
@@ -124,6 +131,10 @@ export class BuscarClienteComponent implements OnInit {
           this.svLogin.refreshToken();
         },
         (res) => {
+          this.selectedCliente = {};
+
+          this.sendClienteUnSelect.emit(this.selectedCliente);
+
           if(res.status == 401){
             this.svLogin.userLogout();
           }
@@ -187,6 +198,10 @@ export class BuscarClienteComponent implements OnInit {
           }
         },
         (res) => {
+          this.selectedCliente = {};
+
+          this.sendClienteUnSelect.emit(this.selectedCliente);
+
           if(res.status == 401){
             this.svLogin.userLogout();
           }
@@ -225,6 +240,10 @@ export class BuscarClienteComponent implements OnInit {
           this.svLogin.refreshToken(); 
         },
         (res) => {
+          this.selectedCliente = {};
+
+          this.sendClienteUnSelect.emit(this.selectedCliente);
+          
           if(res.status == 401){
             this.svLogin.userLogout();
           }

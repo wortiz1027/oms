@@ -18,7 +18,6 @@ export class DetalleClienteComponent implements OnInit {
   public listStatusCliente: StatusCliente[];
 
   @Input() cliente: RequestCrearUsuarioDTO;
-  @Input() readonly: Boolean;
   
   constructor(private formBuilder: FormBuilder,
     private svStatusCLiente : StatusClienteService) { 
@@ -48,6 +47,7 @@ export class DetalleClienteComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.cliente.currentValue) {
       let cliente: RequestCrearUsuarioDTO = changes.cliente.currentValue;
+
       this.detalleClientesForm.controls['identificacion'].setValue(cliente.cedula);
       this.detalleClientesForm.controls['nombres'].setValue(cliente.nombres);
       this.detalleClientesForm.controls['apellidos'].setValue(cliente.apellidos);
@@ -56,7 +56,7 @@ export class DetalleClienteComponent implements OnInit {
       this.detalleClientesForm.controls['telefono'].setValue(cliente.telefono);
       this.detalleClientesForm.controls['email'].setValue(cliente.email);
       this.detalleClientesForm.controls['statusCliente'].setValue(cliente ? cliente.types ? cliente.types.type :"" : "");
-      
+
     }
   }
 

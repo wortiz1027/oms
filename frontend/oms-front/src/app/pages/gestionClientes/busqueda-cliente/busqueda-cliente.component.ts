@@ -20,12 +20,12 @@ export class BusquedaClienteComponent implements OnInit {
 
   onRowSelect(cliente: RequestCrearUsuarioDTO) {
     this.cliente = cliente;
-    this.visibilidadDetalle =true;
+    this.visibilidadDetalle = true;
   }
   
   onRowUnselect(cliente: RequestCrearUsuarioDTO) {
     this.cliente = cliente;
-    this.visibilidadDetalle=false;
+    this.visibilidadDetalle = false;
   }
 
 

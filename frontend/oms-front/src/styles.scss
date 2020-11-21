@@ -11,6 +11,12 @@ mat-card-content{
     align-items: center;
 }
 
+mat-card img{
+  object-fit: cover;
+  width: 30%;
+  height: 30%;
+}
+
 table {
   width: 100%;
 }
