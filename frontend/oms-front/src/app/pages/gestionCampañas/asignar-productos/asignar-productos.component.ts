@@ -1,64 +1,103 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { TipoProductosI } from 'src/app/models/TipoProductos';
-import { TipoProveedorI } from 'src/app/models/TipoProveedor';
-import { TipoProductoService } from 'src/app/services/comunes/tipoProducto.service';
-import { TipoProveedorService } from 'src/app/services/comunes/tipo-proveedor.service';
+import { Router } from '@angular/router';
+import { UUID } from 'angular2-uuid';
+import { AgregarProductoI } from 'src/app/models/AgregarProducto';
+import { RequestAgregarProductoDTO } from 'src/app/models/RequestAgregarProductoDTO';
+import { RequestCrearCampaniaDTO } from 'src/app/models/RequestCrearCampaniaDTO';
+import { RequestCrearProductoDTO } from 'src/app/models/RequestCrearProductoDTO';
+import { ResponseAgregarProductoDTO } from 'src/app/models/ResponseAgregarProductoDTO';
+import { AgregarProductService } from 'src/app/services/campania/agregar-product.service';
+import { LoginService } from 'src/app/services/login/login.service';
 
 @Component({
   selector: 'app-asignar-productos',
   templateUrl: './asignar-productos.component.html',
-  styles: [],
-  providers: [TipoProveedorService, TipoProductoService]
+  styles: []
 })
 
 export class AsignarProductosComponent implements OnInit {
 
-  public listTipoProveedor: TipoProveedorI[];
-  public listProveedores: TipoProductosI[];
+  campania: RequestCrearCampaniaDTO;
+  visibilidadBuscarProductos:Boolean;
+  visibilidadBotonAgregar:Boolean;
 
-  constructor(private formBuilder: FormBuilder, 
-              private svTipoProveedor: TipoProveedorService,
-              private svTipoProducto: TipoProductoService) { 
+  selectedProductos: RequestCrearProductoDTO[];
+
+  reqAgregarProducto: RequestAgregarProductoDTO;
+  resAgregarProducto: ResponseAgregarProductoDTO; 
+
+  constructor(private formBuilder: FormBuilder,
+              private svAgregarProductoCampaña: AgregarProductService,
+              private svLogin: LoginService,
+              private router: Router) { 
 
   }
 
-  asignarProductosForm = this.formBuilder.group({
-    tipoProveedor: ['', { validators: [Validators.required]}],
-    proveedores: ['', { validators: [Validators.required]}],
-    producto: ['', { validators: [Validators.required]}]
-  });
-
-  ngOnInit(){
-    this.listTipoProveedor = this.svTipoProveedor.getListTipoProveedor();
+  ngOnInit(): void {
+    this.visibilidadBuscarProductos = false;
+    this.reqAgregarProducto = {};
   }
 
-  //Carga proveedores segun la seleccion de tipo proveedor
-  onSelTipoProveedores(value: string): void{
-    //Limpiar el campo proveedores
-    this.asignarProductosForm.patchValue({proveedores: this.listProveedores});
-
-    this.listProveedores = this.svTipoProducto.getListTipoProductos().filter(item => item.tipoProveedor == value);
+  onRowSelectCampania(campania: RequestCrearCampaniaDTO) {
+    this.campania = campania;
+    this.visibilidadBuscarProductos = true;
   }
-
-  //Metodos Para validacion de campos
-  getMensajeError(field:string): string{
-    let mensaje: string;
   
-    if(this.asignarProductosForm.get(field).errors.required){
-      mensaje = 'El campo es requerido';
-    }
-  
-    return mensaje;
+  onRowUnselectCampania(campania: RequestCrearCampaniaDTO) {
+    this.campania = campania;
+    this.visibilidadBuscarProductos = false;
   }
 
+  onRowSelectProducts(productos: RequestCrearProductoDTO[]) {
+    this.selectedProductos = productos;
+
+    this.visibilidadBotonAgregar = true;
+  }
+  
   agregarProducto(){
-    alert("falta jejeje");
+    if(this.selectedProductos && this.selectedProductos.length > 0){
+      this.reqAgregarProducto.products = [];
+      let agregarProducto: AgregarProductoI;
+
+      for(var i = 0; i < this.selectedProductos.length; i++){
+        agregarProducto = {};
+        
+        let idCampaniaProducto = UUID.UUID();
+
+        agregarProducto.campaignProductId = idCampaniaProducto
+        agregarProducto.campaignId = this.campania.campaignId
+        agregarProducto.productId = this.selectedProductos[i].productId;
+        agregarProducto.action = "CREATED";
+
+        this.reqAgregarProducto.products.push(agregarProducto);
+      }
+
+      if(this.reqAgregarProducto != null && this.reqAgregarProducto.products != null && this.reqAgregarProducto.products.length > 0){
+
+        //Llamar servicio crear campaña
+        this.svAgregarProductoCampaña.addProductCampaign(this.reqAgregarProducto).subscribe(
+          (res) => {
+            this.resAgregarProducto = res;
+    
+            if(this.resAgregarProducto.status.status == "SUCCESS"){
+              alert("Productos Agregados !!!");
+              this.svLogin.refreshToken();
+              this.visibilidadBotonAgregar = false;
+              this.visibilidadBuscarProductos = false;
+              this.router.navigate(['asignarProductos']);  
+            } 
+          },
+          (res) => {
+            if(res.status == 401){
+              this.svLogin.userLogout();
+            }
+            console.log('error ' + JSON.stringify(res.status));
+          }
+        );
+
+      }   
+    }
   }
-  
-  verificarCampo(field: string): boolean{
-    return ((this.asignarProductosForm.get(field).dirty || this.asignarProductosForm.get(field).touched) && 
-            (this.asignarProductosForm.get(field).invalid || this.asignarProductosForm.get(field).errors?.required));
-  } 
 
 }

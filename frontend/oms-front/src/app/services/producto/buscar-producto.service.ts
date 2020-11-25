@@ -45,4 +45,13 @@ export class BuscarProductoService {
       .get<ResponseBuscarProductoDTO>(environment.searchProduct_endpoint + "?page=" + _body.page + "&size=" + _body.size, this.httpOptions);
   }
 
+  buscarDetalleProducto(codigoProducto: string): Observable<ResponseBuscarProductoDTO> {
+    let params = new HttpParams();
+        params = params.append('code', codigoProducto);
+        this.httpOptions.params = params;
+
+    return this.httpClient
+      .get<ResponseBuscarProductoDTO>(environment.searchProduct_endpoint + "/details", this.httpOptions);
+  }
+
 }

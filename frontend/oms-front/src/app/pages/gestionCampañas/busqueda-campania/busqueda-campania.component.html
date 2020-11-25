@@ -1,0 +1,45 @@
+<div class="header bg-gradient-danger py-7 py-lg-1">
+    <div class="container">
+        <div class="header-body text-center mb-7">
+            <div class="row justify-content-center">
+            </div>
+        </div>
+    </div>
+
+    <div class="separator separator-bottom separator-skew zindex-100">
+        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+        </svg>
+    </div>
+</div>
+
+<h1>Formulario de Busqueda de Campañas</h1>
+
+<form> 
+
+    <!--Componente para la busqueda de campañas-->          
+    <div class="form-group">
+        <app-buscar-campania (sendCampaniaSelect)="onRowSelect($event)"
+                             (sendCampaniaUnSelect)="onRowUnselect($event)"
+                             (sendProductosCampaniaSelect)="onRowSelectProdCampanias($event)">
+        </app-buscar-campania>
+    </div>   
+    <br>
+    <br>
+
+    <!--Componente para ver el detalle de campañas-->          
+    <div class="form-group" *ngIf="visibilidadDetalle">
+        <app-detalle-campania [campania]="campania">
+
+        </app-detalle-campania>
+    </div>
+    <br>
+
+    <!--Componente para ver el detalle de productos de campañas-->          
+    <div class="form-group" *ngIf="visibilidadDetalleProdsCampania">
+        <app-detalle-productos-campania [productosCampania]="productosCampania">
+
+        </app-detalle-productos-campania>
+    </div>
+
+</form>

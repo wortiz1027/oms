@@ -16,7 +16,7 @@ export class CrearProductoService {
 
   constructor(private httpClient: HttpClient,
     private svLoginService: LoginService) {
-    console.log('Create Prodcut service ready!!');
+    console.log('Create Product service ready!!');
   }
 
   createProduct(_body: RequestCrearProductoDTO): Observable<any> {

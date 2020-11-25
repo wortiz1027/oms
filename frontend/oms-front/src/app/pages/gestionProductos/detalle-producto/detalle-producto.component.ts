@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TipoProductosI } from 'src/app/models/TipoProductos';
 import { TipoProveedorI } from 'src/app/models/TipoProveedor';
@@ -18,11 +18,12 @@ export class DetalleProductoComponent implements OnInit {
   public listTipoProductos: TipoProductosI[];
   public minDate: Date;
   public maxDate: Date;
-  public base64: string;
 
   urlImage: string;
 
   @Input() producto: RequestCrearProductoDTO;
+  
+  @Output() sendDetalleProducto = new EventEmitter<DetalleProductoComponent>();
 
   selectedNameTipoProducto: string;
   selectedValueTipoProducto: string;
@@ -38,8 +39,10 @@ export class DetalleProductoComponent implements OnInit {
   }
 
   detalleProductosForm = this.formBuilder.group({
+    idProducto: [''],
     tipoProveedor: ['', { validators: [Validators.required]}],
     tipoProducto: ['', { validators: [Validators.required]}],
+    tipoProductoNV: ['', { validators: [Validators.required]}],
     codigo: ['', { validators: [Validators.required]}],
     nombre: ['', { validators: [Validators.required]}],
     descripcion: ['', { validators: [Validators.required]}],
@@ -48,11 +51,13 @@ export class DetalleProductoComponent implements OnInit {
     fechaFinal: [''],
     ciudadOrigen: [''],
     ciudadDestino: [''],
+    imagen: [''],
     urlImagen: ['']
   });
 
   ngOnInit() {
     this.listTipoProveedor = this.svTipoProveedor.getListTipoProveedor();
+    this.sendDetalleProducto.emit(this);
   } 
 
   //Carga proveedores segun la seleccion de tipo proveedor
@@ -81,9 +86,11 @@ export class DetalleProductoComponent implements OnInit {
       }else{
         this.listTipoProductos = this.svTipoProducto.getListTipoProductos();
       }
-      
+
+      this.detalleProductosForm.controls['idProducto'].setValue(producto ? producto.productId ? producto.productId :"" : "");
       this.detalleProductosForm.controls['tipoProveedor'].setValue(producto ? producto.vendorId ? producto.vendorId :"" : "");
       this.detalleProductosForm.controls['tipoProducto'].setValue(producto ? producto.type ? producto.type.id ? producto.type.id : "" : "" : "");
+      this.detalleProductosForm.controls['tipoProductoNV'].setValue(producto ? producto.type ? producto.type : {} : {});
       this.detalleProductosForm.controls['codigo'].setValue(producto.productCode);
       this.detalleProductosForm.controls['nombre'].setValue(producto.productName);
       this.detalleProductosForm.controls['descripcion'].setValue(producto.productDescription);
@@ -92,8 +99,9 @@ export class DetalleProductoComponent implements OnInit {
       this.detalleProductosForm.controls['fechaFinal'].setValue(producto.endDate);
       this.detalleProductosForm.controls['ciudadOrigen'].setValue(producto.originCity);
       this.detalleProductosForm.controls['ciudadDestino'].setValue(producto.destinationCity);
-      this.detalleProductosForm.controls['urlImagen'].setValue(producto ? producto.image ? producto.image.url :"" : "");
-
+      this.detalleProductosForm.controls['imagen'].setValue(producto ? producto.image ? producto.image :{} : {});
+      this.detalleProductosForm.controls['urlImagen'].setValue(producto ? producto.image ? producto.image.url ? producto.image.url :"" : "" : {});
+        
       //this.urlImage = this.detalleProductosForm.controls['urlImagen'].value;      
       this.urlImage = "https://material.angular.io/assets/img/examples/shiba2.jpg";
     }

@@ -166,10 +166,12 @@
 
     <!--Componente para cargar imagenes-->          
     <div class="form-group">
-        <app-file-upload #fileUpload></app-file-upload>
+        <app-file-upload 
+                         (sendFileUpload)="showDataFileUpload($event)"
+        ></app-file-upload>
     </div>
 
-    <button type="submit" class="btn btn-success" [disabled]="registerProductosForm.invalid">Crear</button>
+    <button type="submit" class="btn btn-success" [disabled]="!visibilidadBotonCrear">Crear</button>
     <button type="button" class="btn btn-default" (click)="limpiar()">Limpiar</button>
 
 </form>

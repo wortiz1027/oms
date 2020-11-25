@@ -20,5 +20,6 @@ export const environment = {
   createimage_variable: `${hostApiGateway}/images/cmd`,
   createProduct_variable: `${hostApiGateway}/products/cmd`,
   searchProduct_endpoint: `${hostApiGateway}/products/qrs`,
+  createCampaign_variable: `${hostApiGateway}/campaigns/cmd`,
+  searchCampaign_endpoint: `${hostApiGateway}/campaigns/qrs`,
 };
-

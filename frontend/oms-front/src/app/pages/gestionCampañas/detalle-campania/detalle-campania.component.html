@@ -9,7 +9,7 @@
             <div class="col-3">
                 <div class="form-group">
                     <label for="codigo">Código</label>
-                    <input type="text" class="form-control" formControlName="codigo">
+                    <input type="text" class="form-control" formControlName="codigo" readonly>
                 </div>
 
                 <div *ngIf="verificarCampo('codigo')" class="alert-danger">
@@ -21,7 +21,7 @@
             <div class="col-3">
                 <div class="form-group">
                     <label for="nombre">Nombre</label>
-                    <input type="text" class="form-control" formControlName="nombre">
+                    <input type="text" class="form-control" formControlName="nombre" readonly>
                 </div>
 
                 <div *ngIf="verificarCampo('nombre')" class="alert-danger">
@@ -33,7 +33,7 @@
             <div class="col-3">
                 <div class="form-group">
                     <label for="descripcion">Descripción</label>
-                    <input type="text" class="form-control" formControlName="descripcion">
+                    <input type="text" class="form-control" formControlName="descripcion" readonly>
                 </div>
 
                 <div *ngIf="verificarCampo('descripcion')" class="alert-danger">
@@ -50,7 +50,7 @@
                 <mat-form-field appearance="fill" class="form-group">
                     <mat-label>Fecha Inicio </mat-label>
                     <input matInput [matDatepicker]="fechaInicial" placeholder="Seleccione una Fecha"
-                        class="form-control" formControlName="fechaInicial" [min]="minDate" [max]="maxDate">
+                        class="form-control" formControlName="fechaInicial" [min]="minDate" [max]="maxDate" readonly>
                     <mat-datepicker-toggle matSuffix [for]="fechaInicial"></mat-datepicker-toggle>
                     <mat-datepicker touchUi #fechaInicial></mat-datepicker>
                 </mat-form-field>
@@ -65,7 +65,7 @@
                 <mat-form-field appearance="fill" class="form-group">
                     <mat-label>Fecha Fin </mat-label>
                     <input matInput [matDatepicker]="fechaFinal" placeholder="Seleccione una Fecha" class="form-control"
-                        formControlName="fechaFinal" [min]="minDate" [max]="maxDate">
+                        formControlName="fechaFinal" [min]="minDate" [max]="maxDate" readonly>
                     <mat-datepicker-toggle matSuffix [for]="fechaFinal"></mat-datepicker-toggle>
                     <mat-datepicker touchUi #fechaFinal></mat-datepicker>
                 </mat-form-field>
@@ -79,7 +79,7 @@
             <div class="col-3">
                 <div class="form-group">
                     <label for="descuento">Descuento</label>
-                    <input type="number" class="form-control" formControlName="descuento" placeholder="Ingrese el % de descuento">
+                    <input type="number" class="form-control" formControlName="descuento" placeholder="Ingrese el % de descuento" readonly>
                 </div>
 
                 <div *ngIf="verificarCampo('descuento')" class="alert-danger">
@@ -95,26 +95,35 @@
             <!-- Activar o Desactivar -->
             <div class="col-3">
                 <div class="form-group">
-                    <label for="activa">Estado</label>
+                    <label for="status">Estado</label>
                 
                     <div class="custom-control custom-radio">
-                        <input id="activado" type="radio" class="custom-control-input" value="activado" name="activa" formControlName="activa">
-                        <label class="custom-control-label" for="activado">Activado</label>
+                        <input id="ACTIVE" type="radio" class="custom-control-input" value="ACTIVE" name="status" formControlName="status" disabled>
+                        <label class="custom-control-label" for="ACTIVE">Activa</label>
                     </div>
 
                     <div class="custom-control custom-radio">
-                        <input id="desactivado" type="radio" class="custom-control-input" value="desactivado" name="activa" formControlName="activa">
-                        <label class="custom-control-label" for="desactivado">Desactivado</label>
+                        <input id="INACTIVE" type="radio" class="custom-control-input" value="INACTIVE" name="status" formControlName="status" disabled>
+                        <label class="custom-control-label" for="INACTIVE">Inactiva</label>
                     </div>
 
-                    <div *ngIf="verificarCampo('activa')" class="alert-danger">
-                        {{getMensajeError("activa")}}
+                    <div *ngIf="verificarCampo('status')" class="alert-danger">
+                        {{getMensajeError("status")}}
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div *ngIf="verificarCampo('activa')" class="alert-danger">
-                    {{getMensajeError("activa")}}
-                </div>
+    <br>
+    <br>
+    <!-- Imagen Campaña -->
+    <div class="col-xl-3 col-lg-6">
+        <div class="card card-stats mb-4 mb-xl-0" style="width: 21rem;">
+            <img class="card-img-center" src="{{urlImage}}" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">{{ this.detalleCampaniasForm.controls['nombre'].value }}</h5>
+                <p class="card-text">{{ this.detalleCampaniasForm.controls['descripcion'].value }}</p>
             </div>
         </div>
     </div>

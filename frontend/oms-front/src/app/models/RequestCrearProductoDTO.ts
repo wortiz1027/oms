@@ -14,4 +14,5 @@ export interface RequestCrearProductoDTO{
     destinationCity?: string;
     image?: ImagenI;
     vendorId?: string;
+    action?: string;
 }

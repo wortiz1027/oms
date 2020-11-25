@@ -48,6 +48,9 @@ export class LoginOmsComponent implements OnInit, OnDestroy {
         this.router.navigate(['/dashboard']);
       },
       (res) => {
+        if(res.error.error == "invalid_grant"){
+          alert("Por favor verifique el usuario y contraseña");
+        }
         console.log('error ' + JSON.stringify(res.status));
       }
     );

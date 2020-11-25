@@ -111,37 +111,34 @@
             <!-- Activar o Desactivar -->
             <div class="col-3">
                 <div class="form-group">
-                    <label for="activa">Estado</label>
+                    <label for="status">Estado</label>
                 
                     <div class="custom-control custom-radio">
-                        <input id="activado" type="radio" class="custom-control-input" value="activado" name="activa" formControlName="activa">
-                        <label class="custom-control-label" for="activado">Activado</label>
+                        <input id="ACTIVE" type="radio" class="custom-control-input" value="ACTIVE" name="status" formControlName="status">
+                        <label class="custom-control-label" for="ACTIVE">Activa</label>
                     </div>
 
                     <div class="custom-control custom-radio">
-                        <input id="desactivado" type="radio" class="custom-control-input" value="desactivado" name="activa" formControlName="activa">
-                        <label class="custom-control-label" for="desactivado">Desactivado</label>
+                        <input id="INACTIVE" type="radio" class="custom-control-input" value="INACTIVE" name="status" formControlName="status">
+                        <label class="custom-control-label" for="INACTIVE">Inactiva</label>
                     </div>
 
-                    <div *ngIf="verificarCampo('activa')" class="alert-danger">
-                        {{getMensajeError("activa")}}
+                    <div *ngIf="verificarCampo('status')" class="alert-danger">
+                        {{getMensajeError("status")}}
                     </div>
-                </div>
-
-                <div *ngIf="verificarCampo('activa')" class="alert-danger">
-                    {{getMensajeError("activa")}}
                 </div>
             </div>
         </div>
     </div>
 
-    <!--Componente para cargar imagenes-->
+    <!--Componente para cargar imagenes-->          
     <div class="form-group">
-        <app-file-upload #fileUpload></app-file-upload>
+        <app-file-upload 
+                         (sendFileUpload)="showDataFileUpload($event)"
+        ></app-file-upload>
     </div>
 
-    <button type="button" class="btn btn-default" (click)="asignarProductos()">Asignar Productos</button>
-    <button type="submit" class="btn btn-success" [disabled]="registerCampaniasForm.invalid">Crear</button>
-    <button type="button" class="btn btn-default" (click)="refrescar()">Limpiar</button>
+    <button type="submit" class="btn btn-success" [disabled]="!visibilidadBotonCrear">Crear</button>
+    <button type="button" class="btn btn-default" (click)="limpiar()">Limpiar</button>
 
 </form>

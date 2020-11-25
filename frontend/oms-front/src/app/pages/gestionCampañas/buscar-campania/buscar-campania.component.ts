@@ -1,27 +1,43 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { Paginator } from 'primeng/paginator';
+import { RequestBuscarCampaniaDTO } from 'src/app/models/RequestBuscarCampaniaDTO';
+import { RequestBuscarProductoDTO } from 'src/app/models/RequestBuscarProductoDTO';
+import { RequestCrearCampaniaDTO } from 'src/app/models/RequestCrearCampaniaDTO';
+import { ResponseBuscarCampaniaDTO } from 'src/app/models/ResponseBuscarCampaniaDTO';
+import { ResponseBuscarProductoCampaniaDTO } from 'src/app/models/ResponseBuscarProductoCampaniaDTO';
+import { BuscarCampaniaService } from 'src/app/services/campania/buscar-campania.service';
+import { LoginService } from 'src/app/services/login/login.service';
 
 @Component({
   selector: 'app-buscar-campania',
   templateUrl: './buscar-campania.component.html',
   styles: []
 })
-export class BuscarCampaniaComponent implements OnInit, AfterViewInit {
+export class BuscarCampaniaComponent implements OnInit {
+  reqBuscarCampania: RequestBuscarCampaniaDTO;
+  resBuscarCampania: ResponseBuscarCampaniaDTO;
+  reqBuscarProductoCampania: RequestBuscarProductoDTO;
+  resBuscarProductoCampania: ResponseBuscarProductoCampaniaDTO;
+  lstCampanias: RequestCrearCampaniaDTO[];
+  totalRecords: number;
+  first: number = 0;
 
-  displayedColumns: string[] = ['position', 'codProducto', 'name', 'descripcion'];
+  @Output() sendCampaniaSelect = new EventEmitter<RequestCrearCampaniaDTO>();
+  @Output() sendCampaniaUnSelect = new EventEmitter<RequestCrearCampaniaDTO>();
 
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  @Output() sendProductosCampaniaSelect = new EventEmitter<ResponseBuscarProductoCampaniaDTO>();
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  selectedCampania: RequestCrearCampaniaDTO;
+  selectedProductosCampania: ResponseBuscarProductoCampaniaDTO;
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
+  @ViewChild('paginator', { static: true }) paginator: Paginator;
 
-  constructor(private formBuilder: FormBuilder) {
-  
+  constructor(private formBuilder: FormBuilder,
+              private svBuscarCampania: BuscarCampaniaService,
+              private svLogin: LoginService
+            ) {
+
   }
 
   busquedaCampaniasForm = this.formBuilder.group({
@@ -29,18 +45,107 @@ export class BuscarCampaniaComponent implements OnInit, AfterViewInit {
   });
   
   ngOnInit() {
-
+    this.lstCampanias = []; 
   }
   
   buscar() {
-    if (!this.busquedaCampaniasForm.valid) {
-      alert('Alguna regla de validación no se está cumpliendo');
+    this.reqBuscarCampania = {};
+    this.lstCampanias = []; 
+    let campania: RequestCrearCampaniaDTO = {};
+    
+    this.reqBuscarCampania.text = this.busquedaCampaniasForm.get('busquedaCampania').value;
+    this.reqBuscarCampania.page = "0";
+    this.reqBuscarCampania.size = "5";
 
-      return;
+    if(this.reqBuscarCampania.text != null && this.reqBuscarCampania.text.trim() != ""){
+      this.svBuscarCampania.buscarCampaniaText(this.reqBuscarCampania).subscribe(
+        (res) => {
+          this.resBuscarCampania = res;
+
+          if(this.resBuscarCampania.status.code == "SUCCESS"){
+            if(this.resBuscarCampania.data.campaigns != null && this.resBuscarCampania.data.campaigns.length > 0){
+              for(let i= 0; i < this.resBuscarCampania.data.campaigns.length; i++){
+                campania = {};
+  
+                campania.campaignId = this.resBuscarCampania.data.campaigns[i].campaignId;
+                campania.campaignCode = this.resBuscarCampania.data.campaigns[i].campaignCode;
+                campania.campaignName = this.resBuscarCampania.data.campaigns[i].campaignName;
+                campania.campaignDescription = this.resBuscarCampania.data.campaigns[i].campaignDescription;
+                campania.discount = this.resBuscarCampania.data.campaigns[i].discount;
+                campania.startDate = this.resBuscarCampania.data.campaigns[i].startDate; 
+                campania.endDate = this.resBuscarCampania.data.campaigns[i].endDate;
+                campania.status = this.resBuscarCampania.data.campaigns[i].status;
+                campania.action = this.resBuscarCampania.data.campaigns[i].action;
+                campania.image = this.resBuscarCampania.data.campaigns[i].image;       
+  
+                this.lstCampanias.push(campania);
+  
+                this.totalRecords = this.resBuscarCampania.data.totalItems;
+              }
+            }
+            this.svLogin.refreshToken();
+
+            this.limpiar();
+          }else {
+            alert(this.resBuscarCampania.status.description);
+
+            this.limpiar();
+          }
+        },
+        (res) => {
+          this.selectedCampania = {};
+
+          this.sendCampaniaUnSelect.emit(this.selectedCampania);
+          
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }else if(res.error.status.code == "ERROR"){
+            alert("No se encontró ningún producto con ese texto");
+          }
+        }
+      );
+    }else{
+      this.svBuscarCampania.buscarCampañas(this.reqBuscarCampania).subscribe(
+        (res) => {
+          this.resBuscarCampania = res;
+
+          if(this.resBuscarCampania.data.campaigns != null && this.resBuscarCampania.data.campaigns.length > 0){
+            for(let i= 0; i < this.resBuscarCampania.data.campaigns.length; i++){
+              campania = {};
+              
+              campania.campaignId = this.resBuscarCampania.data.campaigns[i].campaignId;
+              campania.campaignCode = this.resBuscarCampania.data.campaigns[i].campaignCode;
+              campania.campaignName = this.resBuscarCampania.data.campaigns[i].campaignName;
+              campania.campaignDescription = this.resBuscarCampania.data.campaigns[i].campaignDescription;
+              campania.discount = this.resBuscarCampania.data.campaigns[i].discount;
+              campania.startDate = this.resBuscarCampania.data.campaigns[i].startDate; 
+              campania.endDate = this.resBuscarCampania.data.campaigns[i].endDate;
+              campania.status = this.resBuscarCampania.data.campaigns[i].status;
+              campania.action = this.resBuscarCampania.data.campaigns[i].action;
+              campania.image = this.resBuscarCampania.data.campaigns[i].image; 
+
+              this.lstCampanias.push(campania);
+
+              this.totalRecords = this.resBuscarCampania.data.totalItems;
+            }
+          }
+          this.svLogin.refreshToken();
+        },
+        (res) => {
+          this.selectedCampania = {};
+
+          this.sendCampaniaUnSelect.emit(this.selectedCampania);
+
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }
+          console.log('error ' + JSON.stringify(res.status));
+        }
+      );
     }
   }
 
-  refrescar() {
+  limpiar() {
     this.busquedaCampaniasForm.patchValue({
       busquedaCampania: ''
     });
@@ -62,24 +167,189 @@ export class BuscarCampaniaComponent implements OnInit, AfterViewInit {
             (this.busquedaCampaniasForm.get(field).invalid || this.busquedaCampaniasForm.get(field).errors?.required));
   }
 
-}
+  paginate(event) {
 
-export interface PeriodicElement {
-  position: number;
-  codCampania: string;
-  name: string;
-  descripcion: string;
-}
+    this.first = event.first;
+    this.reqBuscarCampania = {};
+    this.lstCampanias = []; 
+    let campania: RequestCrearCampaniaDTO = {};
+    
+    this.reqBuscarCampania.text = this.busquedaCampaniasForm.get('busquedaCampania').value;
+    this.reqBuscarCampania.page = String(event.page == 0 ? 0 : event.page);
+    this.reqBuscarCampania.size = "5";
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, codCampania: '1-001', name: 'Campaña 1', descripcion: 'Descripcion campaña 1'},
-  {position: 2, codCampania: '1-002', name: 'Campaña 2', descripcion: 'Descripcion campaña 2'},
-  {position: 3, codCampania: '1-003', name: 'Campaña 3', descripcion: 'Descripcion campaña 3'},
-  {position: 4, codCampania: '1-004', name: 'Campaña 4', descripcion: 'Descripcion campaña 4'},
-  {position: 5, codCampania: '1-005', name: 'Campaña 5', descripcion: 'Descripcion campaña 5'},
-  {position: 6, codCampania: '2-001', name: 'Campaña 6', descripcion: 'Descripcion campaña 6'},
-  {position: 7, codCampania: '2-002', name: 'Campaña 7', descripcion: 'Descripcion campaña 7'},
-  {position: 8, codCampania: '2-003', name: 'Campaña 8', descripcion: 'Descripcion campaña 8'},
-  {position: 9, codCampania: '2-004', name: 'Campaña 9', descripcion: 'Descripcion campaña 9'},
-  {position: 10, codCampania: '3-001', name: 'Campaña 10', descripcion: 'Descripcion campaña 10'}
-];
+    if(this.reqBuscarCampania.text != null && this.reqBuscarCampania.text.trim() != ""){
+      this.svBuscarCampania.buscarCampaniaText(this.reqBuscarCampania).subscribe(
+        (res) => {
+          this.resBuscarCampania = res;
+
+          if(this.resBuscarCampania.status.code == "SUCCESS"){
+            if(this.resBuscarCampania.data.campaigns != null && this.resBuscarCampania.data.campaigns.length > 0){
+              for(let i= 0; i < this.resBuscarCampania.data.campaigns.length; i++){
+                campania = {};
+  
+                campania.campaignId = this.resBuscarCampania.data.campaigns[i].campaignId;
+                campania.campaignCode = this.resBuscarCampania.data.campaigns[i].campaignCode;
+                campania.campaignName = this.resBuscarCampania.data.campaigns[i].campaignName;
+                campania.campaignDescription = this.resBuscarCampania.data.campaigns[i].campaignDescription;
+                campania.discount = this.resBuscarCampania.data.campaigns[i].discount;
+                campania.startDate = this.resBuscarCampania.data.campaigns[i].startDate; 
+                campania.endDate = this.resBuscarCampania.data.campaigns[i].endDate;
+                campania.status = this.resBuscarCampania.data.campaigns[i].status;
+                campania.action = this.resBuscarCampania.data.campaigns[i].action;
+                campania.image = this.resBuscarCampania.data.campaigns[i].image;       
+  
+                this.lstCampanias.push(campania);
+  
+                this.totalRecords = this.resBuscarCampania.data.totalItems;
+              }
+            }
+            this.svLogin.refreshToken();
+
+            this.limpiar();
+          }else {
+            alert(this.resBuscarCampania.status.description);
+
+            this.limpiar();
+          }
+        },
+        (res) => {
+          this.selectedCampania = {};
+
+          this.sendCampaniaUnSelect.emit(this.selectedCampania);
+          
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }else if(res.error.status.code == "ERROR"){
+            alert("No se encontró ningna campaña con ese texto");
+          }
+        }
+      );
+    }else{
+      this.svBuscarCampania.buscarCampañas(this.reqBuscarCampania).subscribe(
+        (res) => {
+          this.resBuscarCampania = res;
+
+          if(this.resBuscarCampania.data.campaigns != null && this.resBuscarCampania.data.campaigns.length > 0){
+            for(let i= 0; i < this.resBuscarCampania.data.campaigns.length; i++){
+              campania = {};
+              
+              campania.campaignId = this.resBuscarCampania.data.campaigns[i].campaignId;
+              campania.campaignCode = this.resBuscarCampania.data.campaigns[i].campaignCode;
+              campania.campaignName = this.resBuscarCampania.data.campaigns[i].campaignName;
+              campania.campaignDescription = this.resBuscarCampania.data.campaigns[i].campaignDescription;
+              campania.discount = this.resBuscarCampania.data.campaigns[i].discount;
+              campania.startDate = this.resBuscarCampania.data.campaigns[i].startDate; 
+              campania.endDate = this.resBuscarCampania.data.campaigns[i].endDate;
+              campania.status = this.resBuscarCampania.data.campaigns[i].status;
+              campania.action = this.resBuscarCampania.data.campaigns[i].action;
+              campania.image = this.resBuscarCampania.data.campaigns[i].image; 
+
+              this.lstCampanias.push(campania);
+
+              this.totalRecords = this.resBuscarCampania.data.totalItems;
+            }
+          }
+          this.svLogin.refreshToken();
+        },
+        (res) => {
+          this.selectedCampania = {};
+
+          this.sendCampaniaUnSelect.emit(this.selectedCampania);
+
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }
+          console.log('error ' + JSON.stringify(res.status));
+        }
+      );
+    }
+  }
+
+  onRowSelect(event) {
+    let codigoCampania = this.selectedCampania.campaignCode;
+    let idCampania = this.selectedCampania.campaignId;
+
+    if((codigoCampania != null && codigoCampania != "")
+       && (idCampania != null && idCampania != "")){
+      this.selectedCampania = {};
+      this.selectedProductosCampania = {};
+      this.selectedProductosCampania.campaign = {};
+
+      this.svBuscarCampania.buscarDetalleCampaña(codigoCampania).subscribe(
+        (res) => {
+          this.resBuscarCampania = res;
+
+          if(this.resBuscarCampania.status.code == "SUCCESS"){
+            if(this.resBuscarCampania.campaing){
+              this.selectedCampania.campaignId = this.resBuscarCampania.campaing.campaignId;
+              this.selectedCampania.campaignCode = this.resBuscarCampania.campaing.campaignCode;
+              this.selectedCampania.campaignName = this.resBuscarCampania.campaing.campaignName;
+              this.selectedCampania.campaignDescription = this.resBuscarCampania.campaing.campaignDescription;
+              this.selectedCampania.discount = this.resBuscarCampania.campaing.discount;
+              this.selectedCampania.startDate = this.resBuscarCampania.campaing.startDate;
+              this.selectedCampania.endDate = this.resBuscarCampania.campaing.endDate;
+              this.selectedCampania.status = this.resBuscarCampania.campaing.status;
+              this.selectedCampania.action = this.resBuscarCampania.campaing.action; 
+              this.selectedCampania.image = this.resBuscarCampania.campaing.image;
+            }
+          }
+
+          this.sendCampaniaSelect.emit(this.selectedCampania);
+
+          this.svLogin.refreshToken();
+        },
+        (res) => {
+          this.selectedCampania = {};
+
+          this.sendCampaniaUnSelect.emit(this.selectedCampania);
+
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }
+          console.log('error ' + JSON.stringify(res.status));
+        }
+      );
+
+      this.reqBuscarProductoCampania = {};
+      
+      this.reqBuscarProductoCampania.page = "0";
+      this.reqBuscarProductoCampania.size = "5";
+      this.reqBuscarProductoCampania.text = idCampania;
+
+      //Servicio de Productos Campaña
+      this.svBuscarCampania.buscarProductoCampaña(this.reqBuscarProductoCampania).subscribe(
+        (res) => {
+          this.resBuscarProductoCampania = res;
+
+          if(this.resBuscarProductoCampania.status.code == "SUCCESS"){
+            if(this.resBuscarProductoCampania.campaign){
+              this.selectedProductosCampania.campaign = this.resBuscarProductoCampania.campaign;
+            }
+          }
+          this.sendProductosCampaniaSelect.emit(this.selectedProductosCampania);
+
+          this.svLogin.refreshToken();
+        },
+        (res) => {
+
+          this.selectedProductosCampania = {};
+
+          this.sendProductosCampaniaSelect.emit(this.selectedProductosCampania);
+
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }
+          console.log('error ' + JSON.stringify(res.status));
+        }
+      );
+    }
+  }
+
+  onRowUnselect(event) {
+    this.selectedCampania = {};
+
+    this.sendCampaniaUnSelect.emit(this.selectedCampania);
+  }
+
+}

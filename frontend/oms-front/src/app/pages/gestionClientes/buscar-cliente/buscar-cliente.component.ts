@@ -255,7 +255,58 @@ export class BuscarClienteComponent implements OnInit {
   }
 
   onRowSelect(event) {
-    this.sendClienteSelect.emit(this.selectedCliente);
+    let numIdentificacion = this.selectedCliente.cedula;
+
+    if(numIdentificacion != null && numIdentificacion != ""){
+      this.selectedCliente = {};
+      console.log("this.selectedCliente antes " + JSON.stringify(this.selectedCliente));
+
+      this.svBuscarUsuario.buscarDetalleUsuario(numIdentificacion).subscribe(
+        (res) => {
+          this.resBuscarUsuario = res;
+
+          if(this.resBuscarUsuario.status.code == "SUCCESS"){
+            this.selectedCliente.codigo = String(this.resBuscarUsuario.user.idUser);
+            this.selectedCliente.cedula = String(this.resBuscarUsuario.user.cedula);
+            this.selectedCliente.nombres = this.resBuscarUsuario.user.nombre;
+            this.selectedCliente.apellidos = this.resBuscarUsuario.user.apellido;
+            this.selectedCliente.direccion = this.resBuscarUsuario.user.direccion;
+            this.selectedCliente.email = this.resBuscarUsuario.user.email;
+            this.selectedCliente.fechaNacimiento = new Date(this.resBuscarUsuario.user.fechaNacimiento);
+            this.selectedCliente.telefono = this.resBuscarUsuario.user.telefono;
+            this.selectedCliente.types = this.resBuscarUsuario.user.types;
+            this.selectedCliente.roles = this.resBuscarUsuario.user.roles;
+            this.selectedCliente.username = this.resBuscarUsuario.user.username;
+            this.selectedCliente.accountNonExpired = this.resBuscarUsuario.user.accountNonExpired;           
+            this.selectedCliente.credentialNonExpired = this.resBuscarUsuario.user.credentialNonExpired;
+            this.selectedCliente.enable = this.resBuscarUsuario.user.enable;
+
+            this.limpiar();
+          }else {
+            alert(this.resBuscarUsuario.status.description);
+
+            this.limpiar();
+          }
+          console.log("this.selectedCliente despues " + JSON.stringify(this.selectedCliente));
+          this.sendClienteSelect.emit(this.selectedCliente);
+
+          this.svLogin.refreshToken();
+        },
+        (res) => {
+          this.selectedCliente = {};
+
+          this.sendClienteUnSelect.emit(this.selectedCliente);
+
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }
+          console.log('error ' + JSON.stringify(res.status));
+        }
+      );
+    }
+
+
+    
   }
 
   onRowUnselect(event) {

@@ -22,6 +22,7 @@ import { AuthenticationGuard } from '../../guard/authentication.guard';
 import { LoginOmsComponent } from 'src/app/pages/login-oms/login-oms.component';
 import { CrearUsuarioComponent } from 'src/app/pages/gestionUsuarios/crear-usuario/crear-usuario.component';
 import { FileUploadComponent } from 'src/app/components/file-upload/file-upload.component';
+import { BusquedaCampaniaComponent } from 'src/app/pages/gestionCampañas/busqueda-campania/busqueda-campania.component';
 
 export const AdminLayoutRoutes: Routes = [
   { path: 'dashboard',                 component: DashboardComponent, canActivate: [AuthenticationGuard]},
@@ -38,6 +39,7 @@ export const AdminLayoutRoutes: Routes = [
   { path: 'buscarCliente',             component: BusquedaClienteComponent},
   { path: 'actualizarCliente',         component: ActualizacionClienteComponent},
   { path: 'crearCampania',             component: CreacionCampaniaComponent},
+  { path: 'buscarCampania',            component: BusquedaCampaniaComponent},
   { path: 'actualizarCampania',        component: ActualizacionCampaniaComponent},
   { path: 'eliminarCampania',          component: EliminacionCampaniaComponent},
   { path: 'asignarProductos',          component: AsignarProductosComponent},

@@ -3,7 +3,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { TipoProductosI } from 'src/app/models/TipoProductos';
 import { TipoProveedorI } from 'src/app/models/TipoProveedor';
 
-import{ FileUploadComponent} from 'src/app/components/file-upload/file-upload.component'
 import { TipoProveedorService } from 'src/app/services/comunes/tipo-proveedor.service';
 
 import { RequestCrearProductoDTO } from 'src/app/models/RequestCrearProductoDTO';
@@ -34,7 +33,7 @@ export class CreacionProductoComponent implements OnInit {
   public listTipoProductos: TipoProductosI[];
   public minDate: Date;
   public maxDate: Date;
-  public base64: string;
+
   producto: RequestCrearProductoDTO;
   imagen: RequestCrearImagenDTO;
 
@@ -44,7 +43,10 @@ export class CreacionProductoComponent implements OnInit {
   selectedNameTipoProducto: string;
   selectedValueTipoProducto: string;
 
-  @ViewChild(FileUploadComponent) fileUpload;
+  visibilidadBotonCrear: Boolean = false;
+
+  fileBase64: string = "";
+  file: File = null;
 
     constructor(private formBuilder: FormBuilder, 
                 private svTipoProveedor: TipoProveedorService,
@@ -75,7 +77,14 @@ export class CreacionProductoComponent implements OnInit {
   
     ngOnInit() {
       this.listTipoProveedor = this.svTipoProveedor.getListTipoProveedor();
+
+    }
+
+    showDataFileUpload(dataFileUpload: any) {
+      this.fileBase64 = dataFileUpload.fileBase64;
+      this.file = dataFileUpload.file;
   
+      this.visibilidadBotonCrear = true;
     }
   
     crearProducto() {
@@ -90,16 +99,17 @@ export class CreacionProductoComponent implements OnInit {
       this.imagen.metadata = {};
 
       let typeImagen;
-      typeImagen = this.fileUpload.file.type.split('/', this.fileUpload.file.type.length);
+
+      typeImagen = this.file.type.split('/', this.file.type.length);
 
       let codigoImagenUuid = UUID.UUID();
 
       this.imagen.metadata.id = codigoImagenUuid
-      this.imagen.metadata.name = this.fileUpload.file.name;
-      this.imagen.metadata.size = this.fileUpload.file.size;
+      this.imagen.metadata.name = this.file.name;
+      this.imagen.metadata.size = this.file.size;
       this.imagen.metadata.type = typeImagen[1];
 
-      this.imagen.image = this.fileUpload.fileBase64;
+      this.imagen.image = this.fileBase64;
 
       this.svCrearImagen.createImage(this.imagen).subscribe(
         (res) => {
@@ -144,6 +154,7 @@ export class CreacionProductoComponent implements OnInit {
                 if(this.responseProducto.status == "CREATED"){
                   alert("Producto Creado !!!");
                   this.limpiar();
+                  this.visibilidadBotonCrear = false;
                   this.svLogin.refreshToken();
                   this.router.navigate(['crearProducto']);  
                 } 

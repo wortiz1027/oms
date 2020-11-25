@@ -54,6 +54,10 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { PaginatorModule} from 'primeng/paginator';
 import { DetalleClienteEditComponent } from './pages/gestionClientes/detalle-cliente-edit/detalle-cliente-edit.component';
 import { DetalleProductoEditComponent } from './pages/gestionProductos/detalle-producto-edit/detalle-producto-edit.component';
+import { DetalleCampaniaEditComponent } from './pages/gestionCampañas/detalle-campania-edit/detalle-campania-edit.component';
+import { BusquedaCampaniaComponent } from './pages/gestionCampañas/busqueda-campania/busqueda-campania.component';
+import { BuscarProductosCampaniaComponent } from './pages/gestionCampañas/buscar-productos-campania/buscar-productos-campania.component';
+import { DetalleProductosCampaniaComponent } from './pages/gestionCampañas/detalle-productos-campania/detalle-productos-campania.component';
 
 @NgModule({
   imports: [
@@ -105,7 +109,11 @@ import { DetalleProductoEditComponent } from './pages/gestionProductos/detalle-p
     LoginOmsComponent,
     CrearUsuarioComponent,
     DetalleClienteEditComponent,
-    DetalleProductoEditComponent
+    DetalleProductoEditComponent,
+    DetalleCampaniaEditComponent,
+    BusquedaCampaniaComponent,
+    BuscarProductosCampaniaComponent,
+    DetalleProductosCampaniaComponent
   ],
   providers: [AutguardService,
               LoginService],

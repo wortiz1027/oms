@@ -257,14 +257,48 @@ export class BuscarProductoComponent implements OnInit {
   }
 
   onRowSelect(event) {
-    let idProducto = this.selectedProducto.productId;
+    let codigoProducto = this.selectedProducto.productCode;
 
-    let producto: RequestCrearProductoDTO;
+    if(codigoProducto != null && codigoProducto != ""){
+      this.selectedProducto = {};
 
-    if(idProducto != null && idProducto != ""){
+      this.svBuscarProducto.buscarDetalleProducto(codigoProducto).subscribe(
+        (res) => {
+          this.resBuscarProducto = res;
 
+          if(this.resBuscarProducto.status.code == "SUCCESS"){
+            if(this.resBuscarProducto.product){
+              this.selectedProducto.productId = this.resBuscarProducto.product.productId;
+              this.selectedProducto.productCode = this.resBuscarProducto.product.productCode;
+              this.selectedProducto.productName = this.resBuscarProducto.product.productName;
+              this.selectedProducto.productDescription = this.resBuscarProducto.product.productDescription;
+              this.selectedProducto.productPrice = this.resBuscarProducto.product.productPrice;
+              this.selectedProducto.originCity = this.resBuscarProducto.product.originCity;
+              this.selectedProducto.destinationCity = this.resBuscarProducto.product.destinationCity;
+              this.selectedProducto.startDate = this.resBuscarProducto.product.startDate;
+              this.selectedProducto.endDate = this.resBuscarProducto.product.endDate;
+              this.selectedProducto.type = this.resBuscarProducto.product.type;
+              this.selectedProducto.image = this.resBuscarProducto.product.image;
+              this.selectedProducto.vendorId = this.resBuscarProducto.product.vendorId; 
+            }
+          }
+
+          this.sendProductoSelect.emit(this.selectedProducto);
+
+          this.svLogin.refreshToken();
+        },
+        (res) => {
+          this.selectedProducto = {};
+
+          this.sendProductoUnSelect.emit(this.selectedProducto);
+
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }
+          console.log('error ' + JSON.stringify(res.status));
+        }
+      );
     }
-    this.sendProductoSelect.emit(this.selectedProducto);
   }
 
   onRowUnselect(event) {

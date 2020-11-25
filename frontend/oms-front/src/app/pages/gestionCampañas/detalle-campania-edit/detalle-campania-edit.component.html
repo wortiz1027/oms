@@ -1,0 +1,131 @@
+<h1>Detalle de la Campaña</h1>
+
+<form [formGroup]="detalleCampaniasForm">
+
+    <div class="form-group">
+        <div class="form-row">
+
+            <!-- Codigo Campaña -->
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="codigo">Código</label>
+                    <input type="text" class="form-control" formControlName="codigo">
+                </div>
+
+                <div *ngIf="verificarCampo('codigo')" class="alert-danger">
+                    {{getMensajeError("codigo")}}
+                </div>
+            </div>
+
+            <!-- Nombre Campaña -->
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" class="form-control" formControlName="nombre">
+                </div>
+
+                <div *ngIf="verificarCampo('nombre')" class="alert-danger">
+                    {{getMensajeError("nombre")}}
+                </div>
+            </div>
+
+            <!-- Descripción Campaña -->
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <input type="text" class="form-control" formControlName="descripcion">
+                </div>
+
+                <div *ngIf="verificarCampo('descripcion')" class="alert-danger">
+                    {{getMensajeError("descripcion")}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-row">
+            <!-- Fecha Inicial -->
+            <div class="col-3">
+                <mat-form-field appearance="fill" class="form-group">
+                    <mat-label>Fecha Inicio </mat-label>
+                    <input matInput [matDatepicker]="fechaInicial" placeholder="Seleccione una Fecha"
+                        class="form-control" formControlName="fechaInicial" [min]="minDate" [max]="maxDate">
+                    <mat-datepicker-toggle matSuffix [for]="fechaInicial"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #fechaInicial></mat-datepicker>
+                </mat-form-field>
+
+                <div *ngIf="verificarCampo('fechaInicial')" class="alert-danger">
+                    {{getMensajeError("fechaInicial")}}
+                </div>
+            </div>
+
+            <!-- Fecha Final -->
+            <div class="col-3">
+                <mat-form-field appearance="fill" class="form-group">
+                    <mat-label>Fecha Fin </mat-label>
+                    <input matInput [matDatepicker]="fechaFinal" placeholder="Seleccione una Fecha" class="form-control"
+                        formControlName="fechaFinal" [min]="minDate" [max]="maxDate">
+                    <mat-datepicker-toggle matSuffix [for]="fechaFinal"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #fechaFinal></mat-datepicker>
+                </mat-form-field>
+
+                <div *ngIf="verificarCampo('fechaFinal')" class="alert-danger">
+                    {{getMensajeError("fechaFinal")}}
+                </div>
+            </div>
+
+            <!-- Descuento -->
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="descuento">Descuento</label>
+                    <input type="number" class="form-control" formControlName="descuento" placeholder="Ingrese el % de descuento">
+                </div>
+
+                <div *ngIf="verificarCampo('descuento')" class="alert-danger">
+                    {{getMensajeError("descuento")}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-row">
+
+            <!-- Activar o Desactivar -->
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="status">Estado</label>
+                
+                    <div class="custom-control custom-radio">
+                        <input id="ACTIVE" type="radio" class="custom-control-input" value="ACTIVE" name="status" formControlName="status">
+                        <label class="custom-control-label" for="ACTIVE">Activa</label>
+                    </div>
+
+                    <div class="custom-control custom-radio">
+                        <input id="INACTIVE" type="radio" class="custom-control-input" value="INACTIVE" name="status" formControlName="status">
+                        <label class="custom-control-label" for="INACTIVE">Inactiva</label>
+                    </div>
+
+                    <div *ngIf="verificarCampo('status')" class="alert-danger">
+                        {{getMensajeError("status")}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <!-- Imagen Campaña -->
+    <div class="col-xl-3 col-lg-6">
+        <div class="card card-stats mb-4 mb-xl-0" style="width: 21rem;">
+            <img class="card-img-center" src="{{urlImage}}" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">{{ this.detalleCampaniasForm.controls['nombre'].value }}</h5>
+                <p class="card-text">{{ this.detalleCampaniasForm.controls['descripcion'].value }}</p>
+            </div>
+        </div>
+    </div>
+
+</form>

@@ -19,17 +19,21 @@
     
     <!--Componente para la busqueda de productos-->          
     <div class="form-group">
-        <app-buscar-producto #buscarProducto></app-buscar-producto>
-    </div> 
+        <app-buscar-producto (sendProductoSelect)="onRowSelect($event)"
+                             (sendProductoUnSelect)="onRowUnselect($event)">
+        </app-buscar-producto>
+    </div>   
 
     <br>
     <br>
 
     <!--Componente para ver el detalle de productos-->          
-    <div class="form-group">
-        <app-detalle-producto #detalleProducto></app-detalle-producto>
+    <div class="form-group" *ngIf="visibilidadDetalle">
+        <app-detalle-producto [producto]="producto"
+                                  (sendDetalleProducto)="showFormDataDetalle($event)"
+        ></app-detalle-producto>
     </div>
 
-    <button type="submit" class="btn btn-default">Eliminar</button>
+    <button type="submit" class="btn btn-default" *ngIf="visibilidadDetalle">Eliminar</button>
 
 </form>

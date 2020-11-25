@@ -1,0 +1,46 @@
+<form> 
+
+    <div class="content-section implementation" *ngIf="visibilidadTabla">
+      <!--Resultados Busqueda-->
+      <div class="card">
+        <h1>Lista de Productos</h1>
+        <p-table 
+          [value]="lstProductoCampania"
+          [rows]="5"
+          selectionMode="single"
+          [(selection)]="selectedCampania"
+          dataKey="productCode"
+          [responsive]="true"
+          emptyMessage="No se encontraron resultados">
+          
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Codigo</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-producto>
+            <tr [pSelectableRow]="producto">
+                <td>{{producto.productCode}}</td>
+                <td>{{producto.productName}}</td>
+                <td>{{producto.productDescription}}</td>
+            </tr>
+
+          </ng-template>
+        </p-table>
+
+        <p-paginator [rows]="5"  
+                     [totalRecords]="totalRecords"
+                     [showCurrentPageReport]="true"
+                     currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} Resultados"
+                     (onPageChange)="paginate($event)"
+                     #paginator
+                     [first]="first">
+        </p-paginator>
+
+      </div>
+    </div>
+
+</form>

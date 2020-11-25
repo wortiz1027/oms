@@ -1,16 +1,18 @@
 import { formatDate } from '@angular/common';
-import { Component, OnInit} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output} from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { UUID } from 'angular2-uuid';
-import { FileUploadComponent } from 'src/app/components/file-upload/file-upload.component';
+import { RequestBuscarProductoDTO } from 'src/app/models/RequestBuscarProductoDTO';
 import { RequestCrearImagenDTO } from 'src/app/models/RequestCrearImagenDTO';
 import { RequestCrearProductoDTO } from 'src/app/models/RequestCrearProductoDTO';
+import { ResponseBuscarProductoDTO } from 'src/app/models/ResponseBuscarProductoDTO';
 import { ResponseCrearImagenDTO } from 'src/app/models/ResponseCrearImagenDTO';
 import { ResponseCrearProductDTO } from 'src/app/models/ResponseCrearProductDTO';
-import { ResponseCrearProductoDTO } from 'src/app/models/ResponseCrearProductoDTO';
 import { CrearImagenService } from 'src/app/services/imagenes/crear-imagen.service';
 import { LoginService } from 'src/app/services/login/login.service';
 import { ActualizarProductoService } from 'src/app/services/producto/actualizar-producto.service';
+import { BuscarProductoService } from 'src/app/services/producto/buscar-producto.service';
 import { DetalleProductoEditComponent } from '../detalle-producto-edit/detalle-producto-edit.component';
 
 @Component({
@@ -28,16 +30,28 @@ export class ActualizacionProductoComponent implements OnInit {
 
   responseImagen: ResponseCrearImagenDTO;
   responseProducto: ResponseCrearProductDTO;
-  router: any;
 
   fileBase64: string = "";
   file: File = null;
 
   imagen: RequestCrearImagenDTO;
 
+  /*
+  reqBuscarProducto: RequestBuscarProductoDTO;
+  resBuscarProducto: ResponseBuscarProductoDTO;
+  lstProductos: RequestCrearProductoDTO[];
+  totalRecords: number;
+  first: number = 0;
+
+  //selectedProducto: RequestCrearProductoDTO;
+
+  //@Output() sendListProductos = new EventEmitter<ResponseBuscarProductoDTO>();
+*/
   constructor(private svActualizarProducto: ActualizarProductoService,
               private svLogin: LoginService,
-              private svCrearImagen: CrearImagenService) { 
+              private svCrearImagen: CrearImagenService,
+              private router: Router,
+              private svBuscarProducto: BuscarProductoService) { 
 
   } 
   
@@ -73,8 +87,6 @@ export class ActualizacionProductoComponent implements OnInit {
       return;
     }
 
-    console.log("this.formDataDetalleProducto " + JSON.stringify(this.formDataDetalleProducto.value));
-
     if(this.file != null && this.fileBase64 != ""){
       this.imagen = {};
       this.imagen.metadata = {};
@@ -98,7 +110,6 @@ export class ActualizacionProductoComponent implements OnInit {
   
           if(this.responseImagen.status == "CREATED"){
             //Se prepara los datos del producto
-            console.log("se creo imagen");
 
             let producto: RequestCrearProductoDTO = {};
             let imagen: any = {};
@@ -124,22 +135,19 @@ export class ActualizacionProductoComponent implements OnInit {
             producto.vendorId = this.formDataDetalleProducto.get("tipoProveedor").value;
             producto.type = this.formDataDetalleProducto.get("tipoProductoNV").value;
 
-            console.log("producto actualizar " + JSON.stringify(producto));
-
             //Llamar servicio actualizar producto
             this.svActualizarProducto.updateProduct(producto).subscribe(
 
               (res) => {
                 this.responseProducto = res;
 
-                console.log("this.responseProducto " + JSON.stringify(this.responseProducto));
-                /*
-                if(this.responseProducto.status == "SUCCESS"){
-                  alert("Usuario Actualizado !!!");
+                if(this.responseProducto.status == "UPDATED"){
+                  alert("Producto Actualizado !!!");
                   this.svLogin.refreshToken();
-                  this.router.navigate(['actualizarCliente']);  
+                  this.visibilidadDetalle = false;
+                  this.router.navigate(['actualizarProducto']);  
                 } 
-                */
+                
               },
               (res) => {
                 if(res.status == 401){
@@ -148,27 +156,6 @@ export class ActualizacionProductoComponent implements OnInit {
                 console.log('error ' + JSON.stringify(res.status));
               }
             );
-/*
-            //Llamar servicio crear doc
-            this.svCrearProducto.createProduct(this.producto).subscribe(
-              (res) => {
-                this.responseProducto = res;
-        
-                if(this.responseProducto.status == "CREATED"){
-                  alert("Producto Creado !!!");
-                  this.limpiar();
-                  this.svLogin.refreshToken();
-                  this.router.navigate(['crearProducto']);  
-                } 
-              },
-              (res) => {
-                if(res.status == 401){
-                  this.svLogin.userLogout();
-                }
-                console.log('error ' + JSON.stringify(res.status));
-              }
-            );
-            */
           }
         },
         (res) => {
@@ -178,31 +165,82 @@ export class ActualizacionProductoComponent implements OnInit {
           console.log('error ' + JSON.stringify(res.status));
         }
       ); 
-    }
+    }else{
+      //Se prepara los datos del producto
+            
+      let producto: RequestCrearProductoDTO = {};
+      let fechaInicio: string = "";
+      let fechaFin: string = "";
 
-/*
-    this.svActualizarProducto.updateProduct(this.producto).subscribe(
+      fechaInicio = formatDate(this.formDataDetalleProducto.get('fechaInicial').value, 'yyyy-MM-dd', 'en-US');
+      fechaFin = formatDate(this.formDataDetalleProducto.get('fechaFinal').value, 'yyyy-MM-dd', 'en-US');
 
-      (res) => {
-        this.responseService = res;
+      producto.productId = this.formDataDetalleProducto.get("idProducto").value;
+      producto.productCode = this.formDataDetalleProducto.get("codigo").value;
+      producto.productName = this.formDataDetalleProducto.get("nombre").value;
+      producto.productDescription = this.formDataDetalleProducto.get("descripcion").value;
+      producto.startDate = fechaInicio;
+      producto.endDate = fechaFin;
+      producto.productPrice = this.formDataDetalleProducto.get("precio").value;
+      producto.originCity = this.formDataDetalleProducto.get("ciudadOrigen").value;
+      producto.destinationCity = this.formDataDetalleProducto.get("ciudadDestino").value;
+      producto.image = this.formDataDetalleProducto.get("imagen").value;
+      producto.vendorId = this.formDataDetalleProducto.get("tipoProveedor").value;
+      producto.type = this.formDataDetalleProducto.get("tipoProductoNV").value;
 
-        if(this.responseService.status.code == "SUCCESS"){
-          alert("Usuario Actualizado !!!");
-          this.svLogin.refreshToken();
-          this.router.navigate(['actualizarCliente']);  
-        } 
-      },
-      (res) => {
-        if(res.status == 401){
-          this.svLogin.userLogout();
+      //Llamar servicio actualizar producto
+      this.svActualizarProducto.updateProduct(producto).subscribe(
+
+        (res) => {
+          this.responseProducto = res;
+
+          if(this.responseProducto.status == "UPDATED"){
+            alert("Producto Actualizado !!!");
+            this.svLogin.refreshToken();
+            this.visibilidadDetalle = false;
+            this.router.navigate(['actualizarProducto']);  
+          } 
+          
+        },
+        (res) => {
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }
+          console.log('error ' + JSON.stringify(res.status));
         }
-        console.log('error ' + JSON.stringify(res.status));
-      }
-    ); 
-    */
+      );
+    }
     
     return;
   }
 
+  /*
+  consultarProductos(){
 
+    this.reqBuscarProducto = {};
+    this.lstProductos = []; 
+    let producto: RequestCrearProductoDTO = {};
+    
+    this.reqBuscarProducto.text = "";
+    this.reqBuscarProducto.page = "0";
+    this.reqBuscarProducto.size = "5";
+    this.reqBuscarProducto.token = this.svLogin.getToken().valueOf();
+
+    
+    this.svBuscarProducto.buscarProductos(this.reqBuscarProducto).subscribe(
+      (res) => {
+        this.resBuscarProducto = res;
+
+        if(this.resBuscarProducto){
+          this.sendListProductos.emit(this.resBuscarProducto);
+          this.svLogin.refreshToken();
+        } 
+      },
+      (res) => {
+        console.log('error ' + JSON.stringify(res.status));
+      }
+    );
+    
+  }
+  */
 }
