@@ -1,8 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { TipoProductosI } from 'src/app/models/TipoProductos';
-import { TipoProveedorI } from 'src/app/models/TipoProveedor';
-
 import { TipoProveedorService } from 'src/app/services/comunes/tipo-proveedor.service';
 
 import { RequestCrearProductoDTO } from 'src/app/models/RequestCrearProductoDTO';
@@ -14,23 +11,28 @@ import { ResponseCrearImagenDTO } from 'src/app/models/ResponseCrearImagenDTO';
 import { CrearProductoService } from 'src/app/services/producto/crear-producto.service';
 import { ResponseCrearProductDTO } from 'src/app/models/ResponseCrearProductDTO';
 import { Router } from '@angular/router';
-import { TipoProductoService } from 'src/app/services/comunes/tipoProducto.service';
 import { formatDate } from '@angular/common';
 import { LoginService } from 'src/app/services/login/login.service';
 import { IdDescripcionI } from 'src/app/models/IdDescripcion';
+import { ResponseBuscarTipoProveedoresDTO } from 'src/app/models/ResponseBuscarTipoProveedoresDTO';
+import { BuscarProveedorService } from 'src/app/services/proveedores/buscar-proveedor.service';
+import { RequestCrearProveedorDTO } from 'src/app/models/RequestCrearProveedorDTO';
+import { ResponseBuscarProveedoresDTO } from 'src/app/models/ResponseBuscarProveedoresDTO';
+import { TipoProductoService } from 'src/app/services/comunes/tipo-producto.service';
 
 
 @Component({
   selector: 'app-creacion-producto',
   templateUrl: './creacion-producto.component.html',
   styles: [],
-  providers: [TipoProveedorService, TipoProductoService]
+  providers: [TipoProveedorService, BuscarProveedorService]
 })
 
 export class CreacionProductoComponent implements OnInit {
 
-  public listTipoProveedor: TipoProveedorI[];
-  public listTipoProductos: TipoProductosI[];
+  public listTipoProveedor: RequestCrearProveedorDTO[];
+  public listTipoProductos: IdDescripcionI[];
+  //public listTipoProductosTemp: RequestCrearProveedorDTO[];
   public minDate: Date;
   public maxDate: Date;
 
@@ -48,37 +50,72 @@ export class CreacionProductoComponent implements OnInit {
   fileBase64: string = "";
   file: File = null;
 
-    constructor(private formBuilder: FormBuilder, 
-                private svTipoProveedor: TipoProveedorService,
-                private svTipoProducto: TipoProductoService,
-                private svCrearImagen: CrearImagenService,
-                private svCrearProducto: CrearProductoService,
-                private svLogin: LoginService,
-                private router: Router) {
-                  
-                  //Se establece la fecha minima y maxima
-                  const currentYear = new Date().getFullYear();
-                  this.minDate = new Date();
-                  this.maxDate = new Date(currentYear + 0, 11, 31);
-    }
-             
-    registerProductosForm = this.formBuilder.group({
-      tipoProveedor: ['', { validators: [Validators.required]}],
-      tipoProducto: ['', { validators: [Validators.required]}],
-      codigo: ['', { validators: [Validators.required]}],
-      nombre: ['', { validators: [Validators.required]}],
-      descripcion: ['', { validators: [Validators.required]}],
-      precio: ['', { validators: [Validators.required]}],
-      fechaInicial: ['', { validators: [Validators.required]}],
-      fechaFinal: ['', { validators: [Validators.required]}],
-      ciudadOrigen: [''],
-      ciudadDestino: ['']
-    });
-  
-    ngOnInit() {
-      this.listTipoProveedor = this.svTipoProveedor.getListTipoProveedor();
+  responseBuscarTipoProveedores: ResponseBuscarTipoProveedoresDTO;
+  responseBuscarProveedores: ResponseBuscarProveedoresDTO;
+  responseTipoProductos: ResponseBuscarTipoProveedoresDTO;
 
-    }
+  constructor(private formBuilder: FormBuilder, 
+              private svTipoProveedor: BuscarProveedorService,
+              private svTipoProducto: TipoProductoService,
+              private svCrearImagen: CrearImagenService,
+              private svCrearProducto: CrearProductoService,
+              private svLogin: LoginService,
+              private router: Router) {
+                
+                //Se establece la fecha minima y maxima
+                const currentYear = new Date().getFullYear();
+                this.minDate = new Date();
+                this.maxDate = new Date(currentYear + 0, 11, 31);
+  }
+             
+  registerProductosForm = this.formBuilder.group({
+    tipoProveedor: ['', { validators: [Validators.required]}],
+    tipoProducto: ['', { validators: [Validators.required]}],
+    codigo: ['', { validators: [Validators.required]}],
+    nombre: ['', { validators: [Validators.required]}],
+    descripcion: ['', { validators: [Validators.required]}],
+    precio: ['', { validators: [Validators.required]}],
+    fechaInicial: ['', { validators: [Validators.required]}],
+    fechaFinal: ['', { validators: [Validators.required]}],
+    ciudadOrigen: [''],
+    ciudadDestino: ['']
+  });
+  
+  ngOnInit() {
+    //Llamar servicio buscar proveedores
+    this.svTipoProveedor.buscarProveedores().subscribe(
+      (res) => {
+        this.responseBuscarProveedores = res;
+
+        if(this.responseBuscarProveedores.status.code == "SUCCESS"){
+          this.listTipoProveedor = this.responseBuscarProveedores.vendors;
+        } 
+      },
+      (res) => {
+        if(res.status == 401){
+          this.svLogin.userLogout();
+        }
+        console.log('error ' + JSON.stringify(res.status));
+      }
+    );
+
+    //Llamar servicio buscar tipo producto
+    this.svTipoProducto.buscarTipoProductos().subscribe(
+      (res) => {
+        this.responseTipoProductos = res;
+
+        if(this.responseTipoProductos.status.code == "SUCCESS"){
+          this.listTipoProductos = this.responseTipoProductos.types;
+        } 
+      },
+      (res) => {
+        if(res.status == 401){
+          this.svLogin.userLogout();
+        }
+        console.log('error ' + JSON.stringify(res.status));
+      }
+    );
+  }
 
     showDataFileUpload(dataFileUpload: any) {
       this.fileBase64 = dataFileUpload.fileBase64;
@@ -198,14 +235,13 @@ export class CreacionProductoComponent implements OnInit {
     //Carga proveedores segun la seleccion de tipo proveedor
     onSelTipoProveedores(value: string): void{
       //Limpiar el campo proveedores
-      this.registerProductosForm.patchValue({tipoProducto: this.listTipoProductos});
+      //this.registerProductosForm.patchValue({tipoProducto: this.listTipoProductos});
 
-      this.listTipoProductos = this.svTipoProducto.getListTipoProductos().filter(item => item.tipoProveedor == value);
+      //this.listTipoProductos = this.listTipoProductosTemp.filter(item => item.types.idType == value);
     }
 
     //Se mapea el name y value del tipo de producto
     onSelTipoProducto(event): void{
-
       let name = event.target.options[event.target.options.selectedIndex].text;
 
       this.selectedNameTipoProducto = name;

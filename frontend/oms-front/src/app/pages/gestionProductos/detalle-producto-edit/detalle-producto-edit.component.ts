@@ -1,22 +1,28 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { FileUploadComponent } from 'src/app/components/file-upload/file-upload.component';
+import { IdDescripcionI } from 'src/app/models/IdDescripcion';
 import { RequestCrearProductoDTO } from 'src/app/models/RequestCrearProductoDTO';
+import { RequestCrearProveedorDTO } from 'src/app/models/RequestCrearProveedorDTO';
+import { ResponseBuscarProveedoresDTO } from 'src/app/models/ResponseBuscarProveedoresDTO';
+import { ResponseBuscarTipoProveedoresDTO } from 'src/app/models/ResponseBuscarTipoProveedoresDTO';
 import { TipoProductosI } from 'src/app/models/TipoProductos';
 import { TipoProveedorI } from 'src/app/models/TipoProveedor';
+import { TipoProductoService } from 'src/app/services/comunes/tipo-producto.service';
 import { TipoProveedorService } from 'src/app/services/comunes/tipo-proveedor.service';
-import { TipoProductoService } from 'src/app/services/comunes/tipoProducto.service';
+import { LoginService } from 'src/app/services/login/login.service';
+import { BuscarProveedorService } from 'src/app/services/proveedores/buscar-proveedor.service';
 
 @Component({
   selector: 'app-detalle-producto-edit',
   templateUrl: './detalle-producto-edit.component.html',
   styles: [],
-  providers: [TipoProveedorService, TipoProductoService]
+  providers: [TipoProveedorService, BuscarProveedorService]
 })
 export class DetalleProductoEditComponent implements OnInit {
 
-    public listTipoProveedor: TipoProveedorI[];
-    public listTipoProductos: TipoProductosI[];
+    public listTipoProveedor: RequestCrearProveedorDTO[];
+    public listTipoProductos: IdDescripcionI[];
+    //public listTipoProductosTemp: RequestCrearProveedorDTO[];
     public minDate: Date;
     public maxDate: Date;
     public base64: string;
@@ -28,15 +34,20 @@ export class DetalleProductoEditComponent implements OnInit {
   
     selectedNameTipoProducto: string;
     selectedValueTipoProducto: string;
+
+    responseBuscarTipoProveedores: ResponseBuscarTipoProveedoresDTO;
+    responseBuscarProveedores: ResponseBuscarProveedoresDTO;
+    responseTipoProductos: ResponseBuscarTipoProveedoresDTO;
   
     constructor(private formBuilder: FormBuilder, 
-      private svTipoProveedor: TipoProveedorService,
-      private svTipoProducto: TipoProductoService) {
+                private svTipoProveedor: BuscarProveedorService,
+                private svTipoProducto: TipoProductoService,
+                private svLogin: LoginService) {
         
-        //Se establece la fecha minimay maxima
-        const currentYear = new Date().getFullYear();
-        this.minDate = new Date();
-        this.maxDate = new Date(currentYear + 0, 11, 31);
+                  //Se establece la fecha minimay maxima
+                  const currentYear = new Date().getFullYear();
+                  this.minDate = new Date();
+                  this.maxDate = new Date(currentYear + 0, 11, 31);
     }
   
     detalleProductosForm = this.formBuilder.group({
@@ -57,16 +68,49 @@ export class DetalleProductoEditComponent implements OnInit {
     });
   
     ngOnInit() {
-      this.listTipoProveedor = this.svTipoProveedor.getListTipoProveedor();
+      //Llamar servicio buscar proveedores
+      this.svTipoProveedor.buscarProveedores().subscribe(
+        (res) => {
+          this.responseBuscarProveedores = res;
+
+          if(this.responseBuscarProveedores.status.code == "SUCCESS"){
+            this.listTipoProveedor = this.responseBuscarProveedores.vendors;
+          } 
+        },
+        (res) => {
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }
+          console.log('error ' + JSON.stringify(res.status));
+        }
+      );
+
+      //Llamar servicio buscar tipo producto
+      this.svTipoProducto.buscarTipoProductos().subscribe(
+        (res) => {
+          this.responseTipoProductos = res;
+
+          if(this.responseTipoProductos.status.code == "SUCCESS"){
+            this.listTipoProductos = this.responseTipoProductos.types;
+          } 
+        },
+        (res) => {
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }
+          console.log('error ' + JSON.stringify(res.status));
+        }
+      );
+
       this.sendDetalleProducto.emit(this);
     } 
   
     //Carga proveedores segun la seleccion de tipo proveedor
     onSelTipoProveedores(value: string): void{
       //Limpiar el campo proveedores
-      this.detalleProductosForm.patchValue({tipoProducto: this.listTipoProductos});
+      //this.detalleProductosForm.patchValue({tipoProducto: this.listTipoProductos});
   
-      this.listTipoProductos = this.svTipoProducto.getListTipoProductos().filter(item => item.tipoProveedor == value);
+      //this.listTipoProductos = this.listTipoProductosTemp.filter(item => item.idProvider == value);
     }
   
     //Se mapea el name y value del tipo de producto
@@ -85,11 +129,11 @@ export class DetalleProductoEditComponent implements OnInit {
         if(producto != null && producto.vendorId != null && producto.vendorId != ""){
           this.onSelTipoProveedores(producto.vendorId);
         }else{
-          this.listTipoProductos = this.svTipoProducto.getListTipoProductos();
+          //this.listTipoProductos = this.svTipoProducto.getListTipoProductos();
         }
         
         this.detalleProductosForm.controls['idProducto'].setValue(producto ? producto.productId ? producto.productId :"" : "");
-        this.detalleProductosForm.controls['tipoProveedor'].setValue(producto ? producto.vendorId ? producto.vendorId :"" : "");
+        this.detalleProductosForm.controls['tipoProveedor'].setValue(producto ? producto.vendor ? producto.vendor.idProvider ? producto.vendor.idProvider : "" :"" : "");
         this.detalleProductosForm.controls['tipoProducto'].setValue(producto ? producto.type ? producto.type.id ? producto.type.id : "" : "" : "");
         this.detalleProductosForm.controls['tipoProductoNV'].setValue(producto ? producto.type ? producto.type : {} : {});
         this.detalleProductosForm.controls['codigo'].setValue(producto.productCode);

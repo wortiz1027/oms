@@ -10,7 +10,7 @@
                 <div class="form-group">
                     <label for="tipoProveedor">Seleccione el tipo de proveedor</label>
                     <select class="form-control" id="tipoProveedor" name="tipoProveedor" #tipoProveedor formControlName="tipoProveedor" (change)="onSelTipoProveedores($event.target.value)" disabled>
-                        <option *ngFor="let tipoProveedor of listTipoProveedor" [value]="tipoProveedor.value">{{tipoProveedor.name}}</option>
+                        <option *ngFor="let tipoProveedor of listTipoProveedor" [value]="tipoProveedor.idProvider">{{tipoProveedor.nameProvider}}</option>
                     </select>
                 </div>
 
@@ -24,7 +24,7 @@
                 <div class="form-group">
                     <label for="tipoProducto">Seleccione el tipo de producto</label>
                     <select class="form-control" id="tipoProducto" name="tipoProducto" formControlName="tipoProducto" (change)="onSelTipoProducto($event)" disabled>
-                        <option *ngFor="let tipoProducto of listTipoProductos" [nombre]="tipoProducto.name" [value]="tipoProducto.value">{{tipoProducto.name}}</option>
+                        <option *ngFor="let tipoProducto of listTipoProductos" [value]="tipoProducto.id">{{tipoProducto.description}}</option>
                     </select>
                 </div>
 

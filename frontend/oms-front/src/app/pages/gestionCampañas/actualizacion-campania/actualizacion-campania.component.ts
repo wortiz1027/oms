@@ -1,5 +1,5 @@
 import { formatDate } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UUID } from 'angular2-uuid';
@@ -29,8 +29,11 @@ export class ActualizacionCampaniaComponent implements OnInit {
 
   fileBase64: string = "";
   file: File = null;
+  contador: number;
 
   imagen: RequestCrearImagenDTO;
+
+  @Output() sendEventUpdateTable: String;
 
   constructor(private svActualizarCampania: ActualizarCampaniaService,
     private svLogin: LoginService,
@@ -40,7 +43,7 @@ export class ActualizacionCampaniaComponent implements OnInit {
   }
 
   ngOnInit(){
-
+    this.contador = 1;
   }
 
   onRowSelect(campania: RequestCrearCampaniaDTO) {
@@ -118,11 +121,14 @@ export class ActualizacionCampaniaComponent implements OnInit {
 
             //Llamar servicio actualizar campaña
             this.svActualizarCampania.updateCampaign(campania).subscribe(
-
               (res) => {
                 this.responseCampania = res;
 
                 if(this.responseCampania.status == "UPDATED"){
+                  this.contador++;
+
+                  this.sendEventUpdateTable = "ActualizarTabla" + this.contador;
+
                   alert("Campaña Actualizada !!!");
                   this.svLogin.refreshToken();
                   this.router.navigate(['actualizarCampania']);  
@@ -169,11 +175,13 @@ export class ActualizacionCampaniaComponent implements OnInit {
 
       //Llamar servicio actualizar producto
       this.svActualizarCampania.updateCampaign(campania).subscribe(
-
         (res) => {
           this.responseCampania = res;
 
           if(this.responseCampania.status == "UPDATED"){
+            this.contador++;
+            this.sendEventUpdateTable = "ActualizarTabla" + this.contador;
+            
             alert("Campaña Actualizada !!!");
             this.svLogin.refreshToken();
             this.router.navigate(['actualizarCampania']);  

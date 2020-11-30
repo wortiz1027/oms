@@ -46,8 +46,8 @@
             <div class="col-3">      
                 <div class="form-group">
                     <label for="tipoProveedor">Seleccione el tipo de proveedor</label>
-                    <select class="form-control" id="tipoProveedor" name="tipoProveedor" formControlName="tipoProveedor">
-                        <option *ngFor="let tipoProveedor of listTipoProveedor" [value]="tipoProveedor.value">{{tipoProveedor.name}}</option>
+                    <select class="form-control" id="tipoProveedor" name="tipoProveedor" formControlName="tipoProveedor" (change)="onSelTipoProveedor($event)">
+                        <option *ngFor="let tipoProveedor of listTipoProveedor" [value]="tipoProveedor.idType">{{tipoProveedor.description}}</option>
                     </select>
                 </div>
 
@@ -117,7 +117,7 @@
             </div>
 
             <!-- Departamento -->
-            <div class="col-3" *ngIf= "pais.value !== ''">      
+            <div class="col-3" *ngIf= "visibilidadDepartamento">      
                 <div class="form-group">
                     <label for="departamento">Seleccione el Departamento</label>
                     <select class="form-control" id="departamento" #departamento name="departamento" formControlName="departamento" (change) = "onSelDepartamento($event.target.value)">
@@ -131,7 +131,7 @@
             </div>
 
             <!-- Ciudad -->
-            <div class="col-3" *ngIf= "pais.value !== ''">      
+            <div class="col-3" *ngIf= "visibilidadCiudad">      
                 <div class="form-group">
                     <label for="ciudad">Seleccione la Ciudad</label>
                     <select class="form-control" id="ciudad" name="ciudad" formControlName="ciudad">
@@ -147,6 +147,6 @@
     </div>
 
     <button type="submit" class="btn btn-success" [disabled]="registerProveedoresForm.invalid">Crear</button>
-    <button type="button" class="btn btn-default" (click)="refrescar()">Limpiar</button>
+    <button type="button" class="btn btn-default" (click)="limpiar()">Limpiar</button>
 
 </form>

@@ -46,7 +46,6 @@ export class CreacionClienteComponent implements OnInit {
     direccion: ['', { validators: [Validators.required]}],
     telefono: ['', { validators: [Validators.required]}],
     email: ['', { validators: [Validators.required, Validators.pattern(this.emailValido)]}],
-   
     nombreUsuario: ['', { validators: [Validators.required]}],
     password: ['', { validators: [Validators.required]}],
     statusCliente: ['', { validators: [Validators.required]}]

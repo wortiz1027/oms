@@ -28,7 +28,7 @@ export class ActualizarCampaniaService {
     this.httpOptions.headers = headers;
 
     const result = this.httpClient
-        .put<any>(environment.createCampaign_variable, JSON.stringify(_body), this.httpOptions);
+        .put<any>(environment.createCampaign_endpoint, JSON.stringify(_body), this.httpOptions);
 
     return result;
   }

@@ -23,6 +23,8 @@ import { LoginOmsComponent } from 'src/app/pages/login-oms/login-oms.component';
 import { CrearUsuarioComponent } from 'src/app/pages/gestionUsuarios/crear-usuario/crear-usuario.component';
 import { FileUploadComponent } from 'src/app/components/file-upload/file-upload.component';
 import { BusquedaCampaniaComponent } from 'src/app/pages/gestionCampañas/busqueda-campania/busqueda-campania.component';
+import { BusquedaOrdenComponent } from 'src/app/pages/gestionOrden/busqueda-orden/busqueda-orden.component';
+import { CancelarOrdenComponent } from 'src/app/pages/gestionOrden/cancelar-orden/cancelar-orden.component';
 
 export const AdminLayoutRoutes: Routes = [
   { path: 'dashboard',                 component: DashboardComponent, canActivate: [AuthenticationGuard]},
@@ -44,6 +46,8 @@ export const AdminLayoutRoutes: Routes = [
   { path: 'eliminarCampania',          component: EliminacionCampaniaComponent},
   { path: 'asignarProductos',          component: AsignarProductosComponent},
   { path: 'loginOMS',                  component: LoginOmsComponent},
-  { path: 'crearUsuario',              component: CrearUsuarioComponent}
+  { path: 'crearUsuario',              component: CrearUsuarioComponent},
+  { path: 'buscarOrden',               component: BusquedaOrdenComponent},
+  { path: 'cancelarOrden',             component: CancelarOrdenComponent}
   
 ];

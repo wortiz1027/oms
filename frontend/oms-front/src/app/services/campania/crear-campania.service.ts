@@ -29,7 +29,7 @@ export class CrearCampaniaService {
     this.httpOptions.headers = headers;
 
     const result = this.httpClient
-         .post<any>(environment.createCampaign_variable, JSON.stringify(_body), this.httpOptions);
+         .post<any>(environment.createCampaign_endpoint, JSON.stringify(_body), this.httpOptions);
 
     return result;
   }

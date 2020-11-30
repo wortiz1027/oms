@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
 import { RequestBuscarProductoDTO } from 'src/app/models/RequestBuscarProductoDTO';
@@ -27,6 +27,8 @@ export class BuscarProductoComponent implements OnInit {
   selectedProducto: RequestCrearProductoDTO;
 
   @ViewChild('paginator', { static: true }) paginator: Paginator;
+
+  @Input() sendEventUpdateTable: String;
 
   constructor(private formBuilder: FormBuilder,
               private svBuscarProducto: BuscarProductoService,
@@ -74,7 +76,8 @@ export class BuscarProductoComponent implements OnInit {
                 producto.endDate = this.resBuscarProducto.data.products[i].endDate;
                 producto.type = this.resBuscarProducto.data.products[i].type;
                 producto.image = this.resBuscarProducto.data.products[i].image;
-                producto.vendorId = this.resBuscarProducto.data.products[i].vendorId;           
+                producto.vendorId = this.resBuscarProducto.data.products[i].vendorId; 
+                producto.vendor = this.resBuscarProducto.data.products[i].vendor;           
   
                 this.lstProductos.push(producto);
   
@@ -122,7 +125,8 @@ export class BuscarProductoComponent implements OnInit {
               producto.endDate = this.resBuscarProducto.data.products[i].endDate;
               producto.type = this.resBuscarProducto.data.products[i].type;
               producto.image = this.resBuscarProducto.data.products[i].image;
-              producto.vendorId = this.resBuscarProducto.data.products[i].vendorId;           
+              producto.vendorId = this.resBuscarProducto.data.products[i].vendorId; 
+              producto.vendor = this.resBuscarProducto.data.products[i].vendor;          
 
               this.lstProductos.push(producto);
 
@@ -185,7 +189,8 @@ export class BuscarProductoComponent implements OnInit {
                 producto.endDate = this.resBuscarProducto.data.products[i].endDate;
                 producto.type = this.resBuscarProducto.data.products[i].type;
                 producto.image = this.resBuscarProducto.data.products[i].image;
-                producto.vendorId = this.resBuscarProducto.data.products[i].vendorId;           
+                producto.vendorId = this.resBuscarProducto.data.products[i].vendorId;     
+                producto.vendor = this.resBuscarProducto.data.products[i].vendor;      
   
                 this.lstProductos.push(producto);
   
@@ -232,7 +237,8 @@ export class BuscarProductoComponent implements OnInit {
               producto.endDate = this.resBuscarProducto.data.products[i].endDate;
               producto.type = this.resBuscarProducto.data.products[i].type;
               producto.image = this.resBuscarProducto.data.products[i].image;
-              producto.vendorId = this.resBuscarProducto.data.products[i].vendorId;           
+              producto.vendorId = this.resBuscarProducto.data.products[i].vendorId; 
+              producto.vendor = this.resBuscarProducto.data.products[i].vendor;           
 
               this.lstProductos.push(producto);
 
@@ -279,7 +285,8 @@ export class BuscarProductoComponent implements OnInit {
               this.selectedProducto.endDate = this.resBuscarProducto.product.endDate;
               this.selectedProducto.type = this.resBuscarProducto.product.type;
               this.selectedProducto.image = this.resBuscarProducto.product.image;
-              this.selectedProducto.vendorId = this.resBuscarProducto.product.vendorId; 
+              this.selectedProducto.vendorId = this.resBuscarProducto.product.vendorId;
+              this.selectedProducto.vendor = this.resBuscarProducto.product.vendor; 
             }
           }
 
@@ -305,6 +312,61 @@ export class BuscarProductoComponent implements OnInit {
     this.selectedProducto = {};
 
     this.sendProductoUnSelect.emit(this.selectedProducto);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.sendEventUpdateTable.currentValue) {
+      this.reqBuscarProducto = {};
+      this.lstProductos = []; 
+      let producto: RequestCrearProductoDTO = {};
+      
+      this.reqBuscarProducto.text = "";
+      this.reqBuscarProducto.page = "0";
+      this.reqBuscarProducto.size = "5";
+      this.reqBuscarProducto.token = this.svLogin.getToken().valueOf();
+
+      this.svBuscarProducto.buscarProductos(this.reqBuscarProducto).subscribe(
+        (res) => {
+          this.resBuscarProducto = res;
+
+          if(this.resBuscarProducto.data.products != null && this.resBuscarProducto.data.products.length > 0){
+            for(let i= 0; i < this.resBuscarProducto.data.products.length; i++){
+              producto = {};
+
+              producto.productId = this.resBuscarProducto.data.products[i].productId;
+              producto.productCode = this.resBuscarProducto.data.products[i].productCode;
+              producto.productName = this.resBuscarProducto.data.products[i].productName;
+              producto.productDescription = this.resBuscarProducto.data.products[i].productDescription;
+              producto.productPrice = this.resBuscarProducto.data.products[i].productPrice;
+              producto.originCity = this.resBuscarProducto.data.products[i].originCity;
+              producto.destinationCity = this.resBuscarProducto.data.products[i].destinationCity;
+              producto.startDate = this.resBuscarProducto.data.products[i].startDate;
+              producto.endDate = this.resBuscarProducto.data.products[i].endDate;
+              producto.type = this.resBuscarProducto.data.products[i].type;
+              producto.image = this.resBuscarProducto.data.products[i].image;
+              producto.vendorId = this.resBuscarProducto.data.products[i].vendorId; 
+              producto.vendor = this.resBuscarProducto.data.products[i].vendor;          
+
+              this.lstProductos.push(producto);
+
+              this.totalRecords = this.resBuscarProducto.data.totalItems;
+            }
+          }
+          this.svLogin.refreshToken();
+        },
+        (res) => {
+          this.selectedProducto = {};
+
+          this.sendProductoUnSelect.emit(this.selectedProducto);
+
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }
+          console.log('error ' + JSON.stringify(res.status));
+        }
+      );
+  
+    }
   }
 
 }

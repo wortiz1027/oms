@@ -33,20 +33,12 @@ export class ActualizacionProductoComponent implements OnInit {
 
   fileBase64: string = "";
   file: File = null;
+  contador: number;
 
   imagen: RequestCrearImagenDTO;
 
-  /*
-  reqBuscarProducto: RequestBuscarProductoDTO;
-  resBuscarProducto: ResponseBuscarProductoDTO;
-  lstProductos: RequestCrearProductoDTO[];
-  totalRecords: number;
-  first: number = 0;
+  @Output() sendEventUpdateTable: String;
 
-  //selectedProducto: RequestCrearProductoDTO;
-
-  //@Output() sendListProductos = new EventEmitter<ResponseBuscarProductoDTO>();
-*/
   constructor(private svActualizarProducto: ActualizarProductoService,
               private svLogin: LoginService,
               private svCrearImagen: CrearImagenService,
@@ -56,7 +48,7 @@ export class ActualizacionProductoComponent implements OnInit {
   } 
   
   ngOnInit() {
-
+    this.contador = 1;
   }
 
   onRowSelect(producto: RequestCrearProductoDTO) {
@@ -110,7 +102,6 @@ export class ActualizacionProductoComponent implements OnInit {
   
           if(this.responseImagen.status == "CREATED"){
             //Se prepara los datos del producto
-
             let producto: RequestCrearProductoDTO = {};
             let imagen: any = {};
             let fechaInicio: string = "";
@@ -137,11 +128,13 @@ export class ActualizacionProductoComponent implements OnInit {
 
             //Llamar servicio actualizar producto
             this.svActualizarProducto.updateProduct(producto).subscribe(
-
               (res) => {
                 this.responseProducto = res;
 
                 if(this.responseProducto.status == "UPDATED"){
+                  this.contador++;
+                  this.sendEventUpdateTable = "ActualizarTabla" + this.contador;
+
                   alert("Producto Actualizado !!!");
                   this.svLogin.refreshToken();
                   this.visibilidadDetalle = false;
@@ -166,8 +159,7 @@ export class ActualizacionProductoComponent implements OnInit {
         }
       ); 
     }else{
-      //Se prepara los datos del producto
-            
+      //Se prepara los datos del producto          
       let producto: RequestCrearProductoDTO = {};
       let fechaInicio: string = "";
       let fechaFin: string = "";
@@ -190,11 +182,13 @@ export class ActualizacionProductoComponent implements OnInit {
 
       //Llamar servicio actualizar producto
       this.svActualizarProducto.updateProduct(producto).subscribe(
-
         (res) => {
           this.responseProducto = res;
 
           if(this.responseProducto.status == "UPDATED"){
+            this.contador++;
+            this.sendEventUpdateTable = "ActualizarTabla" + this.contador;
+
             alert("Producto Actualizado !!!");
             this.svLogin.refreshToken();
             this.visibilidadDetalle = false;
@@ -213,34 +207,4 @@ export class ActualizacionProductoComponent implements OnInit {
     
     return;
   }
-
-  /*
-  consultarProductos(){
-
-    this.reqBuscarProducto = {};
-    this.lstProductos = []; 
-    let producto: RequestCrearProductoDTO = {};
-    
-    this.reqBuscarProducto.text = "";
-    this.reqBuscarProducto.page = "0";
-    this.reqBuscarProducto.size = "5";
-    this.reqBuscarProducto.token = this.svLogin.getToken().valueOf();
-
-    
-    this.svBuscarProducto.buscarProductos(this.reqBuscarProducto).subscribe(
-      (res) => {
-        this.resBuscarProducto = res;
-
-        if(this.resBuscarProducto){
-          this.sendListProductos.emit(this.resBuscarProducto);
-          this.svLogin.refreshToken();
-        } 
-      },
-      (res) => {
-        console.log('error ' + JSON.stringify(res.status));
-      }
-    );
-    
-  }
-  */
 }

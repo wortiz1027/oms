@@ -1,5 +1,6 @@
 import { IdDescripcionI } from "./IdDescripcion"
 import { ImagenI } from "./Imagen"
+import { RequestCrearProveedorDTO } from "./RequestCrearProveedorDTO"
 
 export interface RequestCrearProductoDTO{
     productId?: string;
@@ -14,5 +15,6 @@ export interface RequestCrearProductoDTO{
     destinationCity?: string;
     image?: ImagenI;
     vendorId?: string;
+    vendor?: RequestCrearProveedorDTO;
     action?: string;
 }

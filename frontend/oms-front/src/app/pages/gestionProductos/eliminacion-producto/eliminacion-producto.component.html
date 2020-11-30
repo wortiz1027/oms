@@ -20,7 +20,8 @@
     <!--Componente para la busqueda de productos-->          
     <div class="form-group">
         <app-buscar-producto (sendProductoSelect)="onRowSelect($event)"
-                             (sendProductoUnSelect)="onRowUnselect($event)">
+                             (sendProductoUnSelect)="onRowUnselect($event)"
+                             [sendEventUpdateTable]="sendEventUpdateTable">
         </app-buscar-producto>
     </div>   
 
@@ -30,7 +31,7 @@
     <!--Componente para ver el detalle de productos-->          
     <div class="form-group" *ngIf="visibilidadDetalle">
         <app-detalle-producto [producto]="producto"
-                                  (sendDetalleProducto)="showFormDataDetalle($event)"
+                              (sendDetalleProducto)="showFormDataDetalle($event)"
         ></app-detalle-producto>
     </div>
 

@@ -1,0 +1,98 @@
+<h1>Detalle de la Orden</h1>
+
+<form [formGroup]="detalleOrdenesForm">
+
+    <div class="form-group">
+        <div class="form-row">
+
+            <!-- Codigo Orden -->
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="codigo">Código</label>
+                    <input type="text" class="form-control" formControlName="codigo" readonly>
+                </div>
+
+                <div *ngIf="verificarCampo('codigo')" class="alert-danger">
+                    {{getMensajeError("codigo")}}
+                </div>
+            </div>
+
+            <!-- Fecha Creación -->
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="fechaCreacion">Fecha Creación</label>
+                    <input type="text" class="form-control" formControlName="fechaCreacion" readonly>
+                </div>
+
+                <div *ngIf="verificarCampo('fechaCreacion')" class="alert-danger">
+                    {{getMensajeError("fechaCreacion")}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-row">
+
+            <!-- Valor Total Orden -->
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="valorTotal">Valor Total</label>
+                    <input type="text" class="form-control" formControlName="valorTotal" readonly>
+                </div>
+
+                <div *ngIf="verificarCampo('valorTotal')" class="alert-danger">
+                    {{getMensajeError("valorTotal")}}
+                </div>
+            </div>
+
+            <!-- Estado Orden -->
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="estado">Estado</label>
+                    <input type="text" class="form-control" formControlName="estado" readonly>
+                </div>
+
+                <div *ngIf="verificarCampo('estado')" class="alert-danger">
+                    {{getMensajeError("estado")}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="content-section implementation" *ngIf="visibilidadTabla">
+        <!--Productos de la Orden-->
+        <div class="card">
+          <h1>Lista de Productos</h1>
+          <p-table 
+            [value]="lstProductosOrden"
+            [paginator]="true"
+            [rows]="5"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} Resultados">
+            
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Codigo</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+              </tr>
+            </ng-template>
+  
+            <ng-template pTemplate="body" let-producto>
+              <tr [pSelectableRow]="producto">
+                  <td>{{producto.code}}</td>
+                  <td>{{producto.quantity}}</td>
+                  <td>{{producto.price}}</td>
+              </tr>
+  
+            </ng-template>
+          </p-table>
+  
+        </div>
+    </div>
+
+</form>

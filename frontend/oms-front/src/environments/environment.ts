@@ -17,9 +17,13 @@ export const environment = {
   clientId_variable: `${clientId}`,
   clientSecret_variable: `${clientSecret}`,
   grant_type_variable: `${grant_type}`,
-  createimage_variable: `${hostApiGateway}/images/cmd`,
-  createProduct_variable: `${hostApiGateway}/products/cmd`,
+  createimage_endpoint: `${hostApiGateway}/images/cmd`,
+  createProduct_endpoint: `${hostApiGateway}/products/cmd`,
   searchProduct_endpoint: `${hostApiGateway}/products/qrs`,
-  createCampaign_variable: `${hostApiGateway}/campaigns/cmd`,
+  createCampaign_endpoint: `${hostApiGateway}/campaigns/cmd`,
   searchCampaign_endpoint: `${hostApiGateway}/campaigns/qrs`,
+  searchOrder_endpoint: `${hostApiGateway}/orders/qrs`,
+  cancelOrder_endpoint: `${hostApiGateway}/orders/cmd`,
+  createVendor_endpoint: `${hostApiGateway}/vendors/cmd`,
+  searchVendor_endpoint: `${hostApiGateway}/vendors/qrs`
 };

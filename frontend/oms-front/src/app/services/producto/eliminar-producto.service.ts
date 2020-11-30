@@ -30,7 +30,7 @@ export class EliminarProductoService {
     this.httpOptions.headers = headers;
 
     const result = this.httpClient
-        .delete<any>(environment.createProduct_variable, this.httpOptions);
+        .delete<any>(environment.createProduct_endpoint, this.httpOptions);
 
     return result;
   }

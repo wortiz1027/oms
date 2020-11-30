@@ -30,6 +30,7 @@ export class DetalleClienteEditComponent implements OnInit {
   }
 
   detalleClientesForm = this.formBuilder.group({
+    codigo: [''],
     identificacion: ['', { validators: [Validators.required]}],
     nombres: ['', { validators: [Validators.required]}],
     apellidos: ['', { validators: [Validators.required]}],
@@ -37,7 +38,13 @@ export class DetalleClienteEditComponent implements OnInit {
     direccion: ['', { validators: [Validators.required]}],
     telefono: ['', { validators: [Validators.required]}],
     email: ['', { validators: [Validators.required, Validators.pattern(this.emailValido)]}],
-    statusCliente: ['', { validators: [Validators.required]}]
+    statusCliente: ['', { validators: [Validators.required]}],
+    username: [''],
+    roles: [''],
+    accountNonExpired: [''],
+    credentialNonExpired: [''],
+    accountNonLocket: [''],
+    enable: ['']
   });
 
   ngOnInit(){
@@ -48,15 +55,22 @@ export class DetalleClienteEditComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.cliente.currentValue) {
       let cliente: RequestCrearUsuarioDTO = changes.cliente.currentValue;
+
+      this.detalleClientesForm.controls['codigo'].setValue(cliente.codigo);
       this.detalleClientesForm.controls['identificacion'].setValue(cliente.cedula);
       this.detalleClientesForm.controls['nombres'].setValue(cliente.nombres);
       this.detalleClientesForm.controls['apellidos'].setValue(cliente.apellidos);
-      this.detalleClientesForm.controls['fechaNacimiento'].setValue(cliente.fechaNacimiento);
       this.detalleClientesForm.controls['direccion'].setValue(cliente.direccion);
-      this.detalleClientesForm.controls['telefono'].setValue(cliente.telefono);
       this.detalleClientesForm.controls['email'].setValue(cliente.email);
-      this.detalleClientesForm.controls['statusCliente'].setValue(cliente.types.type);
-      
+      this.detalleClientesForm.controls['fechaNacimiento'].setValue(cliente.fechaNacimiento);
+      this.detalleClientesForm.controls['telefono'].setValue(cliente.telefono);
+      this.detalleClientesForm.controls['statusCliente'].setValue(cliente ? cliente.types ? cliente.types.type :"" : "");
+      this.detalleClientesForm.controls['roles'].setValue(cliente.roles);
+      this.detalleClientesForm.controls['username'].setValue(cliente.username);
+      this.detalleClientesForm.controls['accountNonExpired'].setValue(cliente.accountNonExpired);
+      this.detalleClientesForm.controls['credentialNonExpired'].setValue(cliente.credentialNonExpired);
+      this.detalleClientesForm.controls['accountNonLocket'].setValue(cliente.accountNonLocket);
+      this.detalleClientesForm.controls['enable'].setValue(cliente.enable);
     }
   }
 

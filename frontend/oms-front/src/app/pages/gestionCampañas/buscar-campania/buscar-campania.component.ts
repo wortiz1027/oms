@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Paginator } from 'primeng/paginator';
 import { RequestBuscarCampaniaDTO } from 'src/app/models/RequestBuscarCampaniaDTO';
@@ -33,6 +33,8 @@ export class BuscarCampaniaComponent implements OnInit {
 
   @ViewChild('paginator', { static: true }) paginator: Paginator;
 
+  @Input() sendEventUpdateTable: String;
+
   constructor(private formBuilder: FormBuilder,
               private svBuscarCampania: BuscarCampaniaService,
               private svLogin: LoginService
@@ -41,7 +43,7 @@ export class BuscarCampaniaComponent implements OnInit {
   }
 
   busquedaCampaniasForm = this.formBuilder.group({
-    busquedaCampania: ['', { validators: [Validators.required]}]
+    busquedaCampania: ['']
   });
   
   ngOnInit() {
@@ -149,22 +151,6 @@ export class BuscarCampaniaComponent implements OnInit {
     this.busquedaCampaniasForm.patchValue({
       busquedaCampania: ''
     });
-  }
-
-  //Metodos Para validacion de campos
-  getMensajeError(field:string): string{
-    let mensaje: string;
-  
-    if(this.busquedaCampaniasForm.get(field).errors.required){
-      mensaje = 'El campo es requerido';
-    }
-  
-    return mensaje;
-  }
-  
-  verificarCampo(field: string): boolean{
-    return ((this.busquedaCampaniasForm.get(field).dirty || this.busquedaCampaniasForm.get(field).touched) && 
-            (this.busquedaCampaniasForm.get(field).invalid || this.busquedaCampaniasForm.get(field).errors?.required));
   }
 
   paginate(event) {
@@ -350,6 +336,56 @@ export class BuscarCampaniaComponent implements OnInit {
     this.selectedCampania = {};
 
     this.sendCampaniaUnSelect.emit(this.selectedCampania);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.sendEventUpdateTable.currentValue) {
+      this.reqBuscarCampania = {};
+      this.lstCampanias = []; 
+      let campania: RequestCrearCampaniaDTO = {};
+      
+      this.reqBuscarCampania.text = "";
+      this.reqBuscarCampania.page = "0";
+      this.reqBuscarCampania.size = "5";
+
+      this.svBuscarCampania.buscarCampañas(this.reqBuscarCampania).subscribe(
+        (res) => {
+          this.resBuscarCampania = res;
+
+          if(this.resBuscarCampania.data.campaigns != null && this.resBuscarCampania.data.campaigns.length > 0){
+            for(let i= 0; i < this.resBuscarCampania.data.campaigns.length; i++){
+              campania = {};
+              
+              campania.campaignId = this.resBuscarCampania.data.campaigns[i].campaignId;
+              campania.campaignCode = this.resBuscarCampania.data.campaigns[i].campaignCode;
+              campania.campaignName = this.resBuscarCampania.data.campaigns[i].campaignName;
+              campania.campaignDescription = this.resBuscarCampania.data.campaigns[i].campaignDescription;
+              campania.discount = this.resBuscarCampania.data.campaigns[i].discount;
+              campania.startDate = this.resBuscarCampania.data.campaigns[i].startDate; 
+              campania.endDate = this.resBuscarCampania.data.campaigns[i].endDate;
+              campania.status = this.resBuscarCampania.data.campaigns[i].status;
+              campania.action = this.resBuscarCampania.data.campaigns[i].action;
+              campania.image = this.resBuscarCampania.data.campaigns[i].image; 
+
+              this.lstCampanias.push(campania);
+
+              this.totalRecords = this.resBuscarCampania.data.totalItems;
+            }
+          }
+          this.svLogin.refreshToken();
+        },
+        (res) => {
+          this.selectedCampania = {};
+
+          this.sendCampaniaUnSelect.emit(this.selectedCampania);
+
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }
+          console.log('error ' + JSON.stringify(res.status));
+        }
+      );
+    }
   }
 
 }

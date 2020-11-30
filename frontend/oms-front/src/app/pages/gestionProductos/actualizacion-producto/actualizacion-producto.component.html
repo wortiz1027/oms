@@ -20,7 +20,8 @@
     <!--Componente para la busqueda de productos-->          
     <div class="form-group">
         <app-buscar-producto (sendProductoSelect)="onRowSelect($event)"
-                             (sendProductoUnSelect)="onRowUnselect($event)">
+                             (sendProductoUnSelect)="onRowUnselect($event)"
+                             [sendEventUpdateTable]="sendEventUpdateTable">
         </app-buscar-producto>
     </div>   
 

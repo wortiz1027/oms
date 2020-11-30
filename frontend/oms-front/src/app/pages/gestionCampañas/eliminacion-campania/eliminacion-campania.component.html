@@ -20,7 +20,8 @@
     <!--Componente para la busqueda de campañas-->          
     <div class="form-group">
         <app-buscar-campania (sendCampaniaSelect)="onRowSelect($event)"
-                             (sendCampaniaUnSelect)="onRowUnselect($event)">
+                             (sendCampaniaUnSelect)="onRowUnselect($event)"
+                             [sendEventUpdateTable]="sendEventUpdateTable">
         </app-buscar-campania>
     </div>  
 

@@ -1,5 +1,5 @@
 import { formatDate } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RequestCrearProductoDTO } from 'src/app/models/RequestCrearProductoDTO';
@@ -16,11 +16,14 @@ import { DetalleProductoComponent } from '../detalle-producto/detalle-producto.c
 export class EliminacionProductoComponent implements OnInit {
 
   producto: RequestCrearProductoDTO;
-  visibilidadDetalle:Boolean;
+  visibilidadDetalle: Boolean;
+  contador: number;
 
   formDataDetalleProducto: FormGroup;
 
   responseDeleteProducto: ResponseCrearProductDTO;
+
+  @Output() sendEventUpdateTable: String;
 
   constructor(private svEliminarProducto: EliminarProductoService,
               private svLogin: LoginService,
@@ -29,7 +32,7 @@ export class EliminacionProductoComponent implements OnInit {
   } 
 
   ngOnInit(): void {
-
+    this.contador = 1;
   }
 
   onRowSelect(producto: RequestCrearProductoDTO) {
@@ -48,7 +51,6 @@ export class EliminacionProductoComponent implements OnInit {
 
   eliminar() {
     //Se prepara los datos del producto
-
     let producto: RequestCrearProductoDTO = {};
     let fechaInicio: string = "";
     let fechaFin: string = "";
@@ -76,6 +78,10 @@ export class EliminacionProductoComponent implements OnInit {
         this.responseDeleteProducto = res;
 
         if(this.responseDeleteProducto.status == "DELETED"){
+          this.contador++;
+
+          this.sendEventUpdateTable = "ActualizarTabla" + this.contador;
+
           alert("Producto Eliminado !!!");
           this.svLogin.refreshToken();
           this.visibilidadDetalle = false;

@@ -1,5 +1,5 @@
 import { formatDate } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RequestCrearCampaniaDTO } from 'src/app/models/RequestCrearCampaniaDTO';
@@ -16,11 +16,14 @@ import { DetalleCampaniaComponent } from '../detalle-campania/detalle-campania.c
 export class EliminacionCampaniaComponent implements OnInit {
 
   campania: RequestCrearCampaniaDTO;
-  visibilidadDetalle:Boolean;
+  visibilidadDetalle: Boolean;
+  contador: number;
 
   formDataDetalleCampania: FormGroup;
 
   responseDeleteCampania: ResponseCrearCampaniaDTO;
+
+  @Output() sendEventUpdateTable: String;
 
   constructor(private svEliminarCampania: EliminarCampaniaService,
               private svLogin: LoginService,
@@ -29,7 +32,7 @@ export class EliminacionCampaniaComponent implements OnInit {
   } 
 
   ngOnInit(){
-
+    this.contador = 1;
   }
 
   onRowSelect(campania: RequestCrearCampaniaDTO) {
@@ -63,17 +66,18 @@ export class EliminacionCampaniaComponent implements OnInit {
     campania.endDate = fechaFin;
     campania.discount = this.formDataDetalleCampania.get("descuento").value;
     campania.status = this.formDataDetalleCampania.get("status").value;
-    campania.action = this.formDataDetalleCampania.get("action").value;
     campania.image = this.formDataDetalleCampania.get("imagen").value;
     campania.action = "DELETED";
 
     //Llamar servicio eliminar campaña
     this.svEliminarCampania.deleteCampaign(campania).subscribe(
-
       (res) => {
         this.responseDeleteCampania = res;
 
        if(this.responseDeleteCampania.status == "DELETED"){
+        this.contador++;
+        this.sendEventUpdateTable = "ActualizarTabla" + this.contador;
+        
         alert("Campaña Eliminada !!!");
         this.svLogin.refreshToken();
         this.visibilidadDetalle = false;

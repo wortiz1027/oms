@@ -28,7 +28,9 @@ export const ROUTES: RouteInfo[] = [
   {path: '/buscarCampania', title: 'Buscar Campaña', icon: 'ni-circle-08 text-pink', class: ''},
   {path: '/actualizarCampania', title: 'Actualizar Campaña', icon: 'ni-circle-08 text-pink', class: ''},
   {path: '/eliminarCampania', title: 'Eliminar Campaña', icon: 'ni-circle-08 text-pink', class: ''},
-  {path: '/crearUsuario', title: 'Crear Usuario', icon: 'ni-circle-08 text-pink', class: ''}
+  {path: '/crearUsuario', title: 'Crear Usuario', icon: 'ni-circle-08 text-pink', class: ''},
+  {path: '/buscarOrden', title: 'Buscar Orden', icon: 'ni-circle-08 text-pink', class: ''},
+  {path: '/cancelarOrden', title: 'Cancelar Orden', icon: 'ni-circle-08 text-pink', class: ''}
   
 ];
 

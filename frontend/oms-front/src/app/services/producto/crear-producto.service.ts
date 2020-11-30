@@ -29,7 +29,7 @@ export class CrearProductoService {
     this.httpOptions.headers = headers;
 
     const result = this.httpClient
-         .post<any>(environment.createProduct_variable, JSON.stringify(_body), this.httpOptions);
+         .post<any>(environment.createProduct_endpoint, JSON.stringify(_body), this.httpOptions);
 
     return result;
   }

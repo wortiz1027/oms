@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
 //import { Paginator } from 'primeng/paginator';
@@ -23,9 +23,9 @@ export class BuscarClienteComponent implements OnInit {
   @Output() sendClienteSelect = new EventEmitter<RequestCrearUsuarioDTO>();
   @Output() sendClienteUnSelect = new EventEmitter<RequestCrearUsuarioDTO>();
 
-  selectedCliente: RequestCrearUsuarioDTO;
+  @Input() sendEventUpdateTable: String;
 
-  //@ViewChild('paginator', { static: true }) paginator: Paginator;
+  selectedCliente: RequestCrearUsuarioDTO;
 
   constructor(private formBuilder: FormBuilder,
               private svBuscarUsuario: BuscarUsuarioService,
@@ -259,7 +259,6 @@ export class BuscarClienteComponent implements OnInit {
 
     if(numIdentificacion != null && numIdentificacion != ""){
       this.selectedCliente = {};
-      console.log("this.selectedCliente antes " + JSON.stringify(this.selectedCliente));
 
       this.svBuscarUsuario.buscarDetalleUsuario(numIdentificacion).subscribe(
         (res) => {
@@ -279,6 +278,7 @@ export class BuscarClienteComponent implements OnInit {
             this.selectedCliente.username = this.resBuscarUsuario.user.username;
             this.selectedCliente.accountNonExpired = this.resBuscarUsuario.user.accountNonExpired;           
             this.selectedCliente.credentialNonExpired = this.resBuscarUsuario.user.credentialNonExpired;
+            this.selectedCliente.accountNonLocket = this.resBuscarUsuario.user.accountNonLocket;
             this.selectedCliente.enable = this.resBuscarUsuario.user.enable;
 
             this.limpiar();
@@ -287,7 +287,7 @@ export class BuscarClienteComponent implements OnInit {
 
             this.limpiar();
           }
-          console.log("this.selectedCliente despues " + JSON.stringify(this.selectedCliente));
+
           this.sendClienteSelect.emit(this.selectedCliente);
 
           this.svLogin.refreshToken();
@@ -313,6 +313,62 @@ export class BuscarClienteComponent implements OnInit {
     this.selectedCliente = {};
 
     this.sendClienteUnSelect.emit(this.selectedCliente);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.sendEventUpdateTable.currentValue) {
+
+      this.reqBuscarUsuario = {};
+      this.lstClientes = []; 
+      let cliente: RequestCrearUsuarioDTO = {};
+      
+      this.reqBuscarUsuario.cedula = "";
+      this.reqBuscarUsuario.page = "0";
+      this.reqBuscarUsuario.size = "5";
+      this.reqBuscarUsuario.token = this.svLogin.getToken().valueOf();
+  
+      this.svBuscarUsuario.buscarUsuarios(this.reqBuscarUsuario).subscribe(
+        (res) => {
+          this.resBuscarUsuario = res;
+
+          if(this.resBuscarUsuario.users.length > 0){
+            for(let i= 0; i < this.resBuscarUsuario.users.length; i++){
+              cliente = {};
+
+              cliente.codigo = String(this.resBuscarUsuario.users[i].idUser);
+              cliente.cedula = String(this.resBuscarUsuario.users[i].cedula);
+              cliente.nombres = this.resBuscarUsuario.users[i].nombre;
+              cliente.apellidos = this.resBuscarUsuario.users[i].apellido;
+              cliente.direccion = this.resBuscarUsuario.users[i].direccion;
+              cliente.email = this.resBuscarUsuario.users[i].email;
+              cliente.fechaNacimiento = new Date(this.resBuscarUsuario.users[i].fechaNacimiento);
+              cliente.telefono = this.resBuscarUsuario.users[i].telefono;
+              cliente.types = this.resBuscarUsuario.users[i].types;
+              cliente.roles = this.resBuscarUsuario.users[i].roles;
+              cliente.username = this.resBuscarUsuario.users[i].username;
+              cliente.accountNonExpired = this.resBuscarUsuario.users[i].accountNonExpired;           
+              cliente.credentialNonExpired = this.resBuscarUsuario.users[i].credentialNonExpired;
+              cliente.enable = this.resBuscarUsuario.users[i].enable;
+
+              this.lstClientes.push(cliente);
+
+              this.totalRecords = this.resBuscarUsuario.totalItems;
+            }
+          }
+          this.svLogin.refreshToken();
+        },
+        (res) => {
+          this.selectedCliente = {};
+
+          this.sendClienteUnSelect.emit(this.selectedCliente);
+
+          if(res.status == 401){
+            this.svLogin.userLogout();
+          }
+          console.log('error ' + JSON.stringify(res.status));
+        }
+      );
+    }
   }
 
 }

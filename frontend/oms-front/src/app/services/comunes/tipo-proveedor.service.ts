@@ -1,28 +1,27 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TipoProveedorI } from 'src/app/models/TipoProveedor';
+import { Observable } from 'rxjs';
+import { ResponseBuscarTipoProveedoresDTO } from 'src/app/models/ResponseBuscarTipoProveedoresDTO';
+import { environment } from 'src/environments/environment';
+import { LoginService } from '../login/login.service';
 
 @Injectable()
 
 export class TipoProveedorService {
 
-  private listTipoProveedor: TipoProveedorI [] = [
-    {
-      name: "Evento",
-      value: "1"
-    },
-    {
-      name: "Hospedaje",
-      value: "2"
-    },
-    {
-      name: "Transporte",
-      value: "3"
-    }
-  ];
+  constructor(private httpClient: HttpClient,
+    private svLogin: LoginService) {
+ 
+    console.log('Search Type Vendor service ready!!');
+  }
 
-  constructor() { }
+  httpOptions = {
+    headers: new HttpHeaders({'Authorization': 'Bearer ' + this.svLogin.getToken()}),
+    params:{}
+  };
 
-  getListTipoProveedor(): TipoProveedorI[]{
-    return this.listTipoProveedor;
+  buscarTipoProveedores(): Observable<ResponseBuscarTipoProveedoresDTO> {
+    return this.httpClient
+      .get<ResponseBuscarTipoProveedoresDTO>(environment.searchVendor_endpoint + "/types", this.httpOptions);
   }
 }

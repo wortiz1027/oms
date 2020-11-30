@@ -30,6 +30,7 @@ export class DetalleClienteComponent implements OnInit {
   }
 
   detalleClientesForm = this.formBuilder.group({
+    codigo: [''],
     identificacion: ['', { validators: [Validators.required]}],
     nombres: ['', { validators: [Validators.required]}],
     apellidos: ['', { validators: [Validators.required]}],
@@ -37,7 +38,8 @@ export class DetalleClienteComponent implements OnInit {
     direccion: ['', { validators: [Validators.required]}],
     telefono: ['', { validators: [Validators.required]}],
     email: ['', { validators: [Validators.required, Validators.pattern(this.emailValido)]}],
-    statusCliente: ['', { validators: [Validators.required]}]
+    statusCliente: ['', { validators: [Validators.required]}],
+    username: ['']
   });
 
   ngOnInit(){
@@ -48,6 +50,7 @@ export class DetalleClienteComponent implements OnInit {
     if (changes.cliente.currentValue) {
       let cliente: RequestCrearUsuarioDTO = changes.cliente.currentValue;
 
+      this.detalleClientesForm.controls['codigo'].setValue(cliente.codigo);
       this.detalleClientesForm.controls['identificacion'].setValue(cliente.cedula);
       this.detalleClientesForm.controls['nombres'].setValue(cliente.nombres);
       this.detalleClientesForm.controls['apellidos'].setValue(cliente.apellidos);
@@ -56,7 +59,7 @@ export class DetalleClienteComponent implements OnInit {
       this.detalleClientesForm.controls['telefono'].setValue(cliente.telefono);
       this.detalleClientesForm.controls['email'].setValue(cliente.email);
       this.detalleClientesForm.controls['statusCliente'].setValue(cliente ? cliente.types ? cliente.types.type :"" : "");
-
+      this.detalleClientesForm.controls['username'].setValue(cliente.username);
     }
   }
 

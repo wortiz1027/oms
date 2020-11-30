@@ -28,7 +28,7 @@ export class ActualizarProductoService {
     this.httpOptions.headers = headers;
 
     const result = this.httpClient
-        .put<any>(environment.createProduct_variable, JSON.stringify(_body), this.httpOptions);
+        .put<any>(environment.createProduct_endpoint, JSON.stringify(_body), this.httpOptions);
 
     return result;
   }

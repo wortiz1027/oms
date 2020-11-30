@@ -58,6 +58,10 @@ import { DetalleCampaniaEditComponent } from './pages/gestionCampañas/detalle-c
 import { BusquedaCampaniaComponent } from './pages/gestionCampañas/busqueda-campania/busqueda-campania.component';
 import { BuscarProductosCampaniaComponent } from './pages/gestionCampañas/buscar-productos-campania/buscar-productos-campania.component';
 import { DetalleProductosCampaniaComponent } from './pages/gestionCampañas/detalle-productos-campania/detalle-productos-campania.component';
+import { BuscarOrdenComponent } from './pages/gestionOrden/buscar-orden/buscar-orden.component';
+import { BusquedaOrdenComponent } from './pages/gestionOrden/busqueda-orden/busqueda-orden.component';
+import { DetalleOrdenComponent } from './pages/gestionOrden/detalle-orden/detalle-orden.component';
+import { CancelarOrdenComponent } from './pages/gestionOrden/cancelar-orden/cancelar-orden.component';
 
 @NgModule({
   imports: [
@@ -113,7 +117,11 @@ import { DetalleProductosCampaniaComponent } from './pages/gestionCampañas/deta
     DetalleCampaniaEditComponent,
     BusquedaCampaniaComponent,
     BuscarProductosCampaniaComponent,
-    DetalleProductosCampaniaComponent
+    DetalleProductosCampaniaComponent,
+    BuscarOrdenComponent,
+    BusquedaOrdenComponent,
+    DetalleOrdenComponent,
+    CancelarOrdenComponent
   ],
   providers: [AutguardService,
               LoginService],

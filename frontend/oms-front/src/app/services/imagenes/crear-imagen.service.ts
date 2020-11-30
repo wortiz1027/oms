@@ -29,7 +29,7 @@ export class CrearImagenService {
     this.httpOptions.headers = headers;
 
     const result = this.httpClient
-         .post<any>(environment.createimage_variable, JSON.stringify(_body), this.httpOptions);
+         .post<any>(environment.createimage_endpoint, JSON.stringify(_body), this.httpOptions);
 
     return result;
   }

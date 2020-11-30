@@ -21,7 +21,8 @@
     <!--Componente para la busqueda de clientes-->          
     <div class="form-group">
         <app-buscar-cliente (sendClienteSelect)="onRowSelect($event)"
-                            (sendClienteUnSelect)="onRowUnselect($event)">
+                            (sendClienteUnSelect)="onRowUnselect($event)"
+                            [sendEventUpdateTable]="sendEventUpdateTable">
         </app-buscar-cliente>
     </div>   
     <br>

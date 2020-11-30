@@ -7,13 +7,37 @@ export class DepartamentoService {
 
   private listDepartamentos: DepartamentoI [] = [
     {
-      name: "Cundinamarca",
+      name: "Antioquia",
       value: "1",
       codigoPais: "1"
     },
     {
-      name: "Tolima",
+      name: "Atlántico",
       value: "2",
+      codigoPais: "1"
+    },
+    {
+      name: "Caldas",
+      value: "3",
+      codigoPais: "1"
+    },
+    {
+      name: "Cundinamarca",
+      value: "4",
+      codigoPais: "1"
+    },{
+      name: "Santander",
+      value: "5",
+      codigoPais: "1"
+    },
+    {
+      name: "Tolima",
+      value: "6",
+      codigoPais: "1"
+    },
+    {
+      name: "Valle del Cauca",
+      value: "7",
       codigoPais: "1"
     }
   ];
