@@ -2,6 +2,7 @@ import {Component, OnInit, ElementRef} from '@angular/core';
 import {ROUTES} from '../sidebar/sidebar.component';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import {Router} from '@angular/router';
+import { LoginService } from 'src/app/services/login/login.service';
 
 @Component({
   selector: 'app-navbar',
@@ -13,7 +14,7 @@ export class NavbarComponent implements OnInit {
   public listTitles: any[];
   public location: Location;
 
-  constructor(location: Location, private element: ElementRef, private router: Router) {
+  constructor(location: Location, private element: ElementRef, private router: Router, private svLogin: LoginService) {
     this.location = location;
   }
 
@@ -33,6 +34,14 @@ export class NavbarComponent implements OnInit {
       }
     }
     return 'Dashboard';
+  }
+
+  userLogout() {
+    this.svLogin.userLogout();
+  }
+
+  showLogout() {
+    return this.getTitle() !== 'Login';
   }
 
 }

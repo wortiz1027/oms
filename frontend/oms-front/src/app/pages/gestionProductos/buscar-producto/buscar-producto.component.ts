@@ -31,40 +31,40 @@ export class BuscarProductoComponent implements OnInit {
   @Input() sendEventUpdateTable: String;
 
   constructor(private formBuilder: FormBuilder,
-              private svBuscarProducto: BuscarProductoService,
-              private svLogin: LoginService
-            ) {
+    private svBuscarProducto: BuscarProductoService,
+    private svLogin: LoginService
+  ) {
 
   }
-        
+
   busquedaProductosForm = this.formBuilder.group({
     busquedaProducto: ['']
   });
-  
+
   ngOnInit() {
-    this.lstProductos = []; 
+    this.lstProductos = [];
   }
-  
+
   buscar() {
     this.reqBuscarProducto = {};
-    this.lstProductos = []; 
+    this.lstProductos = [];
     let producto: RequestCrearProductoDTO = {};
-    
+
     this.reqBuscarProducto.text = this.busquedaProductosForm.get('busquedaProducto').value;
     this.reqBuscarProducto.page = "0";
     this.reqBuscarProducto.size = "5";
     this.reqBuscarProducto.token = this.svLogin.getToken().valueOf();
 
-    if(this.reqBuscarProducto.text != null && this.reqBuscarProducto.text.trim() != ""){
+    if (this.reqBuscarProducto.text != null && this.reqBuscarProducto.text.trim() != "") {
       this.svBuscarProducto.buscarProductoText(this.reqBuscarProducto).subscribe(
         (res) => {
           this.resBuscarProducto = res;
 
-          if(this.resBuscarProducto.status.code == "SUCCESS"){
-            if(this.resBuscarProducto.data.products != null && this.resBuscarProducto.data.products.length > 0){
-              for(let i= 0; i < this.resBuscarProducto.data.products.length; i++){
+          if (this.resBuscarProducto.status.code == "SUCCESS") {
+            if (this.resBuscarProducto.data.products != null && this.resBuscarProducto.data.products.length > 0) {
+              for (let i = 0; i < this.resBuscarProducto.data.products.length; i++) {
                 producto = {};
-  
+
                 producto.productId = this.resBuscarProducto.data.products[i].productId;
                 producto.productCode = this.resBuscarProducto.data.products[i].productCode;
                 producto.productName = this.resBuscarProducto.data.products[i].productName;
@@ -76,18 +76,18 @@ export class BuscarProductoComponent implements OnInit {
                 producto.endDate = this.resBuscarProducto.data.products[i].endDate;
                 producto.type = this.resBuscarProducto.data.products[i].type;
                 producto.image = this.resBuscarProducto.data.products[i].image;
-                producto.vendorId = this.resBuscarProducto.data.products[i].vendorId; 
-                producto.vendor = this.resBuscarProducto.data.products[i].vendor;           
-  
+                producto.vendorId = this.resBuscarProducto.data.products[i].vendorId;
+                producto.vendor = this.resBuscarProducto.data.products[i].vendor;
+
                 this.lstProductos.push(producto);
-  
+
                 this.totalRecords = this.resBuscarProducto.data.totalItems;
               }
             }
             this.svLogin.refreshToken();
 
             this.limpiar();
-          }else {
+          } else {
             alert(this.resBuscarProducto.status.description);
 
             this.limpiar();
@@ -97,21 +97,21 @@ export class BuscarProductoComponent implements OnInit {
           this.selectedProducto = {};
 
           this.sendProductoUnSelect.emit(this.selectedProducto);
-          
-          if(res.status == 401){
+
+          if (res.status == 401) {
             this.svLogin.userLogout();
-          }else if(res.error.status.code == "ERROR"){
+          } else if (res.error.status.code == "ERROR") {
             alert("No se encontró ningún producto con ese texto");
           }
         }
       );
-    }else{
+    } else {
       this.svBuscarProducto.buscarProductos(this.reqBuscarProducto).subscribe(
         (res) => {
           this.resBuscarProducto = res;
 
-          if(this.resBuscarProducto.data.products != null && this.resBuscarProducto.data.products.length > 0){
-            for(let i= 0; i < this.resBuscarProducto.data.products.length; i++){
+          if (this.resBuscarProducto.data.products != null && this.resBuscarProducto.data.products.length > 0) {
+            for (let i = 0; i < this.resBuscarProducto.data.products.length; i++) {
               producto = {};
 
               producto.productId = this.resBuscarProducto.data.products[i].productId;
@@ -125,8 +125,8 @@ export class BuscarProductoComponent implements OnInit {
               producto.endDate = this.resBuscarProducto.data.products[i].endDate;
               producto.type = this.resBuscarProducto.data.products[i].type;
               producto.image = this.resBuscarProducto.data.products[i].image;
-              producto.vendorId = this.resBuscarProducto.data.products[i].vendorId; 
-              producto.vendor = this.resBuscarProducto.data.products[i].vendor;          
+              producto.vendorId = this.resBuscarProducto.data.products[i].vendorId;
+              producto.vendor = this.resBuscarProducto.data.products[i].vendor;
 
               this.lstProductos.push(producto);
 
@@ -140,7 +140,7 @@ export class BuscarProductoComponent implements OnInit {
 
           this.sendProductoUnSelect.emit(this.selectedProducto);
 
-          if(res.status == 401){
+          if (res.status == 401) {
             this.svLogin.userLogout();
           }
           console.log('error ' + JSON.stringify(res.status));
@@ -160,24 +160,24 @@ export class BuscarProductoComponent implements OnInit {
     this.first = event.first;
 
     this.reqBuscarProducto = {};
-    this.lstProductos = []; 
+    this.lstProductos = [];
     let producto: RequestCrearProductoDTO = {};
-    
+
     this.reqBuscarProducto.text = this.busquedaProductosForm.get('busquedaProducto').value;
     this.reqBuscarProducto.page = String(event.page == 0 ? 0 : event.page);
     this.reqBuscarProducto.size = "5";
     this.reqBuscarProducto.token = this.svLogin.getToken().valueOf();
 
-    if(this.reqBuscarProducto.text != null && this.reqBuscarProducto.text.trim() != ""){
+    if (this.reqBuscarProducto.text != null && this.reqBuscarProducto.text.trim() != "") {
       this.svBuscarProducto.buscarProductoText(this.reqBuscarProducto).subscribe(
         (res) => {
           this.resBuscarProducto = res;
 
-          if(this.resBuscarProducto.status.code == "SUCCESS"){
-            if(this.resBuscarProducto.data.products != null && this.resBuscarProducto.data.products.length > 0){
-              for(let i= 0; i < this.resBuscarProducto.data.products.length; i++){
+          if (this.resBuscarProducto.status.code == "SUCCESS") {
+            if (this.resBuscarProducto.data.products != null && this.resBuscarProducto.data.products.length > 0) {
+              for (let i = 0; i < this.resBuscarProducto.data.products.length; i++) {
                 producto = {};
-  
+
                 producto.productId = this.resBuscarProducto.data.products[i].productId;
                 producto.productCode = this.resBuscarProducto.data.products[i].productCode;
                 producto.productName = this.resBuscarProducto.data.products[i].productName;
@@ -189,18 +189,18 @@ export class BuscarProductoComponent implements OnInit {
                 producto.endDate = this.resBuscarProducto.data.products[i].endDate;
                 producto.type = this.resBuscarProducto.data.products[i].type;
                 producto.image = this.resBuscarProducto.data.products[i].image;
-                producto.vendorId = this.resBuscarProducto.data.products[i].vendorId;     
-                producto.vendor = this.resBuscarProducto.data.products[i].vendor;      
-  
+                producto.vendorId = this.resBuscarProducto.data.products[i].vendorId;
+                producto.vendor = this.resBuscarProducto.data.products[i].vendor;
+
                 this.lstProductos.push(producto);
-  
+
                 this.totalRecords = this.resBuscarProducto.data.totalItems;
               }
             }
             this.svLogin.refreshToken();
 
             this.limpiar();
-          }else {
+          } else {
             alert(this.resBuscarProducto.status.description);
 
             this.limpiar();
@@ -211,19 +211,19 @@ export class BuscarProductoComponent implements OnInit {
 
           this.sendProductoUnSelect.emit(this.selectedProducto);
 
-          if(res.status == 401){
+          if (res.status == 401) {
             this.svLogin.userLogout();
           }
           console.log('error ' + JSON.stringify(res.status));
         }
       );
-    }else{
+    } else {
       this.svBuscarProducto.buscarProductos(this.reqBuscarProducto).subscribe(
         (res) => {
           this.resBuscarProducto = res;
 
-          if(this.resBuscarProducto.data.products != null && this.resBuscarProducto.data.products.length > 0){
-            for(let i= 0; i < this.resBuscarProducto.data.products.length; i++){
+          if (this.resBuscarProducto.data.products != null && this.resBuscarProducto.data.products.length > 0) {
+            for (let i = 0; i < this.resBuscarProducto.data.products.length; i++) {
               producto = {};
 
               producto.productId = this.resBuscarProducto.data.products[i].productId;
@@ -237,8 +237,8 @@ export class BuscarProductoComponent implements OnInit {
               producto.endDate = this.resBuscarProducto.data.products[i].endDate;
               producto.type = this.resBuscarProducto.data.products[i].type;
               producto.image = this.resBuscarProducto.data.products[i].image;
-              producto.vendorId = this.resBuscarProducto.data.products[i].vendorId; 
-              producto.vendor = this.resBuscarProducto.data.products[i].vendor;           
+              producto.vendorId = this.resBuscarProducto.data.products[i].vendorId;
+              producto.vendor = this.resBuscarProducto.data.products[i].vendor;
 
               this.lstProductos.push(producto);
 
@@ -252,7 +252,7 @@ export class BuscarProductoComponent implements OnInit {
 
           this.sendProductoUnSelect.emit(this.selectedProducto);
 
-          if(res.status == 401){
+          if (res.status == 401) {
             this.svLogin.userLogout();
           }
           console.log('error ' + JSON.stringify(res.status));
@@ -265,15 +265,15 @@ export class BuscarProductoComponent implements OnInit {
   onRowSelect(event) {
     let codigoProducto = this.selectedProducto.productCode;
 
-    if(codigoProducto != null && codigoProducto != ""){
+    if (codigoProducto != null && codigoProducto != "") {
       this.selectedProducto = {};
 
       this.svBuscarProducto.buscarDetalleProducto(codigoProducto).subscribe(
         (res) => {
           this.resBuscarProducto = res;
 
-          if(this.resBuscarProducto.status.code == "SUCCESS"){
-            if(this.resBuscarProducto.product){
+          if (this.resBuscarProducto.status.code == "SUCCESS") {
+            if (this.resBuscarProducto.product) {
               this.selectedProducto.productId = this.resBuscarProducto.product.productId;
               this.selectedProducto.productCode = this.resBuscarProducto.product.productCode;
               this.selectedProducto.productName = this.resBuscarProducto.product.productName;
@@ -286,7 +286,7 @@ export class BuscarProductoComponent implements OnInit {
               this.selectedProducto.type = this.resBuscarProducto.product.type;
               this.selectedProducto.image = this.resBuscarProducto.product.image;
               this.selectedProducto.vendorId = this.resBuscarProducto.product.vendorId;
-              this.selectedProducto.vendor = this.resBuscarProducto.product.vendor; 
+              this.selectedProducto.vendor = this.resBuscarProducto.product.vendor;
             }
           }
 
@@ -299,7 +299,7 @@ export class BuscarProductoComponent implements OnInit {
 
           this.sendProductoUnSelect.emit(this.selectedProducto);
 
-          if(res.status == 401){
+          if (res.status == 401) {
             this.svLogin.userLogout();
           }
           console.log('error ' + JSON.stringify(res.status));
@@ -317,9 +317,9 @@ export class BuscarProductoComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.sendEventUpdateTable.currentValue) {
       this.reqBuscarProducto = {};
-      this.lstProductos = []; 
+      this.lstProductos = [];
       let producto: RequestCrearProductoDTO = {};
-      
+
       this.reqBuscarProducto.text = "";
       this.reqBuscarProducto.page = "0";
       this.reqBuscarProducto.size = "5";
@@ -329,8 +329,8 @@ export class BuscarProductoComponent implements OnInit {
         (res) => {
           this.resBuscarProducto = res;
 
-          if(this.resBuscarProducto.data.products != null && this.resBuscarProducto.data.products.length > 0){
-            for(let i= 0; i < this.resBuscarProducto.data.products.length; i++){
+          if (this.resBuscarProducto.data.products != null && this.resBuscarProducto.data.products.length > 0) {
+            for (let i = 0; i < this.resBuscarProducto.data.products.length; i++) {
               producto = {};
 
               producto.productId = this.resBuscarProducto.data.products[i].productId;
@@ -344,8 +344,8 @@ export class BuscarProductoComponent implements OnInit {
               producto.endDate = this.resBuscarProducto.data.products[i].endDate;
               producto.type = this.resBuscarProducto.data.products[i].type;
               producto.image = this.resBuscarProducto.data.products[i].image;
-              producto.vendorId = this.resBuscarProducto.data.products[i].vendorId; 
-              producto.vendor = this.resBuscarProducto.data.products[i].vendor;          
+              producto.vendorId = this.resBuscarProducto.data.products[i].vendorId;
+              producto.vendor = this.resBuscarProducto.data.products[i].vendor;
 
               this.lstProductos.push(producto);
 
@@ -359,13 +359,13 @@ export class BuscarProductoComponent implements OnInit {
 
           this.sendProductoUnSelect.emit(this.selectedProducto);
 
-          if(res.status == 401){
+          if (res.status == 401) {
             this.svLogin.userLogout();
           }
           console.log('error ' + JSON.stringify(res.status));
         }
       );
-  
+
     }
   }
 

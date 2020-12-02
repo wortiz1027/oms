@@ -63,6 +63,7 @@ import { BusquedaOrdenComponent } from './pages/gestionOrden/busqueda-orden/busq
 import { DetalleOrdenComponent } from './pages/gestionOrden/detalle-orden/detalle-orden.component';
 import { CancelarOrdenComponent } from './pages/gestionOrden/cancelar-orden/cancelar-orden.component';
 
+
 @NgModule({
   imports: [
     BrowserAnimationsModule,

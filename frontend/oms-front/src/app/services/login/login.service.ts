@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import jwtDecode from 'jwt-decode';
+
 
 @Injectable()
 export class LoginService {
@@ -39,6 +41,7 @@ export class LoginService {
     setToken(userInformation: ResponseService) {
         this.cookies.set('token', userInformation.access_token);
         this.cookies.set('refreshToken', userInformation.refresh_token);
+        this.decodeAccessToken(userInformation.access_token);
     }
 
     setUserInformation(username: string) {
@@ -49,7 +52,7 @@ export class LoginService {
         return this.cookies.get('token');
     }
 
-    getRefreshToken(){
+    getRefreshToken() {
         return this.cookies.get('refreshToken');
     }
 
@@ -58,6 +61,10 @@ export class LoginService {
         username = this.cookies.get('username');
 
         return username;
+    }
+
+    setRolesArray(roles: any[]) {
+        this.cookies.set('roles', JSON.stringify(roles));
     }
 
     userLogout() {
@@ -77,11 +84,33 @@ export class LoginService {
                 (resRefresh) => {
                     this.responseService = resRefresh;
                     this.setToken(this.responseService);
-                  },
-                  (error) => {
+                },
+                (error) => {
                     console.log('Error {}', error);
-                  }
+                }
             );
+    }
+
+    decodeAccessToken(token: string) {
+        let decodedToken: any;
+        decodedToken = jwtDecode(token);
+        const roles: string[] = decodedToken.authorities;
+        console.log('Roles: ', roles);
+        this.setRolesArray(roles);
+    }
+
+    validateRol(rol: string): boolean {
+        let roles = this.cookies.get('roles');
+        if (roles === null || roles === undefined || roles === '') {
+            return false;
+        }
+        roles = JSON.parse(this.cookies.get('roles'));
+        for (let i = 0; i < roles.length; i++) {
+            if (rol === roles[i]) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
