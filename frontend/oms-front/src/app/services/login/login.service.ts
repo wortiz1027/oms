@@ -95,7 +95,7 @@ export class LoginService {
         let decodedToken: any;
         decodedToken = jwtDecode(token);
         const roles: string[] = decodedToken.authorities;
-        console.log('Roles: ', roles);
+
         this.setRolesArray(roles);
     }
 
