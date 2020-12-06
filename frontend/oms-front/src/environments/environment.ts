@@ -2,7 +2,7 @@
 //const host = (<any>window).host;
 //Endpoint servicios
 //const hostSeguridad = 'http://localhost:9092';
-const hostApiGateway = 'http://localhost:9092';
+const hostApiGateway = 'http://10.39.1.85:9092';
 
 //Variables Aplicacion
 const clientId = '89792737-705f-4358-a95b-744962644de4';
