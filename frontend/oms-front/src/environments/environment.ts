@@ -3,6 +3,9 @@
 //Endpoint servicios
 //const hostSeguridad = 'http://localhost:9092';
 const hostApiGateway = 'http://localhost:9092';
+const hostApiServidor = 'http://10.39.1.85:9092';
+
+
 
 //Variables Aplicacion
 const clientId = '89792737-705f-4358-a95b-744962644de4';
@@ -25,5 +28,6 @@ export const environment = {
   searchOrder_endpoint: `${hostApiGateway}/orders/qrs`,
   cancelOrder_endpoint: `${hostApiGateway}/orders/cmd`,
   createVendor_endpoint: `${hostApiGateway}/vendors/cmd`,
-  searchVendor_endpoint: `${hostApiGateway}/vendors/qrs`
+  searchVendor_endpoint: `${hostApiGateway}/vendors/qrs`,
+  cancelOrderBPM_endpoint: `${hostApiServidor}/bpm/cancel`
 };

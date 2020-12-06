@@ -1,9 +1,11 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { InfoOrdenI } from 'src/app/models/InfoOrden';
+import { ResponseCancelOrderBPMDTO } from 'src/app/models/ResponseCancelOrderBPMDTO';
 import { StatusServicesI } from 'src/app/models/StatusServices';
 import { LoginService } from 'src/app/services/login/login.service';
 import { ActualizarOrdenService } from 'src/app/services/orden/actualizar-orden.service';
+import { CancelarOrdenBpmService } from 'src/app/services/orden/cancelar-orden-bpm.service';
 
 @Component({
   selector: 'app-cancelar-orden',
@@ -16,12 +18,14 @@ export class CancelarOrdenComponent implements OnInit {
   visibilidadDetalle: Boolean;
 
   responseCancelOrder: StatusServicesI;
+  responseCancelOrderBPM: ResponseCancelOrderBPMDTO
 
   contador: number;
 
   @Output() sendEventUpdateTable: String;
 
   constructor(private svCancelarOrden: ActualizarOrdenService,
+              private svCancelarOrdenBPM: CancelarOrdenBpmService,
               private svLogin: LoginService,
               private router: Router) { 
 
@@ -55,14 +59,32 @@ export class CancelarOrdenComponent implements OnInit {
         this.responseCancelOrder = res;
 
        if(this.responseCancelOrder.status == "UPDATED"){
-        this.contador++;
-        this.sendEventUpdateTable = "ActualizarTabla" + this.contador;
+         
+        //Llamar servicio cancelar orden bpm
+        this.svCancelarOrdenBPM.cancelOrderBPM(idOrden).subscribe(
 
-        alert("Orden Cancelada !!!");
-        this.svLogin.refreshToken();
-        this.visibilidadDetalle = false;        
-        this.router.navigate(['cancelarOrden']);  
-      }
+          (res) => {
+            this.responseCancelOrderBPM = res;
+
+            if(this.responseCancelOrderBPM.status.code == "SUCCESS"){
+              this.contador++;
+              this.sendEventUpdateTable = "ActualizarTabla" + this.contador;
+
+              alert("Orden Cancelada !!!");
+              this.svLogin.refreshToken();
+              this.visibilidadDetalle = false;        
+              this.router.navigate(['cancelarOrden']);  
+            }
+            
+          },
+          (res) => {
+            if(res.status == 401){
+              this.svLogin.userLogout();
+            }
+            console.log('error ' + JSON.stringify(res.status));
+          }
+        );
+       } 
         
       },
       (res) => {
