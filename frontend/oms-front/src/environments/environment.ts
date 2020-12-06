@@ -4,8 +4,6 @@
 //const hostSeguridad = 'http://localhost:9092';
 const HOST_API_GATEWAY = 'http://10.39.1.85:9092';
 
-
-
 //Variables Aplicacion
 const clientId = '89792737-705f-4358-a95b-744962644de4';
 const clientSecret = '0b78c28e-6abc-4252-85d1-214da95bc6ca';

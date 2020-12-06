@@ -45,7 +45,11 @@ export class LoginOmsComponent implements OnInit, OnDestroy {
 
         this.responseService.username = this.userToLogin.username;
         this._loginService.setToken(this.responseService);
-        this.router.navigate(['/dashboard']);
+
+        this.router.navigate(['/dashboard'])
+          .then(() => {
+            window.location.reload();
+        });
       },
       (res) => {
         if(res.error.error == "invalid_grant"){

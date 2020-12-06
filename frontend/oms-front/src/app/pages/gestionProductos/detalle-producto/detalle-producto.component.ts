@@ -149,8 +149,7 @@ export class DetalleProductoComponent implements OnInit {
       this.detalleProductosForm.controls['imagen'].setValue(producto ? producto.image ? producto.image :{} : {});
       this.detalleProductosForm.controls['urlImagen'].setValue(producto ? producto.image ? producto.image.url ? producto.image.url :"" : "" : {});
         
-      //this.urlImage = this.detalleProductosForm.controls['urlImagen'].value;      
-      this.urlImage = "https://material.angular.io/assets/img/examples/shiba2.jpg";
+      this.urlImage = this.detalleProductosForm.controls['urlImagen'].value;
     }
   }
 

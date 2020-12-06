@@ -60,8 +60,7 @@ export class DetalleCampaniaEditComponent implements OnInit {
         this.detalleCampaniasForm.controls['imagen'].setValue(campania ? campania.image ? campania.image :{} : {});
         this.detalleCampaniasForm.controls['urlImagen'].setValue(campania ? campania.image ? campania.image.url ? campania.image.url :"" : "" : {});
   
-        //this.urlImage = this.detalleProductosForm.controls['urlImagen'].value;      
-        this.urlImage = "https://material.angular.io/assets/img/examples/shiba2.jpg";
+        this.urlImage = this.detalleCampaniasForm.controls['urlImagen'].value;
       }
     }
   
