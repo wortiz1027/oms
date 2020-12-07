@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   oms-application:
-   image: oms-application:latest
+   image: wortiz1027/oms-application:latest
    container_name: oms-application
    hostname: oms-application
    restart: always
