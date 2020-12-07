@@ -11,10 +11,10 @@ declare interface RouteInfo {
 }
 
 export const ROUTES: RouteInfo[] = [
-  {
-    path: '/loginOMS',
-    title: 'Login', icon: 'ni-key-25 text-info', class: '', roles: ['']
-  },
+  //{
+  //  path: '/loginOMS',
+  //  title: 'Login', icon: 'ni-key-25 text-info', class: '', roles: ['']
+  //},
   {
     path: '/crearProveedor',
     title: 'Crear Proveedor', icon: 'ni-circle-08 text-pink', class: '', roles: ['ROLE_ADMIN']

@@ -38,6 +38,11 @@ export class NavbarComponent implements OnInit {
 
   userLogout() {
     this.svLogin.userLogout();
+    
+    this.router.navigate(['/loginOMS'])
+          .then(() => {
+            window.location.reload();
+        });
   }
 
   showLogout() {
