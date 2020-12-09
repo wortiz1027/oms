@@ -89,6 +89,7 @@ export class ActualizacionClienteComponent implements OnInit {
           
           alert("Usuario Actualizado !!!");
           this.svLogin.refreshToken();
+          this.visibilidadDetalle = false;
           this.router.navigate(['actualizarCliente']);  
         } 
       },
