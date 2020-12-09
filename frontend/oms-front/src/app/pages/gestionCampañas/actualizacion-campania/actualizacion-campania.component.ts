@@ -181,6 +181,7 @@ export class ActualizacionCampaniaComponent implements OnInit {
           if(this.responseCampania.status == "UPDATED"){
             this.contador++;
             this.sendEventUpdateTable = "ActualizarTabla" + this.contador;
+            console.log("evento de sendEventUpdateTable!!!!");
             
             alert("Campaña Actualizada !!!");
             this.svLogin.refreshToken();

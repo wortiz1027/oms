@@ -147,7 +147,8 @@ export class DetalleProductoEditComponent implements OnInit {
         this.detalleProductosForm.controls['imagen'].setValue(producto ? producto.image ? producto.image :{} : {});
         this.detalleProductosForm.controls['urlImagen'].setValue(producto ? producto.image ? producto.image.url ? producto.image.url :"" : "" : {});
         
-        this.urlImage = this.detalleProductosForm.controls['imagen'].value;      
+        this.urlImage = this.detalleProductosForm.controls['urlImagen'].value;     
+         
       }
     }
   
